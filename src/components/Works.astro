@@ -7,8 +7,9 @@ const works = [
     title: "リラガーデン様",
     location: "愛知県岡崎市",
     url: "https://relagarden.jp",
-    image: "/images/works/relagarden.jpg", // 実際の画像パス
+    image: "/images/works/relagarden.jpg",
     description: "デザイン性と機能性を両立した施工事例を分かりやすく構成。地域名SEOも考慮した設計です。",
+    alt: "愛知県岡崎市の人工芝施工リラガーデン様のホームページ制作実績。地域密着型の集客に特化したデザイン。"
   },
   {
     category: "人工芝施工",
@@ -17,6 +18,7 @@ const works = [
     url: "https://miwacompany.info/",
     image: "/images/works/miwa-info.jpg",
     description: "インパクトのある屋号に負けない力強いデザインと、信頼感を伝える構成を両立しました。",
+    alt: "滋賀県の人工芝施工・怒涛の芝革命様のWebサイト制作事例。インパクトと信頼感を両立させた構成。"
   },
   {
     category: "コンサルティング",
@@ -25,6 +27,7 @@ const works = [
     url: "https://miwacoin.com/",
     image: "/images/works/miwacoin.jpg",
     description: "ビジネスの専門性を損なわない、誠実でクリーンなコーポレートサイトをご提案しました。",
+    alt: "滋賀県の株式会社MIWA様コーポレートサイト制作実績。誠実でクリーンなコンサルティング業向けデザイン。"
   },
   {
     category: "コンサルティング",
@@ -33,6 +36,7 @@ const works = [
     url: "https://gofishjp.com/",
     image: "/images/works/gofish.jpg",
     description: "グローバルな展開をイメージさせる、洗練されたモダンなインターフェースを構築しました。",
+    alt: "滋賀県の合同会社ゴーフィッシュジャパン様Webサイト事例。モダンでグローバルな印象のインターフェース。"
   }
 ];
 ---
@@ -40,10 +44,12 @@ const works = [
 <section id="works" class="py-24 bg-white">
   <div class="container mx-auto px-6">
     <div class="text-center mb-16">
-      <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">制作実績</h2>
-      <p class="text-slate-600 max-w-2xl mx-auto">
-        愛知・滋賀を中心に、多様な業種のホームページ制作を手掛けています。<br class="hidden md:block" />
-        お客様の強みを引き出し、「伝わる」デザインをご提案します。
+      <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
+        名古屋・愛知三河エリアでの制作実績
+      </h2>
+      <p class="text-slate-600 max-w-2xl mx-auto leading-relaxed">
+        個人事業主様から中小企業様まで、地域に根ざしたホームページ制作を手掛けています。<br class="hidden md:block" />
+        名古屋市内をはじめ、愛知・三河エリアのお客様の「伝えたい」を形にしました。
       </p>
     </div>
 
@@ -56,11 +62,12 @@ const works = [
           class="group flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
         >
           <div class="aspect-video bg-slate-100 relative overflow-hidden border-b border-slate-50">
-            {/* 画像がある場合は表示、ない場合は代替表示 */}
             <img 
               src={work.image} 
-              alt={work.title} 
+              alt={work.alt} 
               class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
               onerror="this.style.display='none'" 
             />
             <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">

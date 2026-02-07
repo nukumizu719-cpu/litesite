@@ -1,25 +1,49 @@
 ---
 // src/layouts/Layout.astro
 import '../styles/global.css';
-import Header from '../components/Header.astro'; // ← 1. インポートされているか
+import Header from '../components/Header.astro';
 
 interface Props {
-	title: string;
+  title: string;
+  description?: string; // ← 追加：任意で説明文を受け取れるように
 }
 
-const { title } = Astro.props;
+// 修正：二重になっていた括弧を直し、デフォルト値を設定
+const { 
+  title, 
+  description = "名古屋で高品質・低コストなホームページ制作ならLiteSite。個人事業主や起業家向けの集客に強いWeb制作を提供します。" 
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="ja" class="scroll-smooth">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="名古屋の格安ホームページ制作 ライトサイト" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>{title}</title>
-	</head>
-	<body class="bg-slate-50 text-slate-900 font-sans">
-		<Header /> <slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <title>{title} | LiteSite</title>
+    <meta name="description" content={description} /> <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "LiteSite",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "名古屋市",
+        "addressRegion": "愛知県",
+        "addressCountry": "JP"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Nagoya"
+      },
+      "description": "名古屋市を拠点に、地域密着型で高品質なWeb制作サービスを提供。"
+    }
+    </script>
+  </head>
+  <body class="bg-slate-50 text-slate-900 font-sans">
+    <Header />
+    <slot />
+  </body>
 </html>
