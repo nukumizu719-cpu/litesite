@@ -1,0 +1,176 @@
+---
+// src/components/Contact.astro
+---
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<section class="py-20 bg-white" id="contact">
+  <div class="container mx-auto px-6">
+    <div class="max-w-2xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-slate-900 mb-4">お問い合わせ</h2>
+        <p class="text-slate-600">
+          制作のご依頼、お見積りのご相談など、お気軽にお問い合わせください。
+        </p>
+      </div>
+
+      <form
+        id="contact-form"
+        class="grid grid-cols-1 gap-6 bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm"
+      >
+        <input type="text" name="website" style="display:none !important" tabindex="-1" autocomplete="off" />
+
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-2">お名前</label>
+          <input 
+            type="text" 
+            name="name" 
+            required 
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all" 
+            placeholder="山田 太郎" 
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-2">メールアドレス</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required 
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all" 
+            placeholder="example@mail.com" 
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-2">メールアドレス（確認用）</label>
+          <input 
+            type="email" 
+            id="email-confirm" 
+            name="email-confirm" 
+            required 
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all" 
+            placeholder="もう一度入力してください" 
+          />
+          <p id="error-message" class="text-red-500 text-sm mt-2 hidden">メールアドレスが一致しません</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-2">ご相談内容</label>
+          <textarea 
+            name="message" 
+            required 
+            rows="5" 
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all" 
+            placeholder="ホームページ制作の相談をしたい..."
+          ></textarea>
+        </div>
+
+        <div class="flex justify-center">
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAACYKQJQo6LXE6nQQ" data-theme="light"></div>
+        </div>
+
+        <button 
+          type="submit" 
+          id="submit-btn" 
+          class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 px-8 rounded-xl transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          この内容で送信する
+        </button>
+
+        <p id="form-status" class="text-center text-sm font-bold hidden py-2 px-4 rounded-lg"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  // 設定値
+  const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbwzfBtUqWgmJPghIBH6n3K7I3FG-oT9n8-_mvYvAmdCiewNEJIPIqnW4hO1ywCwa5gr/exec";
+
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const email = document.getElementById('email') as HTMLInputElement;
+  const emailConfirm = document.getElementById('email-confirm') as HTMLInputElement;
+  const errorMsg = document.getElementById('error-message');
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const statusMsg = document.getElementById('form-status');
+
+  let apiToken = "";
+  const startedAt = Date.now();
+
+  // 1. GASからワンタイムトークンを取得
+  fetch(`${FORM_ENDPOINT}?action=token`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.ok) apiToken = data.token;
+    })
+    .catch(err => console.error("Token fetch error:", err));
+
+  // 2. メールアドレス一致チェック
+  function checkEmail() {
+    if (email.value && emailConfirm.value) {
+      const isMatch = email.value === emailConfirm.value;
+      if (isMatch) {
+        errorMsg?.classList.add('hidden');
+        emailConfirm.classList.remove('border-red-500', 'bg-red-50');
+        submitBtn.disabled = false;
+      } else {
+        errorMsg?.classList.remove('hidden');
+        emailConfirm.classList.add('border-red-500', 'bg-red-50');
+        submitBtn.disabled = true;
+      }
+    }
+  }
+
+  email.addEventListener('input', checkEmail);
+  emailConfirm.addEventListener('input', checkEmail);
+
+  // 3. 送信処理
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // 二重送信防止
+    submitBtn.disabled = true;
+    submitBtn.innerText = "送信中...";
+    statusMsg?.classList.add('hidden');
+
+    const formData = new FormData(form);
+    const payload = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      message: formData.get('message'),
+      website: formData.get('website'), // ハニーポット
+      token: apiToken,
+      startedAt: startedAt,
+      turnstileToken: formData.get('cf-turnstile-response')
+    };
+
+    try {
+      const response = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (result.ok) {
+        // 送信成功
+        window.location.href = "/thanks/";
+      } else {
+        throw new Error(result.error || "送信に失敗しました");
+      }
+    } catch (err: any) {
+      console.error(err);
+      statusMsg!.innerText = err.message === "rate_limited" 
+        ? "短時間に何度も送信することはできません。しばらくお待ちください。"
+        : "送信エラーが発生しました。時間を置いて再度お試しいただくか、SNS等からご連絡ください。";
+      
+      statusMsg?.classList.remove('hidden');
+      statusMsg?.classList.add('text-red-600', 'bg-red-50');
+      
+      submitBtn.disabled = false;
+      submitBtn.innerText = "この内容で送信する";
+    }
+  });
+</script>

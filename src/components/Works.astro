@@ -1,0 +1,98 @@
+---
+// src/components/Works.astro
+
+const works = [
+  {
+    category: "人工芝施工",
+    title: "リラガーデン様",
+    location: "愛知県岡崎市",
+    url: "https://relagarden.jp",
+    image: "/images/works/relagarden.jpg", // 実際の画像パス
+    description: "デザイン性と機能性を両立した施工事例を分かりやすく構成。地域名SEOも考慮した設計です。",
+  },
+  {
+    category: "人工芝施工",
+    title: "怒涛の芝革命様",
+    location: "滋賀県",
+    url: "https://miwacompany.info/",
+    image: "/images/works/miwa-info.jpg",
+    description: "インパクトのある屋号に負けない力強いデザインと、信頼感を伝える構成を両立しました。",
+  },
+  {
+    category: "コンサルティング",
+    title: "株式会社MIWA様",
+    location: "滋賀県",
+    url: "https://miwacoin.com/",
+    image: "/images/works/miwacoin.jpg",
+    description: "ビジネスの専門性を損なわない、誠実でクリーンなコーポレートサイトをご提案しました。",
+  },
+  {
+    category: "コンサルティング",
+    title: "合同会社ゴーフィッシュジャパン様",
+    location: "滋賀県",
+    url: "https://gofishjp.com/",
+    image: "/images/works/gofish.jpg",
+    description: "グローバルな展開をイメージさせる、洗練されたモダンなインターフェースを構築しました。",
+  }
+];
+---
+
+<section id="works" class="py-24 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">制作実績</h2>
+      <p class="text-slate-600 max-w-2xl mx-auto">
+        愛知・滋賀を中心に、多様な業種のホームページ制作を手掛けています。<br class="hidden md:block" />
+        お客様の強みを引き出し、「伝わる」デザインをご提案します。
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {works.map((work) => (
+        <a 
+          href={work.url} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="group flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+        >
+          <div class="aspect-video bg-slate-100 relative overflow-hidden border-b border-slate-50">
+            {/* 画像がある場合は表示、ない場合は代替表示 */}
+            <img 
+              src={work.image} 
+              alt={work.title} 
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              onerror="this.style.display='none'" 
+            />
+            <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <div class="bg-white text-slate-900 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2">
+                サイトを見る
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 flex-grow flex flex-col">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-widest">
+                {work.category}
+              </span>
+              <span class="text-[10px] text-slate-400 font-medium">
+                {work.location}
+              </span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+              {work.title}
+            </h3>
+            <p class="text-slate-500 text-xs leading-relaxed line-clamp-3">
+              {work.description}
+            </p>
+            
+            <div class="mt-4 pt-4 border-t border-slate-50 flex items-center text-blue-600 text-xs font-bold md:hidden">
+              タップしてサイトを表示
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

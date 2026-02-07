@@ -1,0 +1,56 @@
+---
+// src/components/Header.astro
+---
+<header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-slate-100">
+  <div class="container mx-auto px-6 h-20 flex items-center justify-between">
+    <a href="/" class="z-[60] shrink-0">
+      <img src="/logo.png" alt="ライトサイト" class="h-12 md:h-14 w-auto object-contain" />
+    </a>
+
+    <input type="checkbox" id="menu-toggle" class="hidden peer" />
+    <label for="menu-toggle" class="z-[60] cursor-pointer md:hidden flex flex-col gap-1.5 p-2">
+      <span class="w-7 h-0.5 bg-slate-900 transition-all origin-center"></span>
+      <span class="w-7 h-0.5 bg-slate-900 transition-all"></span>
+      <span class="w-7 h-0.5 bg-slate-900 transition-all origin-center"></span>
+    </label>
+
+    <nav class="
+      fixed top-0 left-0 w-full h-screen
+      bg-white/95 backdrop-blur-lg
+      flex flex-col items-center justify-center
+      gap-8
+      transition-all duration-300 ease-in-out
+      opacity-0 invisible translate-y-[-20px]
+      peer-checked:opacity-100 peer-checked:visible peer-checked:translate-y-0
+      md:static md:w-auto md:h-auto md:bg-transparent md:flex-row md:opacity-100 md:visible md:translate-y-0
+      z-[55]
+    ">
+      <ul class="flex flex-col md:flex-row items-center gap-8 text-xl md:text-sm font-bold md:font-medium text-slate-700">
+        <li><a href="/#features" class="hover:text-blue-600 transition-colors">特徴</a></li>
+        <li><a href="/#works" class="hover:text-blue-600 transition-colors">制作実績</a></li>
+        <li><a href="/#pricing" class="hover:text-blue-600 transition-colors">料金</a></li>
+        <li><a href="/#faq" class="hover:text-blue-600 transition-colors">よくある質問</a></li>
+        <li>
+          <a href="/contact/" class="bg-slate-900 text-white px-10 md:px-5 py-4 md:py-2.5 rounded-full hover:bg-slate-800 transition-all">
+            お問い合わせ
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // メニュー内のリンクをすべて取得
+  const menuLinks = document.querySelectorAll('nav a');
+  const menuToggle = document.getElementById('menu-toggle') as HTMLInputElement;
+
+  // 各リンクがクリックされたら、チェックボックスをオフにする
+  menuLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (menuToggle) {
+        menuToggle.checked = false;
+      }
+    });
+  });
+</script>

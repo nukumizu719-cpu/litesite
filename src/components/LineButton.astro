@@ -1,0 +1,26 @@
+---
+// src/components/LineButton.astro
+// あなたのLINE公式アカウントのURLに書き換えてください
+const lineUrl = "https://line.me/R/ti/p/strait0317jabiru"; 
+---
+<div class="fixed bottom-6 right-6 z-50">
+  <a 
+    href={lineUrl} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="flex items-center bg-[#06C755] text-white font-bold py-3 px-6 rounded-full shadow-2xl hover:scale-105 transition-transform active:scale-95"
+  >
+    <span class="text-sm md:text-base">LINEで無料相談</span>
+  </a>
+</div>
+
+<style>
+  /* ボタンをふわふわ浮かせて目立たせるアニメーション */
+  div {
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+</style>

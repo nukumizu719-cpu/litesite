@@ -1,0 +1,36 @@
+---
+// src/components/FAQ.astro
+const faqs = [
+  {
+    q: "本当に11万円だけで作れるの？",
+    a: "はい、基本パックの範囲内であれば追加料金は一切かかりません。ドメイン代とサーバー代の実費（年間約1万円程度）のみ、ご自身でのお支払いとなります。支払い方法も丁寧にお教えしますのでご安心ください。"
+  },
+  {
+    q: "パソコンが全く使えないんだけど大丈夫？",
+    a: "もちろんです！打ち合わせも電話やLINE、名古屋市内であれば直接お会いして進めることも可能です。難しい専門用語を使わず、『これだけ分かればOK』というポイントに絞ってご説明します。"
+  },
+  {
+    q: "完成した後の修正はどうなるの？",
+    a: "簡単な文字の修正や写真の差し替えなどは、ご自身でスマホからでもできる仕組みを導入しています。自分では不安という場合は、スポットでの修正依頼（数千円〜）も承っております。"
+  }
+];
+---
+<section class="py-20 bg-slate-50" id="faq">
+  <div class="container mx-auto px-6">
+    <h2 class="text-3xl font-bold text-center text-slate-900 mb-12">よくある質問</h2>
+    <div class="max-w-3xl mx-auto space-y-6">
+      {faqs.map((faq) => (
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+          <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-start">
+            <span class="text-blue-600 mr-3">Q.</span>
+            {faq.q}
+          </h3>
+          <p class="text-slate-600 leading-relaxed flex items-start">
+            <span class="text-green-600 mr-3 font-bold">A.</span>
+            {faq.a}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
