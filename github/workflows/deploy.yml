@@ -1,0 +1,31 @@
+name: Deploy to Xserver
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Astro
+        run: npm run build
+
+      - name: Deploy via rsync
+        uses: Burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avzr --delete
+          path: dist/
+          # サーバーID sv16184 に修正済み
+          remote_path: /home/sv16184/litesite.jp/public_html/
+          remote_host: ${{ secrets.XSERVER_HOST }}
+          remote_user: ${{ secrets.XSERVER_USER }}
+          remote_key: ${{ secrets.XSERVER_SSH_KEY }}
+          remote_port: 22
