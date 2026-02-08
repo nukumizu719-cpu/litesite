@@ -1,23 +1,30 @@
 ---
 // src/components/LineButton.astro
-// あなたのLINE公式アカウントのURLに書き換えてください
 const lineUrl = "https://line.me/R/ti/p/strait0317jabiru"; 
+
+const { pathname } = Astro.url;
+const isContactPage = pathname.replace(/\/$/, "") === "/contact";
 ---
-<div class="fixed bottom-6 right-6 z-50">
-  <a 
-    href={lineUrl} 
-    target="_blank" 
-    rel="noopener noreferrer"
-    class="flex items-center bg-[#06C755] text-white font-bold py-3 px-6 rounded-full shadow-2xl hover:scale-105 transition-transform active:scale-95"
-  >
-    <span class="text-sm md:text-base">LINEで無料相談</span>
-  </a>
-</div>
+
+{ !isContactPage && (
+  <div class="fixed bottom-6 right-6 z-50 floating-area">
+    <a 
+      href={lineUrl} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      class="flex items-center bg-[#06C755] text-white font-bold py-3 px-6 rounded-full shadow-2xl hover:scale-105 transition-all active:scale-95 group"
+    >
+      <span class="text-sm md:text-base">LINEで無料相談</span>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
+      </svg>
+    </a>
+  </div>
+)}
 
 <style>
-  /* ボタンをふわふわ浮かせて目立たせるアニメーション */
-  div {
-    animation: bounce 2s infinite;
+  .floating-area {
+    animation: bounce 2s infinite ease-in-out;
   }
   @keyframes bounce {
     0%, 100% { transform: translateY(0); }

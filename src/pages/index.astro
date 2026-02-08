@@ -5,7 +5,8 @@ import Features from '../components/Features.astro';
 import Works from '../components/Works.astro';
 import Pricing from '../components/Pricing.astro';
 import FAQ from '../components/FAQ.astro';
-import LineButton from '../components/LineButton.astro'
+import LineButton from '../components/LineButton.astro';
+import LineSection from '../components/LineSection.astro'; // 追加
 import Footer from '../components/Footer.astro';
 ---
 
@@ -13,13 +14,18 @@ import Footer from '../components/Footer.astro';
   title="名古屋の格安ホームページ制作 LiteSite(ライトサイト)｜個人事業主・起業家支援" 
   description="名古屋市を中心に愛知県内で活動するLiteSite。初期費用を抑え、集客に強い高品質なホームページを制作します。地域密着だからこそできる、丁寧なヒアリングと柔軟な対応が強みです。"
 >
-	<main>
-		<Hero />
-		<Features />
-		<Works />
-		<Pricing />
-		<FAQ />
-		<LineButton />
-		<Footer />
-	</main>
+  <main>
+    <Hero />
+    <Features />
+    <Works />
+    
+    <LineSection />
+    
+    <Pricing />
+    <FAQ />
+    
+    <LineButton />
+    
+    <Footer />
+  </main>
 </Layout>

@@ -1,5 +1,6 @@
 ---
 // src/components/Contact.astro
+import LineSection from './LineSection.astro';
 ---
 
 <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -12,6 +13,14 @@
         <p class="text-slate-600">
           制作のご依頼、お見積りのご相談など、お気軽にお問い合わせください。
         </p>
+      </div>
+
+      <LineSection />
+
+      <div class="relative flex py-8 items-center">
+        <div class="flex-grow border-t border-slate-200"></div>
+        <span class="flex-shrink mx-4 text-slate-400 text-xs uppercase tracking-widest font-bold">or form</span>
+        <div class="flex-grow border-t border-slate-200"></div>
       </div>
 
       <form
@@ -68,13 +77,13 @@
   let apiToken = "";
   const startedAt = Date.now();
 
+  // Token取得
   fetch(`${FORM_ENDPOINT}?action=token`)
     .then(res => res.json())
-    .then(data => {
-      if (data.ok) apiToken = data.token;
-    })
+    .then(data => { if (data.ok) apiToken = data.token; })
     .catch(err => console.error("Token fetch error:", err));
 
+  // メール一致チェック
   function checkEmail() {
     if (email.value && emailConfirm.value) {
       const isMatch = email.value === emailConfirm.value;
@@ -93,6 +102,7 @@
   email.addEventListener('input', checkEmail);
   emailConfirm.addEventListener('input', checkEmail);
 
+  // 送信処理
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     submitBtn.disabled = true;
@@ -126,8 +136,8 @@
     } catch (err: any) {
       console.error(err);
       statusMsg!.innerText = err.message === "rate_limited" 
-        ? "短時間に何度も送信することはできません。しばらくお待ちください。"
-        : "送信エラーが発生しました。時間を置いて再度お試しいただくか、SNS等からご連絡ください。";
+        ? "短時間に何度も送信することはできません。"
+        : "送信エラーが発生しました。時間を置いて再度お試しいただくか、LINEからご連絡ください。";
       
       statusMsg?.classList.remove('hidden');
       statusMsg?.classList.add('text-red-600', 'bg-red-50');
