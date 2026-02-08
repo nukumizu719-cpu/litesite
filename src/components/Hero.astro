@@ -1,37 +1,46 @@
 ---
-// Hero.astro
+// src/components/Hero.astro
 ---
-<section class="relative bg-white py-20 lg:py-32 overflow-hidden">
-  <div class="container mx-auto px-6 text-center relative z-10">
-    
-    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 mb-6 leading-tight">
-      <span class="block text-sm md:text-base font-bold text-blue-500 mb-4 tracking-widest">
-        名古屋・愛知の格安ホームページ制作 <br class="md:hidden" />LiteSite（ライトサイト）
-      </span>
-      
-      「ネットのこと、よくわからん」を<br class="hidden md:block" />
-      <span class="text-blue-600">そのまま丸投げ</span>してください。
-    </h1>
-
-    <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-      難しい専門用語は一切使いません。<br class="hidden sm:block" />
-      名古屋の「ライトサイト」が、個人事業主・起業家のあなたに代わって<br class="hidden sm:block" />
-      お店の魅力をネットで見える化します。
-    </p>
-
-    <div class="flex flex-col sm:flex-row justify-center gap-4">
-      <a href="/contact/" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full shadow-lg transition-all transform hover:-translate-y-1">
-        無料で相談してみる
-      </a>
-      <a href="#works" class="bg-white hover:bg-gray-50 text-slate-700 font-bold py-4 px-8 rounded-full border border-slate-200 shadow-sm transition-all">
-        制作実績を見る
-      </a>
-    </div>
-
+<section class="relative bg-white min-h-[80vh] flex items-center overflow-hidden">
+  <div class="absolute inset-0 z-0">
+    <picture>
+      <source srcset="/images/hero-sp.webp" media="(max-width: 767px)" />
+      <img 
+        src="/images/hero-pc.webp" 
+        alt="名古屋・愛知のホームページ制作 LiteSite" 
+        class="w-full h-full object-cover object-center"
+      />
+    </picture>
+    <div class="absolute inset-0 bg-slate-950/60"></div>
   </div>
-  
-  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
-    <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-50 rounded-full blur-3xl opacity-50"></div>
-    <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-green-50 rounded-full blur-3xl opacity-50"></div>
+
+  <div class="container mx-auto px-6 relative z-10 text-left md:text-center">
+    <div class="mx-auto w-fit md:w-full">
+      
+      <h1 class="text-3xl md:text-5xl lg:text-7xl font-bold tracking-tight text-white mb-6 leading-tight">
+        <span class="block text-sm md:text-base font-bold text-blue-400 mb-4 tracking-widest uppercase">
+          名古屋・愛知の格安ホームページ制作 <br class="md:hidden" />LiteSite（ライトサイト）
+        </span>
+        
+        「ネットのこと、よくわからん」を<br class="hidden md:block" />
+        <span class="text-blue-400">そのまま丸投げ</span>してください。
+      </h1>
+
+      <p class="text-lg md:text-xl text-slate-100 mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
+        難しい専門用語は一切使いません。<br class="hidden sm:block" />
+        名古屋の「ライトサイト」が、個人事業主・起業家のあなたに代わって<br class="hidden sm:block" />
+        お店の魅力をネットで見える化します。
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-start md:justify-center items-start md:items-center gap-4">
+        <a href="/contact/" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-full shadow-lg transition-all transform hover:-translate-y-1 text-center">
+          無料で相談してみる
+        </a>
+        <a href="#works" class="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white backdrop-blur-md font-bold py-4 px-10 rounded-full border border-white/30 shadow-sm transition-all text-center">
+          制作実績を見る
+        </a>
+      </div>
+
+    </div>
   </div>
 </section>

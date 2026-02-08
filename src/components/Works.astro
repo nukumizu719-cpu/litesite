@@ -43,14 +43,16 @@ const works = [
 
 <section id="works" class="py-24 bg-white">
   <div class="container mx-auto px-6">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
-        名古屋・愛知三河エリアでの制作実績
-      </h2>
-      <p class="text-slate-600 max-w-2xl mx-auto leading-relaxed">
-        個人事業主様から中小企業様まで、地域に根ざしたホームページ制作を手掛けています。<br class="hidden md:block" />
-        名古屋市内をはじめ、愛知・三河エリアのお客様の「伝えたい」を形にしました。
-      </p>
+    <div class="text-left md:text-center mb-16">
+      <div class="mx-auto w-fit md:w-full">
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
+          名古屋・愛知三河エリアでの制作実績
+        </h2>
+        <p class="text-slate-600 max-w-2xl mx-auto leading-relaxed text-sm md:text-base">
+          個人事業主様から中小企業様まで、地域に根ざしたホームページ制作を手掛けています。<br class="hidden md:block" />
+          名古屋市内をはじめ、愛知・三河エリアのお客様の「伝えたい」を形にしました。
+        </p>
+      </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -59,18 +61,21 @@ const works = [
           href={work.url} 
           target="_blank" 
           rel="noopener noreferrer" 
-          class="group flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+          class="group flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+          aria-label={`${work.title}のWebサイトを見る（新しいタブで開く）`}
         >
+          {/* 画像エリア */}
           <div class="aspect-video bg-slate-100 relative overflow-hidden border-b border-slate-50">
             <img 
               src={work.image} 
               alt={work.alt} 
-              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               loading="lazy"
               decoding="async"
-              onerror="this.style.display='none'" 
+              onerror="this.src='/images/common/placeholder.jpg'; this.onerror=null;"
             />
-            <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            {/* ホバー時のオーバーレイ（PC用） */}
+            <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex items-center justify-center">
               <div class="bg-white text-slate-900 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2">
                 サイトを見る
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
@@ -78,7 +83,8 @@ const works = [
             </div>
           </div>
 
-          <div class="p-6 flex-grow flex flex-col">
+          {/* テキストコンテンツ：常に左揃え */}
+          <div class="p-6 flex-grow flex flex-col text-left">
             <div class="flex items-center gap-2 mb-3">
               <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-widest">
                 {work.category}
@@ -87,15 +93,19 @@ const works = [
                 {work.location}
               </span>
             </div>
+            
             <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
               {work.title}
             </h3>
-            <p class="text-slate-500 text-xs leading-relaxed line-clamp-3">
+            
+            <p class="text-slate-500 text-xs leading-relaxed line-clamp-3 mb-4">
               {work.description}
             </p>
             
-            <div class="mt-4 pt-4 border-t border-slate-50 flex items-center text-blue-600 text-xs font-bold md:hidden">
-              タップしてサイトを表示
+            {/* スマホ用フッター（タップを促す） */}
+            <div class="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between text-blue-600 text-xs font-bold md:hidden">
+              <span>サイトを表示</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
             </div>
           </div>
         </a>
