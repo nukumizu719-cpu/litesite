@@ -1,5 +1,7 @@
 ---
 // src/components/Contact.astro
+// GitHub Secretsの PUBLIC_TURNSTILE_SITE_KEY を使用します
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -68,7 +70,11 @@
         </div>
 
         <div class="flex justify-center">
-          <div class="cf-turnstile" data-sitekey="0x4AAAAAACYKQJQo6LXE6nQQ" data-theme="light"></div>
+          <div 
+            class="cf-turnstile" 
+            data-sitekey={siteKey} 
+            data-theme="light"
+          ></div>
         </div>
 
         <button 
@@ -86,7 +92,6 @@
 </section>
 
 <script>
-  // 設定値
   const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbwzfBtUqWgmJPghIBH6n3K7I3FG-oT9n8-_mvYvAmdCiewNEJIPIqnW4hO1ywCwa5gr/exec";
 
   const form = document.getElementById('contact-form') as HTMLFormElement;
@@ -99,7 +104,6 @@
   let apiToken = "";
   const startedAt = Date.now();
 
-  // 1. GASからワンタイムトークンを取得
   fetch(`${FORM_ENDPOINT}?action=token`)
     .then(res => res.json())
     .then(data => {
@@ -107,7 +111,6 @@
     })
     .catch(err => console.error("Token fetch error:", err));
 
-  // 2. メールアドレス一致チェック
   function checkEmail() {
     if (email.value && emailConfirm.value) {
       const isMatch = email.value === emailConfirm.value;
@@ -126,11 +129,9 @@
   email.addEventListener('input', checkEmail);
   emailConfirm.addEventListener('input', checkEmail);
 
-  // 3. 送信処理
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // 二重送信防止
     submitBtn.disabled = true;
     submitBtn.innerText = "送信中...";
     statusMsg?.classList.add('hidden');
@@ -140,7 +141,7 @@
       name: formData.get('name'),
       email: formData.get('email'),
       message: formData.get('message'),
-      website: formData.get('website'), // ハニーポット
+      website: formData.get('website'),
       token: apiToken,
       startedAt: startedAt,
       turnstileToken: formData.get('cf-turnstile-response')
@@ -155,7 +156,6 @@
       const result = await response.json();
 
       if (result.ok) {
-        // 送信成功
         window.location.href = "/thanks/";
       } else {
         throw new Error(result.error || "送信に失敗しました");
