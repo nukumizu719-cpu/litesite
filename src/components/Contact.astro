@@ -1,9 +1,8 @@
 ---
 // src/components/Contact.astro
-const siteKey = 0x4AAAAAACYKQJQo6LXE6nQQ;
 ---
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <section class="py-20 bg-white" id="contact">
   <div class="container mx-auto px-6">
@@ -23,64 +22,30 @@ const siteKey = 0x4AAAAAACYKQJQo6LXE6nQQ;
 
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-2">お名前</label>
-          <input 
-            type="text" 
-            name="name" 
-            required 
-            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all" 
-            placeholder="山田 太郎" 
-          />
+          <input type="text" name="name" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all" placeholder="山田 太郎" />
         </div>
 
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-2">メールアドレス</label>
-          <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            required 
-            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all" 
-            placeholder="example@mail.com" 
-          />
+          <input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all" placeholder="example@mail.com" />
         </div>
 
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-2">メールアドレス（確認用）</label>
-          <input 
-            type="email" 
-            id="email-confirm" 
-            name="email-confirm" 
-            required 
-            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all" 
-            placeholder="もう一度入力してください" 
-          />
+          <input type="email" id="email-confirm" name="email-confirm" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all" placeholder="もう一度入力してください" />
           <p id="error-message" class="text-red-500 text-sm mt-2 hidden">メールアドレスが一致しません</p>
         </div>
 
         <div>
           <label class="block text-sm font-bold text-slate-700 mb-2">ご相談内容</label>
-          <textarea 
-            name="message" 
-            required 
-            rows="5" 
-            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all" 
-            placeholder="ホームページ制作の相談をしたい..."
-          ></textarea>
+          <textarea name="message" required rows="5" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all" placeholder="ホームページ制作の相談をしたい..."></textarea>
         </div>
 
         <div class="flex justify-center">
-          <div 
-            class="cf-turnstile" 
-            data-sitekey={siteKey} 
-            data-theme="light"
-          ></div>
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAACYKQJQo6LXE6nQQ" data-theme="light"></div>
         </div>
 
-        <button 
-          type="submit" 
-          id="submit-btn" 
-          class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 px-8 rounded-xl transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-        >
+        <button type="submit" id="submit-btn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 px-8 rounded-xl transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
           この内容で送信する
         </button>
 
@@ -130,7 +95,6 @@ const siteKey = 0x4AAAAAACYKQJQo6LXE6nQQ;
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
     submitBtn.disabled = true;
     submitBtn.innerText = "送信中...";
     statusMsg?.classList.add('hidden');
@@ -167,7 +131,6 @@ const siteKey = 0x4AAAAAACYKQJQo6LXE6nQQ;
       
       statusMsg?.classList.remove('hidden');
       statusMsg?.classList.add('text-red-600', 'bg-red-50');
-      
       submitBtn.disabled = false;
       submitBtn.innerText = "この内容で送信する";
     }
