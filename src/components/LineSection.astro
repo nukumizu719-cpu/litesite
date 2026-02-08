@@ -3,19 +3,29 @@
 const lineUrl = "https://line.me/R/ti/p/strait0317jabiru";
 ---
 
-<div class="container mx-auto px-6 py-10">
-  <div class="max-w-2xl mx-auto p-8 bg-green-50 border border-green-200 rounded-3xl text-center shadow-sm">
-    <p class="text-sm font-bold text-slate-700 mb-4 tracking-wider">＼ スマホからならLINEがスムーズ！ ／</p>
+<div class="container mx-auto px-4 py-10">
+  <div class="max-w-2xl mx-auto p-6 md:p-8 bg-green-50 border border-green-200 rounded-3xl text-center shadow-sm">
+    <p class="text-xs md:text-sm font-bold text-slate-700 mb-4 tracking-tighter md:tracking-wider whitespace-nowrap">
+      ＼ スマホからならLINEがスムーズ！ ／
+    </p>
+    
     <a 
       href={lineUrl} 
       target="_blank" 
       rel="noopener noreferrer"
-      class="inline-flex items-center bg-[#06C755] hover:bg-[#05b34c] text-white font-bold py-4 px-10 rounded-2xl shadow-md transition-all transform hover:-translate-y-1 active:scale-95"
+      class="inline-flex items-center justify-center bg-[#06C755] hover:bg-[#05b34c] text-white font-bold 
+             py-4 px-4 md:px-10 rounded-2xl shadow-md transition-all transform hover:-translate-y-1 active:scale-95 
+             w-full md:w-auto overflow-hidden"
     >
-      <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.036 9.608.391.084.922.258 1.057.592.121.303.079.778.039 1.085l-.171 1.027c-.053.303-.242 1.185 1.043.646 1.284-.54 6.913-4.073 9.441-6.972 1.747-1.94 2.555-3.958 2.555-6.026zm-15.011 3.822c-.171 0-.312-.141-.312-.312v-2.592l-1.636 2.512c-.053.082-.141.132-.24.132h-.01c-.098 0-.187-.05-.24-.132l-1.636-2.512v2.592c0 .171-.141.312-.312.312s-.312-.141-.312-.312v-3.235c0-.131.081-.248.204-.294.123-.046.262-.012.349.085l1.945 2.986 1.945-2.986c.087-.097.226-.131.349-.085.123.046.204.163.204.294v3.235c0 .171-.141.312-.312.312zm4.195-2.673h-1.603v.654h1.603c.172 0 .312.141.312.313s-.141.312-.312.312h-1.603v.654h1.603c.172 0 .312.141.312.313s-.141.312-.312.312h-1.916c-.171 0-.312-.141-.312-.312v-3.235c0-.171.141-.312.312-.312h1.916c.172 0 .312.141.312.313s-.141.312-.312.312zm4.148 2.673c-.171 0-.312-.141-.312-.312v-3.235c0-.171.141-.312.312-.312s.312.141.312.312v3.235c0 .171-.141.312-.312.312zm3.176-1.57h-1.442v-1.665c0-.171-.141-.312-.312-.312s-.312.141-.312.312v3.235c0 .083.033.163.091.221s.138.091.221.091h1.754c.171 0 .312-.141.312-.312s-.141-.312-.312-.312z"></path>
-      </svg>
-      LINEで無料相談・見積もり
+      <img 
+        src="/line.svg" 
+        alt="LINE" 
+        class="w-8 h-8 md:w-8 md:h-8 mr-1 md:mr-1.5 flex-shrink-0"
+      />
+      
+      <span class="text-[14px] md:text-lg whitespace-nowrap tracking-tight md:tracking-normal">
+        LINEで無料相談・見積もり
+      </span>
     </a>
   </div>
 </div>
