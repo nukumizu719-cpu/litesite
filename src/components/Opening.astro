@@ -1,0 +1,76 @@
+---
+/**
+ * オープニング演出：レトロPC・タイプライター
+ */
+
+// --- 調整変数エリア ---
+const bgColor = "#0f172a";      // 背景色（ダークネイビー）
+const textColor = "#ffffff";    // 文字色（白。エンジニア感を出したいなら #00ff41）
+const typingSpeed = 100;        // 1文字あたりの速度 (ミリ秒)
+
+// 演出が終わってから画面が消えるまでの待機時間 (ミリ秒)
+// 1000 = 1秒。ユーザーを待たせすぎないよう 0.8s〜1.2s あたりがロジカルな推奨値です。
+const waitTime = 1000;          
+// -----------------
+---
+
+<div id="opening-overlay" class="fixed inset-0 z-[10000] flex items-center justify-center pointer-events-none" style={`background-color: ${bgColor};`}>
+  <div id="typewriter" class="text-3xl md:text-6xl font-bold tracking-tighter" style={`color: ${textColor}; font-family: 'JetBrains Mono', 'Courier New', monospace;`}>
+  </div>
+</div>
+
+<style>
+  /* フェードアウト処理 */
+  #opening-overlay {
+    transition: opacity 0.8s ease-in-out, visibility 0.8s;
+  }
+  
+  #opening-overlay.fade-out {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* レトロなブロックカーソルの点滅演出 */
+  #typewriter::after {
+    content: "█";
+    margin-left: 8px;
+    animation: blink 0.8s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+</style>
+
+<script define:vars={{ typingSpeed, waitTime }}>
+  const text = "ENTER LITESITE";
+  const container = document.getElementById('typewriter');
+  const overlay = document.getElementById('opening-overlay');
+  
+  let i = 0;
+
+  function typeWriter() {
+    if (i < text.length) {
+      container.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typeWriter, typingSpeed);
+    } else {
+      // タイピング完了後、指定時間待機してフェードアウト
+      setTimeout(() => {
+        overlay.classList.add('fade-out');
+        
+        // 完全に消えた後に背景のクリックを有効化し、負荷を減らすため要素を非表示に
+        setTimeout(() => {
+          overlay.style.display = 'none';
+        }, 800);
+      }, waitTime);
+    }
+  }
+
+  // DOMContentLoadedで実行（画像などの読み込みを待たずに即開始）
+  document.addEventListener('DOMContentLoaded', () => {
+    // 最初の1文字目が出るまで少しだけ（200ms）溜めを作る
+    setTimeout(typeWriter, 200);
+  });
+</script>

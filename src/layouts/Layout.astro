@@ -1,14 +1,14 @@
 ---
 // src/layouts/Layout.astro
+import Opening from '../components/Opening.astro'; // 大文字に修正
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 
 interface Props {
   title: string;
-  description?: string; // ← 追加：任意で説明文を受け取れるように
+  description?: string;
 }
 
-// 修正：二重になっていた括弧を直し、デフォルト値を設定
 const { 
   title, 
   description = "名古屋で高品質・低コストなホームページ制作ならLiteSite。個人事業主や起業家向けの集客に強いWeb制作を提供します。" 
@@ -21,9 +21,13 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     
     <title>{title} | LiteSite</title>
-    <meta name="description" content={description} /> <script type="application/ld+json">
+    <meta name="description" content={description} /> 
+    <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
@@ -43,6 +47,8 @@ const {
     </script>
   </head>
   <body class="bg-slate-50 text-slate-900 font-sans">
+    <Opening /> 
+
     <Header />
     <slot />
   </body>
