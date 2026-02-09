@@ -7,24 +7,19 @@
       <img src="/logo.png" alt="ライトサイト" class="h-12 md:h-14 w-auto object-contain" />
     </a>
 
-    <input type="checkbox" id="menu-toggle" class="hidden peer" />
-    <label for="menu-toggle" class="z-[60] cursor-pointer md:hidden flex flex-col gap-1.5 p-2">
-      <span class="w-7 h-0.5 bg-slate-900 transition-all origin-center"></span>
-      <span class="w-7 h-0.5 bg-slate-900 transition-all"></span>
-      <span class="w-7 h-0.5 bg-slate-900 transition-all origin-center"></span>
+    <input type="checkbox" id="menu-toggle" class="hidden" />
+    
+    <label 
+      for="menu-toggle" 
+      class="hamburger-button z-[60] cursor-pointer md:hidden flex flex-col gap-1.5 p-2"
+      aria-label="メニューを開閉する"
+    >
+      <span class="line"></span>
+      <span class="line"></span>
+      <span class="line"></span>
     </label>
 
-    <nav class="
-      fixed top-0 left-0 w-full h-screen
-      bg-white/95 backdrop-blur-lg
-      flex flex-col items-center justify-center
-      gap-8
-      transition-all duration-300 ease-in-out
-      opacity-0 invisible translate-y-[-20px]
-      peer-checked:opacity-100 peer-checked:visible peer-checked:translate-y-0
-      md:static md:w-auto md:h-auto md:bg-transparent md:flex-row md:opacity-100 md:visible md:translate-y-0
-      z-[55]
-    ">
+    <nav class="mobile-nav fixed top-0 left-0 w-full h-screen bg-white/95 backdrop-blur-lg flex flex-col items-center justify-center gap-8 transition-all duration-300 ease-in-out opacity-0 invisible translate-y-[-20px] md:static md:w-auto md:h-auto md:bg-transparent md:flex-row md:opacity-100 md:visible md:translate-y-0 z-[55]">
       <ul class="flex flex-col md:flex-row items-center gap-8 text-xl md:text-sm font-bold md:font-medium text-slate-700">
         <li><a href="/#features" class="hover:text-blue-600 transition-colors">特徴</a></li>
         <li><a href="/#works" class="hover:text-blue-600 transition-colors">制作実績</a></li>
@@ -40,17 +35,64 @@
   </div>
 </header>
 
-<script>
-  // メニュー内のリンクをすべて取得
-  const menuLinks = document.querySelectorAll('nav a');
-  const menuToggle = document.getElementById('menu-toggle') as HTMLInputElement;
+<style>
+  /* 三本線の基本スタイル */
+  .line {
+    display: block;
+    width: 1.75rem; /* w-7 */
+    height: 2px;    /* h-0.5 */
+    background-color: #0f172a; /* bg-slate-900 */
+    transition: all 0.3s ease-in-out;
+    transform-origin: center;
+  }
 
-  // 各リンクがクリックされたら、チェックボックスをオフにする
+  /* チェックボックスが入った時の「×」アニメーション */
+  #menu-toggle:checked ~ .hamburger-button .line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  #menu-toggle:checked ~ .hamburger-button .line:nth-child(2) {
+    opacity: 0;
+  }
+
+  #menu-toggle:checked ~ .hamburger-button .line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /* メニュー本体の表示制御（Tailwindの挙動をCSSで確実に再現） */
+  #menu-toggle:checked ~ .mobile-nav {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle') as HTMLInputElement;
+  const menuLinks = document.querySelectorAll('nav a');
+
+  const toggleScrollLock = (isLocked: boolean) => {
+    document.body.style.overflow = isLocked ? 'hidden' : '';
+  };
+
+  menuToggle?.addEventListener('change', () => {
+    toggleScrollLock(menuToggle.checked);
+  });
+
   menuLinks.forEach(link => {
     link.addEventListener('click', () => {
-      if (menuToggle) {
+      if (menuToggle?.checked) {
         menuToggle.checked = false;
+        toggleScrollLock(false);
       }
     });
+  });
+
+  // PCサイズになったらリセット
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768 && menuToggle?.checked) {
+      menuToggle.checked = false;
+      toggleScrollLock(false);
+    }
   });
 </script>
