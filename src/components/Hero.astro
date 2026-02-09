@@ -1,11 +1,14 @@
 ---
-// 動画と制御ボタンのみのコンポーネント
+// src/components/Hero.astro
+import HeroContent from './HeroContent.astro';
 ---
-<section class="relative bg-black w-full overflow-hidden">
-  <div class="w-full aspect-video md:h-[70vh]">
+
+<section class="relative bg-white min-h-[5vh] md:min-h-[10vh] flex items-center overflow-hidden">
+  
+  <div class="absolute inset-0 z-0">
     <video
       id="hero-video"
-      class="w-full h-full object-cover"
+      class="w-full h-full object-cover object-center bg-black"
       autoplay
       muted
       loop
@@ -14,31 +17,59 @@
     >
       <source src="/images/hero-sp.mp4" type="video/mp4" media="(max-width: 767px)" />
       <source src="/images/hero-pc.mp4" type="video/mp4" />
+      <img src="/images/hero-pc.webp" alt="背景動画の代替画像" />
     </video>
   </div>
+
+  <div class="absolute inset-0 bg-slate-950/30 z-10 pointer-events-none"></div>
 
   <button
     id="video-toggle-btn"
     type="button"
-    class="absolute top-4 right-4 z-30 px-3 py-2 rounded-full border border-white/45 bg-black/35 text-white text-xs font-semibold backdrop-blur-sm"
+    class="absolute top-4 right-4 z-30 px-3 py-2 md:px-4 md:py-2.5 rounded-full border border-white/45 bg-black/35 text-white text-xs md:text-sm font-semibold backdrop-blur-sm hover:bg-black/45 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent cursor-pointer"
+    aria-controls="hero-video"
     aria-pressed="true" 
   >
     動画を停止する
   </button>
+
+  <HeroContent />
+
 </section>
 
 <script>
-  const video = document.getElementById('hero-video') as HTMLVideoElement;
-  const btn = document.getElementById('video-toggle-btn');
+  document.addEventListener('DOMContentLoaded', () => {
+    const video = document.getElementById('hero-video') as HTMLVideoElement;
+    const btn = document.getElementById('video-toggle-btn');
 
-  if (video && btn) {
+    if (!video || !btn) return;
+
     const setBtnState = (isPlaying: boolean) => {
-      btn.textContent = isPlaying ? '動画を停止する' : '動画を再生する';
+      if (isPlaying) {
+        btn.textContent = '動画を停止する';
+        btn.setAttribute('aria-pressed', 'true');
+      } else {
+        btn.textContent = '動画を再生する';
+        btn.setAttribute('aria-pressed', 'false');
+      }
     };
+
+    // 初期状態チェック
+    if (video.paused) {
+      setBtnState(false);
+    }
+
+    // イベント監視
     video.addEventListener('play', () => setBtnState(true));
     video.addEventListener('pause', () => setBtnState(false));
+
+    // ボタンクリック操作
     btn.addEventListener('click', () => {
-      video.paused ? video.play() : video.pause();
+      if (video.paused) {
+        video.play().catch(e => console.warn('Play failed:', e));
+      } else {
+        video.pause();
+      }
     });
-  }
+  });
 </script>
