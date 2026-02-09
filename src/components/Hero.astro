@@ -1,46 +1,44 @@
 ---
-// src/components/Hero.astro
+// 動画と制御ボタンのみのコンポーネント
 ---
-<section class="relative bg-white min-h-[80vh] flex items-center overflow-hidden">
-  <div class="absolute inset-0 z-0">
-    <picture>
-      <source srcset="/images/hero-sp.webp" media="(max-width: 767px)" />
-      <img 
-        src="/images/hero-pc.webp" 
-        alt="名古屋・愛知のホームページ制作 LiteSite" 
-        class="w-full h-full object-cover object-center"
-      />
-    </picture>
-    <div class="absolute inset-0 bg-slate-950/60"></div>
+<section class="relative bg-black w-full overflow-hidden">
+  <div class="w-full aspect-video md:h-[70vh]">
+    <video
+      id="hero-video"
+      class="w-full h-full object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+      poster="/images/hero-pc.webp"
+    >
+      <source src="/images/hero-sp.mp4" type="video/mp4" media="(max-width: 767px)" />
+      <source src="/images/hero-pc.mp4" type="video/mp4" />
+    </video>
   </div>
 
-  <div class="container mx-auto px-6 relative z-10 text-left md:text-center">
-    <div class="mx-auto w-fit md:w-full">
-      
-      <h1 class="text-3xl md:text-5xl lg:text-7xl font-bold tracking-tight text-white mb-6 leading-tight">
-        <span class="block text-sm md:text-base font-bold text-blue-400 mb-4 tracking-widest uppercase">
-          名古屋・愛知の格安ホームページ制作 <br class="md:hidden" />LiteSite（ライトサイト）
-        </span>
-        
-        「ネットのこと、よくわからん」を<br class="hidden md:block" />
-        <span class="text-blue-400">そのまま丸投げ</span>してください。
-      </h1>
-
-      <p class="text-lg md:text-xl text-slate-100 mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
-        難しい専門用語は一切使いません。<br class="hidden sm:block" />
-        名古屋の「ライトサイト」が、個人事業主・起業家のあなたに代わって<br class="hidden sm:block" />
-        お店の魅力をネットで見える化します。
-      </p>
-
-      <div class="flex flex-col sm:flex-row justify-start md:justify-center items-start md:items-center gap-4">
-        <a href="/contact/" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-full shadow-lg transition-all transform hover:-translate-y-1 text-center">
-          無料で相談してみる
-        </a>
-        <a href="#works" class="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white backdrop-blur-md font-bold py-4 px-10 rounded-full border border-white/30 shadow-sm transition-all text-center">
-          制作実績を見る
-        </a>
-      </div>
-
-    </div>
-  </div>
+  <button
+    id="video-toggle-btn"
+    type="button"
+    class="absolute top-4 right-4 z-30 px-3 py-2 rounded-full border border-white/45 bg-black/35 text-white text-xs font-semibold backdrop-blur-sm"
+    aria-pressed="true" 
+  >
+    動画を停止する
+  </button>
 </section>
+
+<script>
+  const video = document.getElementById('hero-video') as HTMLVideoElement;
+  const btn = document.getElementById('video-toggle-btn');
+
+  if (video && btn) {
+    const setBtnState = (isPlaying: boolean) => {
+      btn.textContent = isPlaying ? '動画を停止する' : '動画を再生する';
+    };
+    video.addEventListener('play', () => setBtnState(true));
+    video.addEventListener('pause', () => setBtnState(false));
+    btn.addEventListener('click', () => {
+      video.paused ? video.play() : video.pause();
+    });
+  }
+</script>
