@@ -5,18 +5,18 @@ import HeroContent from './HeroContent.astro';
 
 <section class="relative bg-white min-h-[5vh] md:min-h-[10vh] flex items-center overflow-hidden">
   
-  <div class="absolute inset-0 z-0 bg-black"> <video
+  <div class="absolute inset-0 z-0 bg-black">
+    <video
       id="hero-video"
       class="w-full h-full object-cover object-center"
       autoplay
       muted
       loop
       playsinline
-      /* poster属性を削除しました */
     >
       <source src="/images/hero-sp.mp4" type="video/mp4" media="(max-width: 767px)" />
       <source src="/images/hero-pc.mp4" type="video/mp4" />
-      </video>
+    </video>
   </div>
 
   <div class="absolute inset-0 bg-slate-950/30 z-10 pointer-events-none"></div>
@@ -24,11 +24,24 @@ import HeroContent from './HeroContent.astro';
   <button
     id="video-toggle-btn"
     type="button"
-    class="absolute top-4 right-4 z-30 px-3 py-2 md:px-4 md:py-2.5 rounded-full border border-white/45 bg-black/35 text-white text-xs md:text-sm font-semibold backdrop-blur-sm hover:bg-black/45 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent cursor-pointer"
+    class="absolute top-4 right-4 z-30 p-2 md:p-3 rounded-full border border-white/45 bg-black/35 text-white backdrop-blur-sm hover:bg-black/45 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent cursor-pointer flex items-center justify-center group"
     aria-controls="hero-video"
     aria-pressed="true" 
+    aria-label="動画を停止する"
   >
-    動画を停止する
+    <img 
+      id="icon-play" 
+      src="/images/ico_play_g.svg" 
+      alt="" 
+      class="hidden w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform" 
+    />
+    
+    <img 
+      id="icon-stop" 
+      src="/images/ico_stop_g.svg" 
+      alt="" 
+      class="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform" 
+    />
   </button>
 
   <HeroContent />
@@ -36,21 +49,43 @@ import HeroContent from './HeroContent.astro';
 </section>
 
 <script>
-  // 前述のスクリプトと同様のため省略（そのまま利用可能です）
   document.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById('hero-video') as HTMLVideoElement;
     const btn = document.getElementById('video-toggle-btn');
-    if (!video || !btn) return;
+    const iconPlay = document.getElementById('icon-play');
+    const iconStop = document.getElementById('icon-stop');
+
+    // 要素が足りない場合は中断
+    if (!video || !btn || !iconPlay || !iconStop) return;
 
     const setBtnState = (isPlaying: boolean) => {
-      btn.textContent = isPlaying ? '動画を停止する' : '動画を再生する';
-      btn.setAttribute('aria-pressed', String(isPlaying));
+      if (isPlaying) {
+        // 再生中 → 停止アイコンを表示、再生アイコンを隠す
+        iconStop.classList.remove('hidden');
+        iconPlay.classList.add('hidden');
+        
+        btn.setAttribute('aria-pressed', 'true');
+        btn.setAttribute('aria-label', '動画を停止する'); // アクセシビリティ用テキスト更新
+      } else {
+        // 停止中 → 再生アイコンを表示、停止アイコンを隠す
+        iconPlay.classList.remove('hidden');
+        iconStop.classList.add('hidden');
+        
+        btn.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('aria-label', '動画を再生する');
+      }
     };
 
-    if (video.paused) setBtnState(false);
+    // 1. 初期状態チェック
+    if (video.paused) {
+      setBtnState(false);
+    }
+
+    // 2. イベントリスナー (同期)
     video.addEventListener('play', () => setBtnState(true));
     video.addEventListener('pause', () => setBtnState(false));
 
+    // 3. クリックイベント
     btn.addEventListener('click', () => {
       if (video.paused) {
         video.play().catch(e => console.warn('Play failed:', e));
