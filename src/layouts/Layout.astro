@@ -1,8 +1,8 @@
 ---
 // src/layouts/Layout.astro
-import Opening from '../components/Opening.astro'; // 大文字に修正
-import '../styles/global.css';
+import Opening from '../components/Opening.astro';
 import Header from '../components/Header.astro';
+import '../styles/global.css';
 
 interface Props {
   title: string;
@@ -11,8 +11,11 @@ interface Props {
 
 const { 
   title, 
-  description = "名古屋で高品質・低コストなホームページ制作ならLiteSite。個人事業主や起業家向けの集客に強いWeb制作を提供します。" 
+  description = "名古屋で高品質・低コストなホームページ制作ならLiteSite。" 
 } = Astro.props;
+
+// 解析用ID（一箇所で管理）
+const GA_ID = "G-EMP52J5809";
 ---
 
 <!doctype html>
@@ -21,34 +24,23 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     
-    <title>{title} | LiteSite</title>
-    <meta name="description" content={description} /> 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ProfessionalService",
-      "name": "LiteSite",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "名古屋市",
-        "addressRegion": "愛知県",
-        "addressCountry": "JP"
-      },
-      "areaServed": {
-        "@type": "City",
-        "name": "Nagoya"
-      },
-      "description": "名古屋市を拠点に、地域密着型で高品質なWeb制作サービスを提供。"
-    }
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+    <script define:vars={{ GA_ID }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', GA_ID);
     </script>
-  </head>
+
+    <title>{title} | LiteSite</title>
+    <meta name="description" content={description} />
+    
+    </head>
   <body class="bg-slate-50 text-slate-900 font-sans">
     <Opening /> 
-
     <Header />
     <slot />
   </body>
