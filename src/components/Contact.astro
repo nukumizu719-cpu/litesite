@@ -65,6 +65,13 @@ import LineSection from './LineSection.astro';
 </section>
 
 <script>
+  // 型定義の追加（TypeScriptエラー回避用）
+  declare global {
+    interface Window {
+      gtag: (...args: any[]) => void;
+    }
+  }
+
   const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbwzfBtUqWgmJPghIBH6n3K7I3FG-oT9n8-_mvYvAmdCiewNEJIPIqnW4hO1ywCwa5gr/exec";
 
   const form = document.getElementById('contact-form') as HTMLFormElement;
@@ -129,7 +136,21 @@ import LineSection from './LineSection.astro';
       const result = await response.json();
 
       if (result.ok) {
-        window.location.href = "/thanks/";
+        // --- Googleアナリティクス イベント送信 ---
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'generate_lead', {
+            'event_category': 'contact',
+            'event_label': 'litesite_contact_form',
+            'value': 1
+          });
+        }
+        // --------------------------------------
+        
+        // 計測データの送信時間を考慮し、わずかに待機してから遷移
+        setTimeout(() => {
+          window.location.href = "/thanks/";
+        }, 150);
+        
       } else {
         throw new Error(result.error || "送信に失敗しました");
       }
