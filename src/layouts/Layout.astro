@@ -5,26 +5,49 @@ import Header from '../components/Header.astro';
 import '../styles/global.css';
 
 interface Props {
-  title: string;
+  title?: string; // ページ固有のタイトル
   description?: string;
 }
 
 const { 
   title, 
-  description = "名古屋で高品質・低コストなホームページ制作ならLiteSite。" 
+  description = "名古屋で高品質・低コストなホームページ制作ならLiteSite。地域密着で集客に強いWebサイト制作を実現します。" 
 } = Astro.props;
 
-// 解析用ID（一箇所で管理）
+// 基本設定
+const siteName = "LiteSite（ライトサイト）";
+const siteUrl = "https://litesite.jp"; // 実際の公開URL
 const GA_ID = "G-EMP52J5809";
+
+/**
+ * SEOロジック: 
+ * 1. 下層ページ: 「ページ名 | 名古屋のホームページ制作ならLiteSite」
+ * 2. トップページ: キーワードを網羅した強力なタイトル
+ */
+const fullTitle = title 
+  ? `${title} | 名古屋のホームページ制作なら${siteName}`
+  : `名古屋で高品質・低コストなホームページ制作なら${siteName} | 地域密着のWeb制作`;
 ---
 
 <!doctype html>
 <html lang="ja" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={siteUrl} />
+
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={siteUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={`${siteUrl}/ogp.png`} />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
     <script is:inline define:vars={{ GA_ID }}>
       window.dataLayer = window.dataLayer || [];
@@ -35,13 +58,61 @@ const GA_ID = "G-EMP52J5809";
       gtag('config', GA_ID);
     </script>
 
-    <title>{title} | LiteSite</title>
-    <meta name="description" content={description} />
-    
+    <script type="application/ld+json" is:inline define:vars={{ siteName, siteUrl }}>
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "ライトサイト",
+        "alternateName": ["LiteSite", "LiteSite（ライトサイト）"],
+        "url": "https://litesite.jp/"
+      }
+    </script>
+
+    <script type="application/ld+json" is:inline>
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "LiteSite（ライトサイト）",
+        "description": "名古屋市の高品質・低コストなホームページ制作・Web制作支援",
+        "url": "https://litesite.jp",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "名古屋市",
+          "addressRegion": "JP-23"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "35.1814", 
+          "longitude": "136.9066"
+        }
+      }
+    </script>
   </head>
-  <body class="bg-slate-50 text-slate-900 font-sans">
+  
+  <body class="bg-slate-50 text-slate-900 font-sans antialiased">
     <Opening /> 
     <Header />
-    <slot />
-  </body>
+    
+    <main>
+      <slot />
+    </main>
+
+    </body>
 </html>
+
+<style is:global>
+  /* --- ベーススタイル調整 --- */
+  :root {
+    --color-primary: #0f172a; /* Slate 900 */
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* スムーズスクロール (htmlタグにクラス指定があるため補足) */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+</style>
