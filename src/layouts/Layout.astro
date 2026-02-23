@@ -14,9 +14,9 @@ const {
   description = "名古屋で高品質・低コストなホームページ制作ならLiteSite。地域密着で集客に強いWebサイト制作を実現します。" 
 } = Astro.props;
 
-// 基本設定（一箇所で管理）
+// 基本設定
 const siteName = "LiteSite（ライトサイト）";
-const displayName = "ライトサイト"; // Google検索結果に表示させたい名前
+const displayName = "ライトサイト";
 const siteUrl = "https://litesite.jp"; 
 const GA_ID = "G-EMP52J5809";
 
@@ -27,7 +27,8 @@ const fullTitle = title
   ? `${title} | 名古屋のホームページ制作なら${siteName}`
   : `名古屋で高品質・低コストなホームページ制作なら${siteName} | 地域密着のWeb制作`;
 
-// 構造化データ（JSON-LD）を事前に定義して文字列化
+// 構造化データ（JSON-LD）
+// JSON.stringify を使用し、安全な文字列として定義
 const websiteSchema = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -45,7 +46,8 @@ const businessSchema = JSON.stringify({
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "名古屋市",
-    "addressRegion": "JP-23"
+    "addressRegion": "JP-23",
+    "addressCountry": "JP"
   }
 });
 ---
@@ -79,8 +81,8 @@ const businessSchema = JSON.stringify({
       gtag('config', GA_ID);
     </script>
 
-    <script type="application/ld+json" is:inline set:html={websiteSchema}></script>
-    <script type="application/ld+json" is:inline set:html={businessSchema}></script>
+    <script type="application/ld+json" set:html={websiteSchema} />
+    <script type="application/ld+json" set:html={businessSchema} />
 
   </head>
   <body class="bg-slate-50 text-slate-900 font-sans antialiased">
