@@ -1,97 +1,98 @@
 ---
-// src/components/Hero.astro
-import HeroContent from './HeroContent.astro';
+/**
+ * 補助金訴求・SEO特化型 統合Heroコンポーネント
+ * 動画を廃止し、表示速度と成約率を最大化。
+ * 「実質5.7万円〜」という具体的な数字で、名古屋の創業層へ刺さる訴求を行います。
+ */
 ---
+<section class="relative bg-slate-50 py-16 md:py-28 border-b border-slate-200 overflow-hidden">
+  <div class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-96 h-96 bg-blue-50 rounded-full blur-3xl opacity-60"></div>
+  <div class="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-96 h-96 bg-slate-200 rounded-full blur-3xl opacity-40"></div>
 
-<section class="relative bg-white min-h-[5vh] md:min-h-[10vh] flex items-center overflow-hidden">
-  
-  <div class="absolute inset-0 z-0 bg-black">
-    <video
-      id="hero-video"
-      class="w-full h-full object-cover object-center"
-      autoplay
-      muted
-      loop
-      playsinline
-    >
-      <source src="/images/hero-sp.mp4" type="video/mp4" media="(max-width: 767px)" />
-      <source src="/images/hero-pc.mp4" type="video/mp4" />
-    </video>
+  <div class="container mx-auto px-6 relative z-10">
+    <div class="grid lg:grid-cols-12 gap-12 items-center">
+      
+      <div class="lg:col-span-7 text-left">
+        <div class="inline-flex items-center gap-2 bg-blue-600 text-white text-xs md:text-sm font-bold px-4 py-1.5 rounded-full mb-8 shadow-md">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+          </span>
+          小規模事業者持続化補助金〈創業型〉第3回公募（第6版）対応
+        </div>
+        
+        <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 leading-[1.15] mb-8 tracking-tight">
+          名古屋での起業を、<br />
+          <span class="text-blue-600">「実質5.7万円〜」</span>の<br />
+          最強集客サイトで始める。
+        </h1>
+        
+        <p class="text-lg md:text-xl text-slate-600 mb-10 leading-relaxed font-medium max-w-2xl">
+          公募要領（第6版）に準拠した申請サポートから、<br class="hidden md:block" />
+          爆速SEOフレームワーク「Astro」による制作まで丸投げ。<br class="hidden md:block" />
+          <span class="text-slate-900 border-b-2 border-blue-200">「お金を残して、顧客を呼ぶ」</span>論理的な創業支援をご提案します。
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+          <a href="/contact/" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-5 px-12 rounded-xl text-xl shadow-xl transition-all transform hover:-translate-y-1 active:scale-95">
+            無料で補助金活用を相談する
+          </a>
+          
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-bold text-slate-500">※第3回公募の準備はお早めに</span>
+            <a href="/subsidy/" class="text-blue-600 font-bold hover:underline flex items-center gap-1 group">
+              創業型の要件・第6版の注意点を見る 
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5">
+        <div class="bg-white p-8 rounded-3xl shadow-2xl border border-slate-100 relative">
+          <div class="absolute -top-4 -right-4 bg-red-500 text-white text-sm font-bold py-2 px-4 rounded-lg shadow-lg rotate-12 animate-pulse">
+            最大3/4補助！
+          </div>
+          
+          <h2 class="text-xl font-bold text-slate-800 mb-6 text-center underline decoration-blue-500 decoration-4 underline-offset-8">
+            LiteSiteが選ばれる3つの理由
+          </h2>
+          
+          <ul class="space-y-6">
+            <li class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold">1</div>
+              <div>
+                <p class="font-bold text-slate-900 text-lg">採択率重視の計画書支援</p>
+                <p class="text-sm text-slate-500 leading-relaxed">名古屋・愛知の商工会議所への提出書類作成をITの専門家視点でアドバイス。</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold">2</div>
+              <div>
+                <p class="font-bold text-slate-900 text-lg">Google評価100点の爆速設計</p>
+                <p class="text-sm text-slate-500 leading-relaxed">最新技術Astro採用。表示速度はSEO順位に直結し、大手競合を圧倒します。</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold">3</div>
+              <div>
+                <p class="font-bold text-slate-900 text-lg">維持費「永年0円」</p>
+                <p class="text-sm text-slate-500 leading-relaxed">月額保守費用なし。創業期の限られた資金を広告や設備投資に回せます。</p>
+              </div>
+            </li>
+          </ul>
+
+          <div class="mt-8 pt-6 border-t border-slate-100">
+            <p class="text-center text-slate-400 text-xs leading-relaxed italic">
+              LiteSite（ライトサイト）は名古屋・安城を中心に<br />
+              愛知県全域の小規模事業者をロジカルにサポートしています。
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
-
-  <div class="absolute inset-0 bg-slate-950/30 z-10 pointer-events-none"></div>
-
-  <button
-    id="video-toggle-btn"
-    type="button"
-    class="absolute top-4 right-4 z-30 p-2 md:p-3 rounded-full border border-white/45 bg-black/35 text-white backdrop-blur-sm hover:bg-black/45 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent cursor-pointer flex items-center justify-center group"
-    aria-controls="hero-video"
-    aria-pressed="true" 
-    aria-label="動画を停止する"
-  >
-    <img 
-      id="icon-play" 
-      src="/images/ico_play_g.svg" 
-      alt="" 
-      class="hidden w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform" 
-    />
-    
-    <img 
-      id="icon-stop" 
-      src="/images/ico_stop_g.svg" 
-      alt="" 
-      class="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform" 
-    />
-  </button>
-
-  <HeroContent />
-
 </section>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const video = document.getElementById('hero-video') as HTMLVideoElement;
-    const btn = document.getElementById('video-toggle-btn');
-    const iconPlay = document.getElementById('icon-play');
-    const iconStop = document.getElementById('icon-stop');
-
-    // 要素が足りない場合は中断
-    if (!video || !btn || !iconPlay || !iconStop) return;
-
-    const setBtnState = (isPlaying: boolean) => {
-      if (isPlaying) {
-        // 再生中 → 停止アイコンを表示、再生アイコンを隠す
-        iconStop.classList.remove('hidden');
-        iconPlay.classList.add('hidden');
-        
-        btn.setAttribute('aria-pressed', 'true');
-        btn.setAttribute('aria-label', '動画を停止する'); // アクセシビリティ用テキスト更新
-      } else {
-        // 停止中 → 再生アイコンを表示、停止アイコンを隠す
-        iconPlay.classList.remove('hidden');
-        iconStop.classList.add('hidden');
-        
-        btn.setAttribute('aria-pressed', 'false');
-        btn.setAttribute('aria-label', '動画を再生する');
-      }
-    };
-
-    // 1. 初期状態チェック
-    if (video.paused) {
-      setBtnState(false);
-    }
-
-    // 2. イベントリスナー (同期)
-    video.addEventListener('play', () => setBtnState(true));
-    video.addEventListener('pause', () => setBtnState(false));
-
-    // 3. クリックイベント
-    btn.addEventListener('click', () => {
-      if (video.paused) {
-        video.play().catch(e => console.warn('Play failed:', e));
-      } else {
-        video.pause();
-      }
-    });
-  });
-</script>

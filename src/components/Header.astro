@@ -1,13 +1,17 @@
 ---
-// src/components/Header.astro
+/**
+ * SEO & 補助金導線強化型 Header
+ * 1. 「補助金ガイド」をナビゲーションの最優先位置に配置
+ * 2. モバイルメニューでも補助金ページへの接触機会を最大化
+ */
 ---
-<header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-slate-100">
+<header class="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
   <div class="container mx-auto px-6 h-20 flex items-center justify-between">
-    <a href="/" class="z-[60] shrink-0">
-      <img src="/logo.png" alt="ライトサイト" class="h-12 md:h-14 w-auto object-contain" />
+    <a href="/" class="z-[60] shrink-0 transition-opacity hover:opacity-80">
+      <img src="/logo.png" alt="LiteSite（ライトサイト）名古屋のホームページ制作" class="h-10 md:h-12 w-auto object-contain" />
     </a>
 
-    <input type="checkbox" id="menu-toggle" class="hidden" />
+    <input type="checkbox" id="menu-toggle" class="hidden peer" />
     
     <label 
       for="menu-toggle" 
@@ -19,15 +23,27 @@
       <span class="line"></span>
     </label>
 
-    <nav class="mobile-nav fixed top-0 left-0 w-full h-screen bg-white/95 backdrop-blur-lg flex flex-col items-center justify-center gap-8 transition-all duration-300 ease-in-out opacity-0 invisible translate-y-[-20px] md:static md:w-auto md:h-auto md:bg-transparent md:flex-row md:opacity-100 md:visible md:translate-y-0 z-[55]">
-      <ul class="flex flex-col md:flex-row items-center gap-8 text-xl md:text-sm font-bold md:font-medium text-slate-700">
-        <li><a href="/#features" class="hover:text-blue-600 transition-colors">特徴</a></li>
-        <li><a href="/#works" class="hover:text-blue-600 transition-colors">制作実績</a></li>
-        <li><a href="/#pricing" class="hover:text-blue-600 transition-colors">料金</a></li>
-        <li><a href="/#faq" class="hover:text-blue-600 transition-colors">よくある質問</a></li>
+    <nav class="mobile-nav fixed top-0 left-0 w-full h-screen bg-white/98 backdrop-blur-xl flex flex-col items-center justify-center gap-8 transition-all duration-300 ease-in-out opacity-0 invisible translate-y-[-20px] 
+      md:static md:w-auto md:h-auto md:bg-transparent md:flex-row md:opacity-100 md:visible md:translate-y-0 z-[55]">
+      
+      <ul class="flex flex-col md:flex-row items-center gap-8 text-xl md:text-[0.9rem] font-bold md:font-semibold text-slate-700 uppercase tracking-wider">
         <li>
-          <a href="/contact/" class="bg-slate-900 text-white px-10 md:px-5 py-4 md:py-2.5 rounded-full hover:bg-slate-800 transition-all">
-            お問い合わせ
+          <a href="/subsidy/" class="flex items-center gap-1.5 text-blue-600 hover:text-blue-700 transition-colors py-2 md:border-b-2 md:border-blue-100 md:hover:border-blue-600">
+            <span class="text-xs bg-blue-600 text-white px-2 py-0.5 rounded-sm scale-90 md:scale-75">NEW</span>
+            補助金ガイド
+          </a>
+        </li>
+        <li><a href="/#features" class="hover:text-blue-600 transition-colors">特徴</a></li>
+        <li><a href="/#works" class="hover:text-blue-600 transition-colors">実績</a></li>
+        <li><a href="/#pricing" class="hover:text-blue-600 transition-colors">料金</a></li>
+        <li><a href="/#faq" class="hover:text-blue-600 transition-colors">FAQ</a></li>
+        
+        <li class="pt-4 md:pt-0">
+          <a href="/contact/" class="flex items-center gap-2 bg-slate-900 text-white px-10 md:px-6 py-4 md:py-3 rounded-xl hover:bg-blue-600 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+            無料相談・お問い合わせ
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 hidden md:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
           </a>
         </li>
       </ul>
@@ -36,34 +52,37 @@
 </header>
 
 <style>
-  /* 三本線の基本スタイル */
+  /* 三本線の基本スタイル（変更なしだが、よりシャープに） */
   .line {
     display: block;
-    width: 1.75rem; /* w-7 */
-    height: 2px;    /* h-0.5 */
-    background-color: #0f172a; /* bg-slate-900 */
-    transition: all 0.3s ease-in-out;
-    transform-origin: center;
+    width: 1.5rem;
+    height: 2px;
+    background-color: #0f172a;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* チェックボックスが入った時の「×」アニメーション */
+  /* チェックボックスが入った時のアニメーション */
   #menu-toggle:checked ~ .hamburger-button .line:nth-child(1) {
     transform: translateY(8px) rotate(45deg);
   }
-
   #menu-toggle:checked ~ .hamburger-button .line:nth-child(2) {
     opacity: 0;
+    transform: translateX(10px);
   }
-
   #menu-toggle:checked ~ .hamburger-button .line:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
   }
 
-  /* メニュー本体の表示制御（Tailwindの挙動をCSSで確実に再現） */
+  /* Peerクラスを活用した表示制御 */
   #menu-toggle:checked ~ .mobile-nav {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+  }
+
+  /* アクティブなリンクの視覚効果（Astroのページ判定JSと組み合わせるとより強力） */
+  nav a {
+    position: relative;
   }
 </style>
 
@@ -88,7 +107,6 @@
     });
   });
 
-  // PCサイズになったらリセット
   window.addEventListener('resize', () => {
     if (window.innerWidth >= 768 && menuToggle?.checked) {
       menuToggle.checked = false;

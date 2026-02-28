@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const title = "特定商取引法に基づく表記 | LiteSite（ライトサイト）";
+const description = "LiteSite（ライトサイト）の特定商取引法に基づく表記をご案内します。";
+---
+
+<Layout title={title} description={description}>
+  <main class="bg-slate-50 py-20">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <div class="bg-white p-8 md:p-16 rounded-3xl shadow-sm border border-slate-200">
+        <h1 class="text-3xl font-bold text-slate-900 mb-8 pb-4 border-b-2 border-blue-600 inline-block">
+          特定商取引法に基づく表記
+        </h1>
+
+        <div class="space-y-0 text-sm md:text-base">
+          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
+            <div class="font-bold text-slate-900 mb-2 md:mb-0">販売業者</div>
+            <div class="md:col-span-2 text-slate-600">LiteSite（ライトサイト）</div>
+          </div>
+
+          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
+            <div class="font-bold text-slate-900 mb-2 md:mb-0">代表責任者</div>
+            <div class="md:col-span-2 text-slate-600">（※お名前をご記入ください）</div>
+          </div>
+
+          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
+            <div class="font-bold text-slate-900 mb-2 md:mb-0">所在地</div>
+            <div class="md:col-span-2 text-slate-600">愛知県安城市（※詳細な住所をご記入ください）</div>
+          </div>
+
+          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
+            <div class="font-bold text-slate-900 mb-2 md:mb-0">メールアドレス</div>
+            <div class="md:col-span-2 text-slate-600">info@litesite.jp</div>
+          </div>
+
+          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
+            <div class="font-bold text-slate-900 mb-2 md:mb-0">販売価格</div>
+            <div class="md:col-span-2 text-slate-600">
+              各プラン・サービスごとに表示された価格に基づきます。<br />
+              詳細は「料金プラン」のページをご確認ください。
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
+            <div class="font-bold text-slate-900 mb-2 md:mb-0">商品代金以外の必要料金</div>
+            <div class="md:col-span-2 text-slate-600">
+              ・銀行振込手数料（振込支払いの場合）<br />
+              ・ドメイン、サーバー取得に関わる実費（セルフ運用プランの場合）
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
+            <div class="font-bold text-slate-900 mb-2 md:mb-0">引き渡し時期</div>
+            <div class="md:col-span-2 text-slate-600">
+              制作着手から通常1ヶ月程度（契約内容および資料提供のタイミングにより前後します）。
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
+            <div class="font-bold text-slate-900 mb-2 md:mb-0">お支払方法</div>
+            <div class="md:col-span-2 text-slate-600">銀行振込、クレジットカード（Stripe等）</div>
+          </div>
+
+          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
+            <div class="font-bold text-slate-900 mb-2 md:mb-0">返品・キャンセル</div>
+            <div class="md:col-span-2 text-slate-600 leading-relaxed">
+              サービスの性質上、制作着手後のキャンセル・返品は受け付けておりません。<br />
+              保守サブスクリプションの解約は、解約希望月の前月末日までにお申し出いただくことで、翌月より停止いたします。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <a href="/" class="text-blue-600 hover:underline text-sm font-bold">← ホームへ戻る</a>
+      </div>
+    </div>
+  </main>
+</Layout>

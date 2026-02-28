@@ -1,6 +1,10 @@
 ---
-// src/components/Works.astro
-
+/**
+ * 戦略的実績セクション (Works.astro)
+ * 1. 地名SEO: 各実績に「所在地」を明記し、ローカル検索を強化
+ * 2. 信頼性: カテゴリと詳細なディスクリプションで専門性を証明
+ * 3. パフォーマンス: 画像の遅延読み込みとエラーハンドリングを完備
+ */
 const works = [
   {
     category: "人工芝施工",
@@ -8,51 +12,49 @@ const works = [
     location: "愛知県岡崎市",
     url: "https://relagarden.jp",
     image: "/images/works/relagarden.jpg",
-    description: "デザイン性と機能性を両立した施工事例を分かりやすく構成。地域名SEOも考慮した設計です。",
-    alt: "愛知県岡崎市の人工芝施工リラガーデン様のホームページ制作実績。地域密着型の集客に特化したデザイン。"
+    description: "「岡崎市 人工芝」での検索上位を狙うSEO設計を施し、広告費に頼らない集客の土台を構築。デザインと機能性を両立させた事例です。",
+    alt: "愛知県岡崎市の人工芝施工リラガーデン様のホームページ制作実績。地域密着型の集客に特化したSEO設計。"
   },
   {
     category: "人工芝施工",
     title: "怒涛の芝革命様",
-    location: "滋賀県",
+    location: "滋賀県（全国対応）",
     url: "https://miwacompany.info/",
     image: "/images/works/miwa-info.jpg",
-    description: "インパクトのある屋号に負けない力強いデザインと、信頼感を伝える構成を両立しました。",
-    alt: "滋賀県の人工芝施工・怒涛の芝革命様のWebサイト制作事例。インパクトと信頼感を両立させた構成。"
+    description: "インパクトのある屋号を最大限に活かす力強いビジュアル設計。創業期のブランド立ち上げをデザインの力で支援しました。",
+    alt: "人工芝施工・怒涛の芝革命様のWebサイト制作事例。インパクトと信頼感を両立させたブランディング。"
   },
   {
     category: "コンサルティング",
     title: "株式会社MIWA様",
-    location: "滋賀県",
+    location: "滋賀県（法人案件）",
     url: "https://miwacoin.com/",
     image: "/images/works/miwacoin.jpg",
-    description: "ビジネスの専門性を損なわない、誠実でクリーンなコーポレートサイトをご提案しました。",
-    alt: "滋賀県の株式会社MIWA様コーポレートサイト制作実績。誠実でクリーンなコンサルティング業向けデザイン。"
+    description: "BtoBビジネスに不可欠な「誠実さ」をクリーンなインターフェースで表現。補助金活用による戦略的投資の成功モデルです。",
+    alt: "株式会社MIWA様コーポレートサイト制作実績。誠実でクリーンなコンサルティング業向けデザイン。"
   },
   {
     category: "コンサルティング",
     title: "合同会社ゴーフィッシュジャパン様",
-    location: "滋賀県",
+    location: "滋賀県（グローバル）",
     url: "https://gofishjp.com/",
     image: "/images/works/gofish.jpg",
-    description: "グローバルな展開をイメージさせる、洗練されたモダンなインターフェースを構築しました。",
-    alt: "滋賀県の合同会社ゴーフィッシュジャパン様Webサイト事例。モダンでグローバルな印象のインターフェース。"
+    description: "グローバル展開を見据えた洗練されたモダンなUIを構築。多言語展開や拡張性を考慮したAstroフレームワークの利点を活かしています。",
+    alt: "合同会社ゴーフィッシュジャパン様Webサイト事例。モダンで洗練されたインターフェース設計。"
   }
 ];
 ---
 
-<section id="works" class="py-24 bg-white">
+<section id="works" class="py-24 bg-white border-t border-slate-50">
   <div class="container mx-auto px-6">
-    <div class="text-left md:text-center mb-16">
-      <div class="mx-auto w-fit md:w-full">
-        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
-          名古屋・愛知三河エリアでの制作実績
-        </h2>
-        <p class="text-slate-600 max-w-2xl mx-auto leading-relaxed text-sm md:text-base">
-          個人事業主様から中小企業様まで、地域に根ざしたホームページ制作を手掛けています。<br class="hidden md:block" />
-          名古屋市内をはじめ、愛知・三河エリアのお客様の「伝えたい」を形にしました。
-        </p>
-      </div>
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tighter">
+        制作実績
+      </h2>
+      <p class="text-slate-600 max-w-2xl mx-auto leading-relaxed text-sm md:text-lg font-medium">
+        名古屋・愛知三河エリアを中心に、個人事業主様から中小企業様まで。<br class="hidden md:block" />
+        「補助金を活用して、勝てるサイトを作る」という選択をしたクライアント様の事例です。
+      </p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -61,55 +63,68 @@ const works = [
           href={work.url} 
           target="_blank" 
           rel="noopener noreferrer" 
-          class="group flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-          aria-label={`${work.title}のWebサイトを見る（新しいタブで開く）`}
+          class="group flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 ease-out"
+          aria-label={`${work.title}のWebサイトを見る（別ウィンドウで開きます）`}
         >
-          {/* 画像エリア */}
-          <div class="aspect-video bg-slate-100 relative overflow-hidden border-b border-slate-50">
+          {/* 画像コンテナ：アスペクト比固定とホバーエフェクト */}
+          <div class="aspect-[16/10] bg-slate-100 relative overflow-hidden">
             <img 
               src={work.image} 
               alt={work.alt} 
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               loading="lazy"
               decoding="async"
               onerror="this.src='/images/common/placeholder.jpg'; this.onerror=null;"
             />
-            {/* ホバー時のオーバーレイ（PC用） */}
-            <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex items-center justify-center">
-              <div class="bg-white text-slate-900 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2">
-                サイトを見る
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-              </div>
-            </div>
-          </div>
-
-          {/* テキストコンテンツ：常に左揃え */}
-          <div class="p-6 flex-grow flex flex-col text-left">
-            <div class="flex items-center gap-2 mb-3">
-              <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-widest">
-                {work.category}
+            {/* PC向け：オーバーレイ表示 */}
+            <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:flex items-center justify-center">
+              <span class="bg-white text-slate-900 px-6 py-2 rounded-full text-sm font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                サイトを開く
               </span>
-              <span class="text-[10px] text-slate-400 font-medium">
+            </div>
+            {/* 所在地バッジ */}
+            <div class="absolute top-4 left-4">
+              <span class="bg-white/90 backdrop-blur-sm text-slate-900 text-[10px] font-bold px-3 py-1 rounded-full shadow-sm">
                 {work.location}
               </span>
             </div>
+          </div>
+
+          {/* コンテンツエリア */}
+          <div class="p-6 flex-grow flex flex-col">
+            <div class="mb-3">
+              <span class="text-[10px] font-black text-blue-600 bg-blue-50 px-2 py-1 rounded uppercase tracking-tighter">
+                {work.category}
+              </span>
+            </div>
             
-            <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+            <h3 class="text-lg font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors">
               {work.title}
             </h3>
             
-            <p class="text-slate-500 text-xs leading-relaxed line-clamp-3 mb-4">
+            <p class="text-slate-500 text-xs leading-relaxed line-clamp-3 mb-6 font-medium">
               {work.description}
             </p>
             
-            {/* スマホ用フッター（タップを促す） */}
-            <div class="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between text-blue-600 text-xs font-bold md:hidden">
-              <span>サイトを表示</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            {/* モバイル向け導線（タップエリアの視認性） */}
+            <div class="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between text-blue-600 text-[10px] font-bold md:hidden">
+              <span class="tracking-widest uppercase">Visit Website</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
             </div>
           </div>
         </a>
       ))}
+    </div>
+
+    {/* 実績追加のクロージング導線 */}
+    <div class="mt-20 text-center">
+      <p class="text-slate-500 text-sm mb-6 font-medium">あなたの事業も、地域に愛されるWebサイトへ。</p>
+      <a href="/contact/" class="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-blue-600 transition-colors group">
+        制作の相談をしてみる
+        <span class="group-hover:translate-x-1 transition-transform">→</span>
+      </a>
     </div>
   </div>
 </section>

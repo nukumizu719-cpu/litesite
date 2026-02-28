@@ -1,55 +1,100 @@
 ---
 // src/components/Pricing.astro
 ---
-<section class="py-20 bg-white" id="pricing">
-  <div class="container mx-auto px-6 text-center">
-    <div class="mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">制作プラン</h2>
-      <p class="text-slate-600">名古屋で頑張る個人事業主様のために、<br class="md:hidden" />「本当に必要なもの」を全て詰め込みました。</p>
+<section class="py-20 bg-slate-50" id="pricing">
+  <div class="container mx-auto px-6">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">制作プラン</h2>
+      <p class="text-slate-600 max-w-2xl mx-auto text-lg font-medium">
+        補助金活用で初期コストを抑え、運用スタイルに合わせて選べるプランをご用意しました。
+      </p>
     </div>
 
-    <div class="max-w-lg mx-auto bg-slate-50 border-2 border-blue-600 rounded-3xl p-8 md:p-12 relative shadow-xl">
-      <span class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white px-6 py-1 rounded-full text-sm font-bold">
-        基本のセット内容
-      </span>
+    <div class="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
+      
+      <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col">
+        <h3 class="text-xl font-bold text-slate-800 mb-2 text-center">セルフ運用プラン</h3>
+        <p class="text-slate-500 text-sm text-center mb-6">維持費を極限まで抑えたい起業家へ</p>
+        
+        <div class="bg-slate-50 rounded-2xl p-6 mb-8 text-center">
+          <p class="text-xs text-slate-400 line-through mb-1 font-bold">通常価格 ¥229,000</p>
+          <div class="flex items-center justify-center gap-1">
+            <span class="text-sm font-bold text-blue-600">実質</span>
+            <span class="text-4xl font-black text-slate-900 tracking-tighter">¥57,250</span>
+            <span class="text-xs text-slate-500 font-bold">〜</span>
+          </div>
+          <p class="text-[10px] text-blue-600 font-bold mt-2">※創業型補助金 3/4 適用時</p>
+        </div>
 
-      <h3 class="text-2xl font-bold mb-4">ライトサイト制作パック</h3>
-      <div class="mb-6">
-        <span class="text-4xl font-extrabold text-slate-900">¥229,000</span>
-        <span class="text-slate-500 font-normal">(税込)</span>
+        <ul class="space-y-4 mb-10 flex-grow">
+          <li class="flex items-center gap-2 text-sm text-slate-600">
+            <span class="text-blue-500">✓</span> <span>Astro爆速SEOサイト構築</span>
+          </li>
+          <li class="flex items-center gap-2 text-sm text-slate-600">
+            <span class="text-blue-500">✓</span> <span>スマホ完全対応（レスポンシブ）</span>
+          </li>
+          <li class="flex items-center gap-2 text-sm text-slate-600 font-bold text-slate-900">
+            <span class="text-blue-500">✓</span> <span>月額管理費：0円</span>
+          </li>
+        </ul>
+
+        <div class="pt-6 border-t border-slate-100 text-[11px] text-slate-400 mb-6">
+          ※ドメイン・サーバー実費（約1万円/年）はお客様負担となります。
+        </div>
+
+        <a href="/contact/" class="block w-full py-4 text-center border-2 border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition-all">
+          このプランで相談する
+        </a>
       </div>
 
-      <ul class="text-left space-y-4 mb-10 text-slate-700">
-        <li class="flex items-start gap-3">
-          <span class="text-blue-600 font-bold">✓</span> 
-          <span><strong>かんたん修正・更新対応</strong><br /><span class="text-xs text-slate-500">ご自身で触れる安心のマニュアル付き。丸投げもOK</span></span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="text-blue-600 font-bold">✓</span> 
-          <span><strong>名古屋・地域SEO設定</strong><br /><span class="text-xs text-slate-500">検索結果で上位を狙うための内部対策</span></span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="text-blue-600 font-bold">✓</span> 
-          <span><strong>LINEお問い合わせ対応</strong><br /><span class="text-xs text-slate-500">お客様が気軽に相談できる導線作り</span></span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="text-blue-600 font-bold">✓</span> 
-          <span><strong>セキュリティ対策（SSL）</strong><br /><span class="text-xs text-slate-500">サイトの信頼性を高める暗号化通信</span></span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="text-blue-600 font-bold">✓</span> 
-          <span><strong>ドメイン・サーバー取得代行</strong><br /><span class="text-xs text-slate-500">面倒な契約手続きも全て代行いたします</span></span>
-        </li>
-      </ul>
+      <div class="bg-white p-8 rounded-3xl border-2 border-blue-600 shadow-2xl flex flex-col relative transform lg:scale-105 z-10">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white px-6 py-1 rounded-full text-sm font-bold whitespace-nowrap">
+          一番選ばれています
+        </div>
+        
+        <h3 class="text-xl font-bold text-slate-800 mb-2 text-center">安心サブスクプラン</h3>
+        <p class="text-blue-600 text-sm text-center font-bold mb-6">運用のプロがあなたの背中を支えます</p>
+        
+        <div class="bg-blue-50 rounded-2xl p-6 mb-8 text-center">
+          <p class="text-xs text-blue-400 font-bold mb-1 italic underline">制作初期費用</p>
+          <div class="flex items-center justify-center gap-1">
+            <span class="text-sm font-bold text-blue-600">実質</span>
+            <span class="text-4xl font-black text-slate-900 tracking-tighter">¥57,250</span>
+            <span class="text-xs text-slate-500 font-bold">〜</span>
+          </div>
+          <div class="mt-4 pt-4 border-t border-blue-100">
+            <p class="text-xs text-blue-400 font-bold mb-1 italic underline">月額保守・メンテ代</p>
+            <p class="text-2xl font-black text-blue-600 tracking-tighter">¥4,980<span class="text-xs ml-1">(税込)</span></p>
+          </div>
+        </div>
 
-      <p class="text-[10px] text-slate-500 mb-6 leading-tight">
-        ※ドメイン・サーバー代の実費（年/約1万円）のみ別途かかります。<br />
-        ※月額の管理費は0円。必要な実費以外は一切いただきません。
+        <ul class="space-y-4 mb-10 flex-grow">
+          <li class="flex items-center gap-2 text-sm text-slate-600 font-bold italic">
+            <span class="text-blue-600 font-black">★</span> <span>ドメイン・サーバー更新代行込</span>
+          </li>
+          <li class="flex items-center gap-2 text-sm text-slate-600 font-bold italic">
+            <span class="text-blue-600 font-black">★</span> <span>月1回までの軽微な修正無料</span>
+          </li>
+          <li class="flex items-center gap-2 text-sm text-slate-600 font-bold italic">
+            <span class="text-blue-600 font-black">★</span> <span>LINE/Zoomによる運用相談</span>
+          </li>
+          <li class="flex items-center gap-2 text-sm text-slate-600">
+            <span class="text-blue-600 font-black">✓</span> <span>Astro爆速SEOサイト構築</span>
+          </li>
+        </ul>
+
+        <a href="/contact/" class="block w-full py-4 text-center bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition-all transform hover:-translate-y-1">
+          サブスクプランを詳しく聞く
+        </a>
+      </div>
+
+    </div>
+
+    <div class="mt-16 max-w-3xl mx-auto bg-white p-8 rounded-3xl border border-slate-100 text-center shadow-sm">
+      <p class="text-sm text-slate-500 leading-relaxed">
+        ※「実質価格」は、小規模事業者持続化補助金〈創業型〉を利用し、制作費の3/4（最大200万円枠）が補助された場合の計算です。<br />
+        ※補助金の採択には審査があります。LiteSiteでは商工会議所への提出書類のアドバイスも行っております。
       </p>
-      
-      <a href="/contact/" class="block w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-md transform hover:scale-[1.02]">
-        無料で相談してみる
-      </a>
     </div>
   </div>
 </section>

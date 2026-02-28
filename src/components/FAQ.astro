@@ -1,42 +1,92 @@
 ---
-// src/components/FAQ.astro
+/**
+ * SEO & 補助金採択特化型 FAQコンポーネント
+ * 1. 補助金第6版の懸念点（特定創業支援等事業など）への回答
+ * 2. サブスクプラン（保守）の合理的理由の提示
+ * 3. 技術的優位性（Astro/SEO）による市場価値の証明
+ */
 const faqs = [
   {
-    q: "本当に22.9万円だけでホームページが作れるのですか？",
-    a: "はい、基本パックの範囲内であれば追加料金は一切かかりません。ドメイン・サーバー代の実費（年間約1万円程度）のみご負担いただきます。名古屋の他社様と比較しても、固定費を削った個人制作だからこそ実現できる価格設定です。"
+    q: "小規模事業者持続化補助金〈創業型〉の申請は難しいですか？",
+    a: "公募要領（第6版）では「特定創業支援等事業」の証明書受領など、戦略的な準備が必要です。LiteSiteでは名古屋・愛知の各商工会議所への提出実績を元に、採択率を高める「経営計画書」のIT活用項目について具体的なアドバイスを行い、申請を強力にバックアップします。"
   },
   {
-    q: "名古屋市外ですが、相談に乗ってもらえますか？",
-    a: "もちろんです！名古屋市内や安城市周辺であれば直接お会いしての打ち合わせも可能ですし、遠方の場合はLINEやZOOMでのオンライン相談も承っております。ネットに詳しくない方でも、画面を見ながら丁寧にご説明します。"
+    q: "「実質5.7万円〜」の計算根拠を教えてください。",
+    a: "制作パッケージ22.9万円（税込）に対し、持続化補助金〈創業型〉の補助率3/4（最大200万円）を適用した場合の自己負担額です。LiteSiteは固定費を削った個人制作のため、この価格で大手制作会社と同等以上の「爆速SEO設計」を提供。創業期のキャッシュフローを最大化するロジックです。"
   },
   {
-    q: "ホームページ完成後の維持費や修正はどうなりますか？",
-    a: "高額な月額保守費用はいただいておりません。簡単な文字修正や写真の差し替えは、ご自身でスマホから無料で行える仕組みを標準導入しています。操作に不安がある方のためのスポットサポートもご用意しています。"
+    q: "月額4,980円の「安心サブスクプラン」はなぜ必要なのですか？",
+    a: "ドメイン・サーバーの安定維持に加え、Googleの頻繁なコアアップデート（SEO評価基準の変更）への対応、および月1回のコンテンツ更新代行を含むためです。「作って終わり」ではなく、名古屋の地域検索（ローカルSEO）で勝ち続けるための、伴走型マーケティング費用と位置づけています。"
   },
   {
-    q: "制作期間はどのくらいかかりますか？",
-    a: "必要資料が揃ってから、最短2週間〜1ヶ月程度で公開可能です。名古屋近郊で急ぎで集客を始めたい個人事業主様・起業家様のご要望にも、フットワーク軽く対応いたします。"
+    q: "「Astro」という技術を使うメリットは何ですか？",
+    a: "世界最高水準の表示速度を実現できる点です。Googleは表示速度をSEOの最重要指標の一つとしており、Astroで構築されたサイトは競合他社（WordPress等）に対して圧倒的な優位性を持ちます。これが、広告費を抑えても「検索から勝手に客が来る」仕組みの根幹です。"
+  },
+  {
+    q: "名古屋市外（三河エリア等）ですが、対面相談は可能ですか？",
+    a: "はい、安城市や岡崎市など愛知県全域に対応しております。地域密着の「顔が見える制作屋」として、対面でのヒアリングを重視しています。補助金の事業実施期間内に確実に公開できるよう、フットワーク軽くサポートいたします。"
   }
 ];
 ---
 <section class="py-20 bg-slate-50" id="faq">
   <div class="container mx-auto px-6">
-    <h2 class="text-3xl font-bold text-center text-slate-900 mb-12">
-      よくある質問
-    </h2>
-    <div class="max-w-3xl mx-auto space-y-6">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
+        よくある質問と<span class="text-blue-600">解決策</span>
+      </h2>
+      <p class="text-slate-600 font-medium">補助金活用から最新技術、運用コストまで論理的にお答えします。</p>
+    </div>
+    
+    <div class="max-w-4xl mx-auto space-y-4">
       {faqs.map((faq) => (
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-          <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-start">
-            <span class="text-blue-600 mr-3">Q.</span>
-            {faq.q}
-          </h3>
-          <p class="text-slate-600 leading-relaxed flex items-start">
-            <span class="text-green-600 mr-3 font-bold">A.</span>
-            {faq.a}
-          </p>
-        </div>
+        <details class="group bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300 open:shadow-md">
+          <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+            <h3 class="text-lg font-bold text-slate-900 flex items-start pr-4">
+              <span class="text-blue-600 mr-4 font-black">Q.</span>
+              {faq.q}
+            </h3>
+            <span class="transition-transform duration-300 group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </span>
+          </summary>
+          <div class="px-6 pb-6 animate-fadeIn">
+            <div class="flex items-start">
+              <span class="text-green-600 mr-4 font-black text-lg leading-relaxed">A.</span>
+              <p class="text-slate-600 leading-relaxed font-medium">
+                {faq.a}
+              </p>
+            </div>
+          </div>
+        </details>
       ))}
     </div>
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.a
+        }
+      }))
+    })} />
   </div>
 </section>
+
+<style>
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.4s ease-out forwards;
+  }
+</style>

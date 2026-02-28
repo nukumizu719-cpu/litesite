@@ -1,30 +1,25 @@
 ---
+// src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro'; // 動画部分
-import HeroContent from '../components/HeroContent.astro'; // 文字部分 (追加)
+import Hero from '../components/Hero.astro'; // ここに統合済みの新Hero
 import Features from '../components/Features.astro';
 import Works from '../components/Works.astro';
 import Pricing from '../components/Pricing.astro';
 import FAQ from '../components/FAQ.astro';
 import LineButton from '../components/LineButton.astro';
 import LineSection from '../components/LineSection.astro';
-import Footer from '../components/Footer.astro';
 ---
 
 <Layout 
-  title="名古屋の格安ホームページ制作 LiteSite" 
+  title="名古屋・愛知の創業型補助金活用ホームページ制作 | LiteSite" 
 >
   <main>
     <Hero />
-    
-    <HeroContent />
-
     <Features />
     <Works />
     <LineSection />
     <Pricing />
     <FAQ />
     <LineButton />
-    <Footer />
   </main>
 </Layout>

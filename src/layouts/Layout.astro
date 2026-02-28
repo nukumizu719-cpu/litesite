@@ -1,75 +1,103 @@
 ---
-// src/layouts/Layout.astro
-import Opening from '../components/Opening.astro';
 import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
+  type?: 'website' | 'article';
 }
 
-const { 
-  title, 
-  description = "名古屋で高品質・低コストなホームページ制作ならLiteSite。地域密着で集客に強いWebサイト制作を実現します。" 
+const {
+  title,
+  description = "名古屋・愛知での創業型補助金（持続化補助金）を活用したホームページ制作ならLiteSite。実質負担5.7万円〜で、集客に強い爆速SEOサイトを実現します。",
+  image = "/ogp.png",
+  type = "website"
 } = Astro.props;
 
-// 基本設定
+// 基本設定の定数化
 const siteName = "LiteSite（ライトサイト）";
 const displayName = "ライトサイト";
-const siteUrl = "https://litesite.jp"; 
+const siteUrl = "https://litesite.jp";
 const GA_ID = "G-EMP52J5809";
 
 /**
- * SEOタイトルロジック
+ * SEOタイトルロジック：
+ * 特定のページタイトルがある場合はそれを優先し、
+ * トップページ等では最強のキーワードセット（名古屋・補助金・制作）を配置。
  */
 const fullTitle = title 
-  ? `${title} | 名古屋のホームページ制作なら${siteName}`
-  : `名古屋で高品質・低コストなホームページ制作なら${siteName} | 地域密着のWeb制作`;
+  ? `${title} | ${siteName}` 
+  : `名古屋の創業型補助金・ホームページ制作なら${siteName} | 実質負担5.7万円〜`;
 
-// 構造化データ（JSON-LD）
-// JSON.stringify を使用し、安全な文字列として定義
-const websiteSchema = JSON.stringify({
+/**
+ * 構造化データの厳密化
+ */
+const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": displayName,
-  "alternateName": ["LiteSite", "ライトサイト"],
-  "url": siteUrl + "/"
-});
+  "alternateName": ["LiteSite", "ライトサイト", "補助金活用ホームページ制作"],
+  "url": siteUrl
+};
 
-const businessSchema = JSON.stringify({
+const businessSchema = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   "name": siteName,
-  "description": "名古屋市の高品質・低コストなホームページ制作・Web制作支援",
+  "description": "名古屋・愛知の創業型補助金活用によるホームページ制作・Web集客支援",
   "url": siteUrl,
+  "logo": `${siteUrl}/logo.png`,
+  "image": `${siteUrl}/ogp.png`,
   "address": {
     "@type": "PostalAddress",
-    "addressLocality": "名古屋市",
+    "addressLocality": "名古屋市・安城市",
     "addressRegion": "JP-23",
     "addressCountry": "JP"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 35.1815, // 名古屋中心地の参考値
+    "longitude": 136.9066
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer support",
+    "areaServed": "JP",
+    "availableLanguage": "Japanese"
   }
-});
+};
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteUrl);
 ---
 
 <!doctype html>
 <html lang="ja" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    
-    <title>{fullTitle}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={siteUrl} />
+    <meta name="generator" content={Astro.generator} />
 
-    <meta property="og:site_name" content={siteName} />
+    <title>{fullTitle}</title>
+    <meta name="title" content={fullTitle} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={siteUrl} />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content={`${siteUrl}/ogp.png`} />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content={new URL(image, Astro.url)} />
+    <meta property="og:site_name" content={siteName} />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={fullTitle} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
     <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
     <script is:inline define:vars={{ GA_ID }}>
@@ -78,29 +106,74 @@ const businessSchema = JSON.stringify({
         dataLayer.push(arguments);
       }
       gtag('js', new Date());
-      gtag('config', GA_ID);
+      gtag('config', GA_ID, {
+        page_path: window.location.pathname,
+      });
     </script>
 
-    <script type="application/ld+json" set:html={websiteSchema} />
-    <script type="application/ld+json" set:html={businessSchema} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(businessSchema)} />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-slate-50 text-slate-900 font-sans antialiased">
-    <Opening /> 
+  
+  <body class="bg-slate-50 text-slate-900 font-sans antialiased selection:bg-blue-100 selection:text-blue-700">
     <Header />
     
-    <main>
+    <main id="main-content">
       <slot />
     </main>
+
+    <Footer />
 
     <style is:global>
       :root {
         --color-primary: #0f172a;
+        --color-accent: #2563eb;
       }
+      
+      /* フォントレンダリングの最適化 */
       body {
+        font-family: 'Noto Sans JP', sans-serif;
+        text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
+
+      /* フォーカスインジケータのアクセシビリティ向上 */
+      :focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+      }
+
+      /* 共通アニメーション：フェードイン */
+      .fade-in {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+      .fade-in.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
     </style>
+
+    <script>
+      /**
+       * Intersection Observer による要素のフェードイン処理
+       * クラス名 "fade-in" を持つ要素が画面に入ったら "is-visible" を付与
+       */
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
   </body>
 </html>
