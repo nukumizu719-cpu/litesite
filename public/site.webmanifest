@@ -1,0 +1,21 @@
+{
+    "name": "LiteSite（ライトサイト）",
+    "short_name": "LiteSite",
+    "description": "創業型補助金を活用したホームページ制作",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f8fafc",
+    "theme_color": "#0f172a",
+    "icons": [
+      {
+        "src": "/favicon-32x32.png",
+        "sizes": "32x32",
+        "type": "image/png"
+      },
+      {
+        "src": "/apple-touch-icon.png",
+        "sizes": "180x180",
+        "type": "image/png"
+      }
+    ]
+  }

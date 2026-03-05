@@ -17,24 +17,15 @@ const {
   type = "website"
 } = Astro.props;
 
-// 基本設定の定数化
 const siteName = "LiteSite（ライトサイト）";
 const displayName = "ライトサイト";
 const siteUrl = "https://litesite.jp";
 const GA_ID = "G-EMP52J5809";
 
-/**
- * SEOタイトルロジック：
- * 特定のページタイトルがある場合はそれを優先し、
- * トップページ等では最強のキーワードセット（名古屋・補助金・制作）を配置。
- */
 const fullTitle = title 
   ? `${title} | ${siteName}` 
   : `名古屋の創業型補助金・ホームページ制作なら${siteName} | 実質負担5.7万円〜`;
 
-/**
- * 構造化データの厳密化
- */
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -59,7 +50,7 @@ const businessSchema = {
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": 35.1815, // 名古屋中心地の参考値
+    "latitude": 35.1815,
     "longitude": 136.9066
   },
   "contactPoint": {
@@ -78,10 +69,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteUrl);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
-    <title>{fullTitle}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
+    
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0f172a" /> <title>{fullTitle}</title>
     <meta name="title" content={fullTitle} />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
@@ -90,14 +87,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteUrl);
     <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(image, Astro.url)} />
+    <meta property="og:image" content={new URL(image, siteUrl)} />
     <meta property="og:site_name" content={siteName} />
 
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={Astro.url} />
     <meta property="twitter:title" content={fullTitle} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(image, Astro.url)} />
+    <meta property="twitter:image" content={new URL(image, siteUrl)} />
 
     <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
     <script is:inline define:vars={{ GA_ID }}>
@@ -121,11 +118,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteUrl);
   
   <body class="bg-slate-50 text-slate-900 font-sans antialiased selection:bg-blue-100 selection:text-blue-700">
     <Header />
-    
     <main id="main-content">
       <slot />
     </main>
-
     <Footer />
 
     <style is:global>
@@ -133,22 +128,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteUrl);
         --color-primary: #0f172a;
         --color-accent: #2563eb;
       }
-      
-      /* フォントレンダリングの最適化 */
       body {
         font-family: 'Noto Sans JP', sans-serif;
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
-
-      /* フォーカスインジケータのアクセシビリティ向上 */
       :focus-visible {
         outline: 2px solid var(--color-accent);
         outline-offset: 2px;
       }
-
-      /* 共通アニメーション：フェードイン */
       .fade-in {
         opacity: 0;
         transform: translateY(10px);
@@ -161,10 +150,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteUrl);
     </style>
 
     <script>
-      /**
-       * Intersection Observer による要素のフェードイン処理
-       * クラス名 "fade-in" を持つ要素が画面に入ったら "is-visible" を付与
-       */
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -172,7 +157,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteUrl);
           }
         });
       }, { threshold: 0.1 });
-
       document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
     </script>
   </body>
