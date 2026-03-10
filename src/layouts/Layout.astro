@@ -17,8 +17,8 @@ const {
   type = "website"
 } = Astro.props;
 
-const siteName = "LiteSite（ライトサイト）";
-const displayName = "ライトサイト";
+const siteName = "名古屋の補助金活用ホームページ制作 LiteSite";
+const displayName = siteName;
 const siteUrl = "https://litesite.jp";
 const GA_ID = "G-EMP52J5809";
 
@@ -29,7 +29,7 @@ const fullTitle = title
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": displayName,
+  "name": siteName,
   "alternateName": ["LiteSite", "ライトサイト", "補助金活用ホームページ制作"],
   "url": siteUrl
 };
@@ -78,9 +78,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteUrl);
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#0f172a" /> <title>{fullTitle}</title>
+    <meta name="theme-color" content="#0f172a" />
+
+    <title>{fullTitle}</title>
     <meta name="title" content={fullTitle} />
     <meta name="description" content={description} />
+    <meta name="application-name" content={siteName} />
     <link rel="canonical" href={canonicalURL} />
 
     <meta property="og:type" content={type} />
