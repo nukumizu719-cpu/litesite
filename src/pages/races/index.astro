@@ -1,0 +1,51 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import RaceCard from '../../components/RaceCard.astro';
+import { getRaces } from '../../lib/stats';
+
+const races = await getRaces();
+
+// 年ごとにまとめる
+const byYear = new Map<number, typeof races>();
+for (const r of races) {
+  const y = r.data.raceDate.getFullYear();
+  if (!byYear.has(y)) byYear.set(y, []);
+  byYear.get(y)!.push(r);
+}
+const years = [...byYear.keys()].sort((a, b) => b - a);
+---
+
+<Layout
+  title="予想アーカイブ"
+  description="これまでに公開した予想の一覧。減点式チェックリストで人気馬を評価し、ワイドを起点に組み立てた買い目を、結果とあわせて全て残しています。"
+>
+  <PageHeader
+    eyebrow="Races"
+    title="予想アーカイブ"
+    lead="公開した予想をすべて残しています。レース後は同じ記事に結果を追記しているので、予想の根拠と答え合わせを1ページで確認できます。"
+  />
+
+  <div class="mx-auto max-w-5xl px-5 py-12">
+    {
+      races.length === 0 ? (
+        <p class="py-16 text-center text-sm text-muted">まだ記事がありません。</p>
+      ) : (
+        years.map((y) => (
+          <section class="mb-14">
+            <h2 class="mb-5 flex items-center gap-4 font-[family-name:var(--font-mono)] text-sm font-semibold tracking-[0.16em] text-muted">
+              {y}
+              <span class="h-px flex-1 bg-line" />
+              <span class="text-[11px] font-normal">{byYear.get(y)!.length}件</span>
+            </h2>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {byYear.get(y)!.map((race) => (
+                <RaceCard race={race} />
+              ))}
+            </div>
+          </section>
+        ))
+      )
+    }
+  </div>
+</Layout>

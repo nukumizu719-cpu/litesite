@@ -1,0 +1,107 @@
+---
+import WakuBadge from './WakuBadge.astro';
+import { signedYen, yen, roi as calcRoi } from '../lib/format';
+
+interface Props {
+  result: {
+    top3: { no: number; name: string }[];
+    payout: number;
+    hits: string[];
+    note?: string;
+  };
+  budget: number;
+  headCount: number;
+}
+
+const { result, budget, headCount } = Astro.props;
+
+const hit = result.payout > 0;
+const rate = calcRoi(budget, result.payout);
+const profit = result.payout - budget;
+const places = ['1着', '2着', '3着'];
+---
+
+<section
+  class:list={[
+    'rounded-lg border-2 bg-surface',
+    hit ? 'border-hit' : 'border-line',
+  ]}
+>
+  <header
+    class:list={[
+      'flex flex-wrap items-center justify-between gap-3 rounded-t-[6px] px-5 py-3',
+      hit ? 'bg-hit-soft' : 'bg-surface-2',
+    ]}
+  >
+    <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.16em] text-muted uppercase">
+      Result
+    </p>
+    <p class:list={['text-sm font-bold', hit ? 'text-hit' : 'text-muted']}>
+      {hit ? `的中（${result.hits.join('・') || '払戻あり'}）` : '不的中'}
+    </p>
+  </header>
+
+  <div class="px-5 py-5">
+    <ol class="grid gap-2.5">
+      {
+        result.top3.map((h, i) => (
+          <li class="flex items-center gap-3">
+            <span class="w-8 shrink-0 font-[family-name:var(--font-mono)] text-[11px] text-muted">
+              {places[i]}
+            </span>
+            <WakuBadge no={h.no} headCount={headCount} size="sm" />
+            <span class="font-medium">{h.name}</span>
+          </li>
+        ))
+      }
+    </ol>
+
+    <dl class="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded border border-line bg-line sm:grid-cols-4">
+      <div class="bg-surface px-3 py-3">
+        <dt class="font-[family-name:var(--font-mono)] text-[9px] tracking-[0.14em] text-muted uppercase">投資</dt>
+        <dd class="mt-1 font-[family-name:var(--font-mono)] text-[15px] font-semibold tabular-nums">
+          {yen(budget)}
+        </dd>
+      </div>
+      <div class="bg-surface px-3 py-3">
+        <dt class="font-[family-name:var(--font-mono)] text-[9px] tracking-[0.14em] text-muted uppercase">払戻</dt>
+        <dd class="mt-1 font-[family-name:var(--font-mono)] text-[15px] font-semibold tabular-nums">
+          {yen(result.payout)}
+        </dd>
+      </div>
+      <div class="bg-surface px-3 py-3">
+        <dt class="font-[family-name:var(--font-mono)] text-[9px] tracking-[0.14em] text-muted uppercase">収支</dt>
+        <dd
+          class:list={[
+            'mt-1 font-[family-name:var(--font-mono)] text-[15px] font-semibold tabular-nums',
+            profit >= 0 ? 'text-hit' : 'text-miss',
+          ]}
+        >
+          {signedYen(profit)}
+        </dd>
+      </div>
+      <div class="bg-surface px-3 py-3">
+        <dt class="font-[family-name:var(--font-mono)] text-[9px] tracking-[0.14em] text-muted uppercase">回収率</dt>
+        <dd
+          class:list={[
+            'mt-1 font-[family-name:var(--font-mono)] text-[15px] font-semibold tabular-nums',
+            rate >= 100 ? 'text-hit' : 'text-miss',
+          ]}
+        >
+          {rate}%
+        </dd>
+      </div>
+    </dl>
+
+    {
+      result.note && (
+        <div class="mt-5 border-l-2 border-dirt pl-4">
+          <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.14em] text-muted uppercase">
+            振り返り
+          </p>
+          <p class="mt-1.5 text-sm leading-relaxed text-ink-2">{result.note}</p>
+        </div>
+      )
+    }
+  </div>
+</section>

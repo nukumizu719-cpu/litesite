@@ -1,0 +1,27 @@
+---
+import WakuBadge from './WakuBadge.astro';
+
+interface Props {
+  danger: { no: number; name: string; reason: string };
+  headCount: number;
+}
+
+const { danger, headCount } = Astro.props;
+---
+
+<aside class="rounded-lg border border-warn/40 bg-warn-soft p-5">
+  <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.16em] text-warn uppercase">
+    危険な人気馬
+  </p>
+  <div class="mt-3 flex items-center gap-3">
+    <WakuBadge no={danger.no} headCount={headCount} size="md" />
+    <p class="text-lg font-bold">{danger.name}</p>
+  </div>
+  <p class="mt-3 text-sm leading-relaxed text-ink-2">{danger.reason}</p>
+  <a
+    href="/logic/danger/"
+    class="mt-4 inline-block font-[family-name:var(--font-mono)] text-[11px] text-warn underline underline-offset-4 hover:no-underline"
+  >
+    判定基準を見る →
+  </a>
+</aside>

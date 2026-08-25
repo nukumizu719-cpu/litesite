@@ -1,116 +1,140 @@
 ---
-/**
- * SEO & 補助金導線強化型 Header
- * 1. 「補助金ガイド」をナビゲーションの最優先位置に配置
- * 2. モバイルメニューでも補助金ページへの接触機会を最大化
- */
+import { SITE, NAV } from '../config';
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 ---
-<header class="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
-  <div class="container mx-auto px-6 h-20 flex items-center justify-between">
-    <a href="/" class="z-[60] shrink-0 transition-opacity hover:opacity-80">
-      <img src="/logo.png" alt="LiteSite（ライトサイト）名古屋のホームページ制作" class="h-10 md:h-12 w-auto object-contain" />
+
+<header
+  class="sticky top-0 z-50 w-full border-b border-line bg-ground/90 backdrop-blur-md supports-[backdrop-filter]:bg-ground/75"
+>
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5 md:h-[4.5rem]">
+    <a href="/" class="z-[60] shrink-0 leading-none transition-opacity hover:opacity-70">
+      <span class="block font-[family-name:var(--font-display)] text-[1.35rem] font-extrabold tracking-tight md:text-[1.5rem]">
+        {SITE.name}
+      </span>
+      <span class="mt-0.5 block font-[family-name:var(--font-mono)] text-[9px] tracking-[0.18em] text-muted uppercase">
+        {SITE.nameEn}
+      </span>
     </a>
 
-    <input type="checkbox" id="menu-toggle" class="hidden peer" />
-    
-    <label 
-      for="menu-toggle" 
-      class="hamburger-button z-[60] cursor-pointer md:hidden flex flex-col gap-1.5 p-2"
-      aria-label="メニューを開閉する"
-    >
-      <span class="line"></span>
-      <span class="line"></span>
-      <span class="line"></span>
-    </label>
+    <input type="checkbox" id="nav-toggle" class="peer hidden" />
 
-    <nav class="mobile-nav fixed top-0 left-0 w-full h-screen bg-white/98 backdrop-blur-xl flex flex-col items-center justify-center gap-8 transition-all duration-300 ease-in-out opacity-0 invisible translate-y-[-20px] 
-      md:static md:w-auto md:h-auto md:bg-transparent md:flex-row md:opacity-100 md:visible md:translate-y-0 z-[55]">
-      
-      <ul class="flex flex-col md:flex-row items-center gap-8 text-xl md:text-[0.9rem] font-bold md:font-semibold text-slate-700 uppercase tracking-wider">
-        <li>
-          <a href="/subsidy/" class="flex items-center gap-1.5 text-blue-600 hover:text-blue-700 transition-colors py-2 md:border-b-2 md:border-blue-100 md:hover:border-blue-600">
-            <span class="text-xs bg-blue-600 text-white px-2 py-0.5 rounded-sm scale-90 md:scale-75">NEW</span>
-            補助金ガイド
-          </a>
-        </li>
-        <li><a href="/#features" class="hover:text-blue-600 transition-colors">特徴</a></li>
-        <li><a href="/#works" class="hover:text-blue-600 transition-colors">実績</a></li>
-        <li><a href="/#pricing" class="hover:text-blue-600 transition-colors">料金</a></li>
-        <li><a href="/#faq" class="hover:text-blue-600 transition-colors">FAQ</a></li>
-        
-        <li class="pt-4 md:pt-0">
-          <a href="/contact/" class="flex items-center gap-2 bg-slate-900 text-white px-10 md:px-6 py-4 md:py-3 rounded-xl hover:bg-blue-600 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
-            無料相談・お問い合わせ
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 hidden md:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </a>
-        </li>
-      </ul>
-    </nav>
+    <div class="flex items-center gap-1 md:gap-7">
+      <nav
+        class="mobile-nav invisible fixed inset-0 z-[55] flex translate-y-[-12px] flex-col items-center justify-center gap-2 bg-ground opacity-0 transition-all duration-300 md:visible md:static md:translate-y-0 md:flex-row md:bg-transparent md:opacity-100"
+        aria-label="メインナビゲーション"
+      >
+        <ul class="flex flex-col items-center gap-6 text-lg font-bold md:flex-row md:gap-7 md:text-[0.9rem] md:font-semibold">
+          {
+            NAV.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                  class:list={[
+                    'transition-colors hover:text-turf',
+                    isActive(item.href) ? 'text-turf' : 'text-ink-2',
+                  ]}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <button
+        type="button"
+        id="theme-toggle"
+        aria-label="配色を切り替える"
+        class="z-[60] grid h-10 w-10 place-items-center rounded-md border border-line-soft text-ink-2 transition-colors hover:border-turf hover:text-turf"
+      >
+        <svg class="h-[18px] w-[18px] dark-hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+        </svg>
+        <svg class="hidden h-[18px] w-[18px] dark-show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+        </svg>
+      </button>
+
+      <label
+        for="nav-toggle"
+        class="hamburger z-[60] grid h-10 w-10 cursor-pointer place-items-center rounded-md border border-line-soft md:hidden"
+        aria-label="メニューを開閉する"
+      >
+        <span class="grid gap-[5px]">
+          <span class="line block h-[2px] w-5 bg-ink"></span>
+          <span class="line block h-[2px] w-5 bg-ink"></span>
+          <span class="line block h-[2px] w-5 bg-ink"></span>
+        </span>
+      </label>
+    </div>
   </div>
 </header>
 
 <style>
-  /* 三本線の基本スタイル（変更なしだが、よりシャープに） */
-  .line {
-    display: block;
-    width: 1.5rem;
-    height: 2px;
-    background-color: #0f172a;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  #nav-toggle:checked ~ div .hamburger .line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
   }
-
-  /* チェックボックスが入った時のアニメーション */
-  #menu-toggle:checked ~ .hamburger-button .line:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-  }
-  #menu-toggle:checked ~ .hamburger-button .line:nth-child(2) {
+  #nav-toggle:checked ~ div .hamburger .line:nth-child(2) {
     opacity: 0;
-    transform: translateX(10px);
   }
-  #menu-toggle:checked ~ .hamburger-button .line:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
+  #nav-toggle:checked ~ div .hamburger .line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
   }
-
-  /* Peerクラスを活用した表示制御 */
-  #menu-toggle:checked ~ .mobile-nav {
-    opacity: 1;
+  #nav-toggle:checked ~ div .mobile-nav {
     visibility: visible;
+    opacity: 1;
     transform: translateY(0);
   }
+  .line {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s;
+  }
 
-  /* アクティブなリンクの視覚効果（Astroのページ判定JSと組み合わせるとより強力） */
-  nav a {
-    position: relative;
+  /* テーマアイコンの出し分け。3状態すべてを明示する */
+  :root[data-theme='dark'] .dark-hide { display: none; }
+  :root[data-theme='dark'] .dark-show { display: block; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .dark-hide { display: none; }
+    :root:not([data-theme='light']) .dark-show { display: block; }
   }
 </style>
 
 <script>
-  const menuToggle = document.getElementById('menu-toggle') as HTMLInputElement;
-  const menuLinks = document.querySelectorAll('nav a');
-
-  const toggleScrollLock = (isLocked: boolean) => {
-    document.body.style.overflow = isLocked ? 'hidden' : '';
+  // モバイルメニュー：リンクを踏んだら閉じる／背面スクロールを止める
+  const toggle = document.getElementById('nav-toggle') as HTMLInputElement | null;
+  const setLock = (locked: boolean) => {
+    document.body.style.overflow = locked ? 'hidden' : '';
   };
-
-  menuToggle?.addEventListener('change', () => {
-    toggleScrollLock(menuToggle.checked);
-  });
-
-  menuLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      if (menuToggle?.checked) {
-        menuToggle.checked = false;
-        toggleScrollLock(false);
+  toggle?.addEventListener('change', () => setLock(toggle.checked));
+  document.querySelectorAll('.mobile-nav a').forEach((a) =>
+    a.addEventListener('click', () => {
+      if (toggle?.checked) {
+        toggle.checked = false;
+        setLock(false);
       }
-    });
+    })
+  );
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768 && toggle?.checked) {
+      toggle.checked = false;
+      setLock(false);
+    }
   });
 
-  window.addEventListener('resize', () => {
-    if (window.innerWidth >= 768 && menuToggle?.checked) {
-      menuToggle.checked = false;
-      toggleScrollLock(false);
-    }
+  // 配色の切り替え。未設定のときはOSの設定を初期値として反転させる
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const current =
+      root.getAttribute('data-theme') ??
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try {
+      localStorage.setItem('theme', next);
+    } catch (e) {}
   });
 </script>

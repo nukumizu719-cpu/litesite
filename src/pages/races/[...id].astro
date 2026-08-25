@@ -1,0 +1,173 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import MarkTable from '../../components/MarkTable.astro';
+import BetTable from '../../components/BetTable.astro';
+import ResultBanner from '../../components/ResultBanner.astro';
+import DangerCard from '../../components/DangerCard.astro';
+import LineSection from '../../components/LineSection.astro';
+import { jpDate, isoDate } from '../../lib/format';
+
+export async function getStaticPaths() {
+  // 下書きもURLは生成する（本人が確認できるように）。一覧と集計からは外れ、noindex が付く。
+  const races = await getCollection('races');
+  const sorted = races.sort((a, b) => b.data.raceDate.getTime() - a.data.raceDate.getTime());
+
+  return sorted.map((race, i) => ({
+    params: { id: race.id },
+    props: {
+      race,
+      newer: sorted[i - 1] ?? null,
+      older: sorted[i + 1] ?? null,
+    },
+  }));
+}
+
+const { race, newer, older } = Astro.props;
+const { Content } = await render(race);
+const d = race.data;
+
+const year = d.raceDate.getFullYear();
+const title = `${year} ${d.raceName} 予想`;
+const description =
+  d.summary ??
+  `${year}年${d.raceName}（${d.course}）の予想。減点式チェックリストで人気馬を評価し、ワイドを起点に買い目を組み立てました。`;
+
+const gradeStyle =
+  d.grade === 'G1'
+    ? 'bg-turf text-white'
+    : d.grade === 'G2' || d.grade === 'G3'
+      ? 'bg-turf-soft text-turf'
+      : 'bg-surface-2 text-ink-2';
+---
+
+<Layout
+  title={title}
+  description={description}
+  type="article"
+  publishedTime={d.raceDate}
+  noindex={d.draft}
+>
+  <article>
+    <header class="border-b border-line">
+      <div class="mx-auto max-w-3xl px-5 pt-10 pb-8 md:pt-14">
+        {
+          d.draft && (
+            <p class="mb-5 rounded border border-warn/40 bg-warn-soft px-4 py-2.5 text-xs text-warn">
+              この記事は下書きです。一覧・成績集計には反映されず、検索エンジンにも登録されません。
+            </p>
+          )
+        }
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span
+            class:list={['rounded-[3px] px-2 py-0.5 font-[family-name:var(--font-mono)] text-[11px] font-semibold tracking-wider', gradeStyle]}
+          >
+            {d.grade}
+          </span>
+          <time datetime={isoDate(d.raceDate)} class="font-[family-name:var(--font-mono)] text-xs text-muted">
+            {jpDate(d.raceDate)}
+          </time>
+          {d.handicap && <span class="font-[family-name:var(--font-mono)] text-[11px] text-dirt">ハンデ戦</span>}
+        </div>
+
+        <h1 class="mt-4 font-[family-name:var(--font-display)] text-[2rem] leading-[1.25] font-extrabold text-balance md:text-[2.6rem]">
+          {d.raceName}
+        </h1>
+
+        <p class="mt-3 font-[family-name:var(--font-mono)] text-sm text-muted">
+          {d.course}・{d.headCount}頭
+        </p>
+
+        {d.summary && <p class="mt-5 leading-relaxed text-ink-2">{d.summary}</p>}
+      </div>
+    </header>
+
+    <div class="mx-auto grid max-w-3xl grid-cols-[minmax(0,1fr)] gap-12 px-5 py-10 md:py-14">
+      {
+        d.result && (
+          <section class="fade-in">
+            <ResultBanner result={d.result} budget={d.budget} headCount={d.headCount} />
+          </section>
+        )
+      }
+
+      <section class="fade-in">
+        <h2 class="font-[family-name:var(--font-display)] text-xl font-bold">印と評価</h2>
+        <p class="mt-2 mb-5 text-sm text-muted">軸は {d.axis}。</p>
+        <MarkTable marks={d.marks} headCount={d.headCount} axis={d.axis} />
+      </section>
+
+      {
+        d.danger && (
+          <section class="fade-in">
+            <DangerCard danger={d.danger} headCount={d.headCount} />
+          </section>
+        )
+      }
+
+      <section class="fade-in">
+        <h2 class="mb-5 font-[family-name:var(--font-display)] text-xl font-bold">買い目</h2>
+        <BetTable bets={d.bets} budget={d.budget} raceName={`${year} ${d.raceName}`} />
+      </section>
+
+      <section class="prose fade-in max-w-none">
+        <Content />
+      </section>
+
+      {
+        d.tags.length > 0 && (
+          <ul class="flex flex-wrap gap-2">
+            {d.tags.map((t) => (
+              <li class="rounded-full border border-line-soft px-3 py-1 font-[family-name:var(--font-mono)] text-[11px] text-muted">
+                {t}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      <aside class="rounded-lg border border-line-soft bg-surface-2 px-5 py-4 text-xs leading-relaxed text-muted">
+        予想は的中・利益を保証するものではありません。馬券の購入は20歳になってから、
+        ご自身の判断と責任で、余裕資金の範囲で行ってください。
+      </aside>
+    </div>
+
+    <nav class="mx-auto max-w-3xl px-5 pb-4">
+      <div class="grid gap-3 border-t border-line pt-6 sm:grid-cols-2">
+        {
+          older ? (
+            <a
+              href={`/races/${older.id}/`}
+              class="rounded-lg border border-line bg-surface px-4 py-3 transition-colors hover:border-turf"
+            >
+              <span class="font-[family-name:var(--font-mono)] text-[10px] tracking-widest text-muted uppercase">
+                ← 前の予想
+              </span>
+              <span class="mt-1 block text-sm font-semibold">{older.data.raceName}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          newer && (
+            <a
+              href={`/races/${newer.id}/`}
+              class="rounded-lg border border-line bg-surface px-4 py-3 text-right transition-colors hover:border-turf"
+            >
+              <span class="font-[family-name:var(--font-mono)] text-[10px] tracking-widest text-muted uppercase">
+                次の予想 →
+              </span>
+              <span class="mt-1 block text-sm font-semibold">{newer.data.raceName}</span>
+            </a>
+          )
+        }
+      </div>
+    </nav>
+
+    <div class="mt-14">
+      <LineSection />
+    </div>
+  </article>
+</Layout>

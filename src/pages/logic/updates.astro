@@ -1,0 +1,81 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { jpDate, isoDate } from '../../lib/format';
+
+const entries = (await getCollection('updates')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+
+const rendered = await Promise.all(
+  entries.map(async (e) => ({ entry: e, Content: (await render(e)).Content }))
+);
+
+const targetStyle: Record<string, string> = {
+  チェックリスト: 'bg-turf-soft text-turf',
+  購入ロジック: 'bg-dirt-soft text-dirt',
+  危険な人気馬: 'bg-warn-soft text-warn',
+  その他: 'bg-surface-2 text-muted',
+};
+---
+
+<Layout
+  title="ロジック更新履歴"
+  description="外したレースから何を学び、どのルールをどう変えたのか。予想ロジックの変更を日付つきで残しています。"
+>
+  <PageHeader
+    eyebrow="Logic Updates"
+    title="ロジック更新履歴"
+    lead="ルールは固定ではありません。外したレースから見えた欠陥を、いつ、どう直したのかを残しています。予想が当たったかどうかより、この履歴がこのサイトの中身だと考えています。"
+  />
+
+  <div class="mx-auto max-w-3xl px-5 py-12">
+    {
+      rendered.length === 0 ? (
+        <p class="py-16 text-center text-sm text-muted">まだ更新履歴がありません。</p>
+      ) : (
+        <ol class="relative grid gap-8 border-l-2 border-line pl-0">
+          {rendered.map(({ entry, Content }) => (
+            <li class="fade-in relative pl-7">
+              <span class="absolute top-3 -left-[5px] h-2 w-2 rounded-full bg-turf" />
+              <div class="flex flex-wrap items-center gap-3">
+                <time
+                  datetime={isoDate(entry.data.date)}
+                  class="font-[family-name:var(--font-mono)] text-xs text-muted tabular-nums"
+                >
+                  {jpDate(entry.data.date)}
+                </time>
+                <span
+                  class:list={[
+                    'rounded-[3px] px-2 py-0.5 font-[family-name:var(--font-mono)] text-[10px] font-semibold',
+                    targetStyle[entry.data.target] ?? targetStyle['その他'],
+                  ]}
+                >
+                  {entry.data.target}
+                </span>
+                {entry.data.trigger && (
+                  <span class="font-[family-name:var(--font-mono)] text-[10px] text-muted">
+                    きっかけ: {entry.data.trigger}
+                  </span>
+                )}
+              </div>
+              <h2 class="mt-2 font-[family-name:var(--font-display)] text-lg font-bold text-balance">
+                {entry.data.title}
+              </h2>
+              <div class="prose mt-2.5 text-sm">
+                <Content />
+              </div>
+            </li>
+          ))}
+        </ol>
+      )
+    }
+
+    <p class="mt-14 border-t border-line pt-8 text-sm leading-relaxed text-muted">
+      現在のルールの全文は
+      <a href="/logic/checklist/" class="text-turf underline underline-offset-4">人気馬チェックリスト</a>と
+      <a href="/logic/buying/" class="text-turf underline underline-offset-4">馬券購入ロジック</a>にまとめています。
+    </p>
+  </div>
+</Layout>

@@ -1,33 +1,25 @@
 ---
-// src/components/LineButton.astro
-const lineUrl = "https://line.me/R/ti/p/strait0317jabiru"; 
+import { LINE_URL } from '../config';
 
-const { pathname } = Astro.url;
-const isContactPage = pathname.replace(/\/$/, "") === "/contact";
+// 問い合わせページと、LINE未開設のときは出さない
+const path = Astro.url.pathname.replace(/\/$/, '');
+const hidden = !LINE_URL || path === '/contact' || path === '/thanks';
 ---
 
-{ !isContactPage && (
-  <div class="fixed bottom-6 right-6 z-50 floating-area">
-    <a 
-      href={lineUrl} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      class="flex items-center bg-[#06C755] text-white font-bold py-3 px-6 rounded-full shadow-2xl hover:scale-105 transition-all active:scale-95 group"
-    >
-      <span class="text-sm md:text-base">LINEで無料相談</span>
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
-      </svg>
-    </a>
-  </div>
-)}
-
-<style>
-  .floating-area {
-    animation: bounce 2s infinite ease-in-out;
-  }
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-</style>
+{
+  !hidden && (
+    <div class="fixed right-4 bottom-4 z-40 md:right-6 md:bottom-6">
+      <a
+        href={LINE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group flex items-center gap-2 rounded-full bg-[#06C755] px-5 py-3 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
+      >
+        LINEで予想を受け取る
+        <svg class="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+  )
+}

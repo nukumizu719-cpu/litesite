@@ -1,0 +1,93 @@
+---
+/**
+ * 戦略的ブログセクション (BlogSection.astro)
+ * 1. リアルタイム更新: microCMSから最新3件を自動取得。
+ * 2. 衝突回避リンク: 記事詳細ページ (/blog/article/[id]/) への正確な遷移。
+ * 3. 誘導強化: 正規の一覧URL (/blog/1/) への導線確保。
+ */
+import { client } from "../library/microcms";
+import type { Blog } from "../library/microcms";
+
+// microCMSからデータを取得（トップページ表示用に最新3件）
+const response = await client.get({
+  endpoint: "blogs",
+  queries: { 
+    limit: 3,
+    orders: "-publishedAt" 
+  }
+});
+const posts = response.contents as Blog[];
+---
+
+<section id="blog" class="py-24 bg-slate-50 border-t border-slate-100">
+  <div class="container mx-auto px-6">
+    <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+      <div class="text-left">
+        <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tighter fade-in">
+          お知らせ・コラム
+        </h2>
+        <p class="text-slate-600 max-w-xl leading-relaxed font-medium fade-in">
+          名古屋・愛知の補助金最新情報や、ホームページ制作に役立つ知識を発信しています。
+        </p>
+      </div>
+      {/* 一覧ページへの正規リンク (/blog/1/) */}
+      <a href="/blog/1/" class="group flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700 transition-colors fade-in">
+        すべての記事を見る
+        <span class="group-hover:translate-x-1 transition-transform">→</span>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {posts.map((post) => (
+        <article class="fade-in">
+          <a 
+            href={`/blog/article/${post.id}/`} 
+            class="group flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 h-full"
+          >
+            {/* アイキャッチ画像エリア */}
+            <div class="aspect-video bg-slate-200 relative overflow-hidden">
+              {post.eyecatch ? (
+                <img 
+                  src={post.eyecatch.url} 
+                  alt={post.title} 
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  loading="lazy"
+                />
+              ) : (
+                <div class="w-full h-full flex items-center justify-center text-slate-400 font-bold">
+                  No Image
+                </div>
+              )}
+              {/* カテゴリバッジ */}
+              {post.category && (
+                <div class="absolute top-4 left-4">
+                  <span class="bg-blue-600/90 backdrop-blur-sm text-white text-[10px] font-black px-3 py-1 rounded-full shadow-sm">
+                    {post.category.name}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* コンテンツエリア */}
+            <div class="p-8 flex-grow flex flex-col">
+              <time class="text-[10px] text-slate-400 font-bold tracking-widest uppercase mb-3">
+                {new Date(post.publishedAt).toLocaleDateString('ja-JP').replace(/\//g, '.')}
+              </time>
+              
+              <h3 class="text-lg font-bold text-slate-900 mb-4 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
+                {post.title}
+              </h3>
+              
+              <div class="mt-auto pt-4 flex items-center text-blue-600 text-[10px] font-black tracking-widest uppercase">
+                READ MORE
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

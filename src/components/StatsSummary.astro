@@ -1,0 +1,97 @@
+---
+import type { Stats } from '../lib/stats';
+import { signedYen, yen } from '../lib/format';
+
+interface Props {
+  stats: Stats;
+  /** 見出しに出す期間ラベル（例: 2026年 / 通算） */
+  label?: string;
+  compact?: boolean;
+}
+
+const { stats, label = '通算', compact = false } = Astro.props;
+const empty = stats.races === 0;
+---
+
+<div class="rounded-lg border border-line bg-surface">
+  <div class="flex items-baseline justify-between gap-3 border-b border-line-soft px-5 py-3">
+    <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.16em] text-muted uppercase">
+      {label}成績
+    </p>
+    <p class="font-[family-name:var(--font-mono)] text-[11px] text-muted tabular-nums">
+      {stats.races}レース
+    </p>
+  </div>
+
+  {
+    empty ? (
+      <p class="px-5 py-8 text-center text-sm text-muted">
+        結果を入力した記事がまだありません。
+      </p>
+    ) : (
+      <div>
+        <div class="grid grid-cols-2 gap-px bg-line sm:grid-cols-4">
+          <div class="bg-surface px-4 py-4">
+            <p class="font-[family-name:var(--font-mono)] text-[9px] tracking-[0.14em] text-muted uppercase">
+              回収率
+            </p>
+            <p
+              class:list={[
+                'mt-1.5 font-[family-name:var(--font-mono)] font-bold tabular-nums',
+                compact ? 'text-xl' : 'text-3xl',
+                stats.roi >= 100 ? 'text-hit' : 'text-miss',
+              ]}
+            >
+              {stats.roi}
+              <span class="text-[0.5em] font-semibold">%</span>
+            </p>
+          </div>
+          <div class="bg-surface px-4 py-4">
+            <p class="font-[family-name:var(--font-mono)] text-[9px] tracking-[0.14em] text-muted uppercase">
+              的中率
+            </p>
+            <p
+              class:list={[
+                'mt-1.5 font-[family-name:var(--font-mono)] font-bold tabular-nums',
+                compact ? 'text-xl' : 'text-3xl',
+              ]}
+            >
+              {stats.hitRate}
+              <span class="text-[0.5em] font-semibold">%</span>
+            </p>
+          </div>
+          <div class="bg-surface px-4 py-4">
+            <p class="font-[family-name:var(--font-mono)] text-[9px] tracking-[0.14em] text-muted uppercase">
+              収支
+            </p>
+            <p
+              class:list={[
+                'mt-1.5 font-[family-name:var(--font-mono)] font-bold tabular-nums',
+                compact ? 'text-xl' : 'text-2xl',
+                stats.profit >= 0 ? 'text-hit' : 'text-miss',
+              ]}
+            >
+              {signedYen(stats.profit)}
+            </p>
+          </div>
+          <div class="bg-surface px-4 py-4">
+            <p class="font-[family-name:var(--font-mono)] text-[9px] tracking-[0.14em] text-muted uppercase">
+              的中
+            </p>
+            <p
+              class:list={[
+                'mt-1.5 font-[family-name:var(--font-mono)] font-bold tabular-nums',
+                compact ? 'text-xl' : 'text-2xl',
+              ]}
+            >
+              {stats.hits}<span class="text-[0.55em] text-muted">/{stats.races}</span>
+            </p>
+          </div>
+        </div>
+        <p class="border-t border-line-soft px-5 py-3 font-[family-name:var(--font-mono)] text-[11px] text-muted tabular-nums">
+          投資 {yen(stats.invested)} ／ 払戻 {yen(stats.returned)}
+        </p>
+      </div>
+    )
+  }
+</div>
