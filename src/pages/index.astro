@@ -8,7 +8,7 @@ import { SITE } from '../config';
 
 const races = await getRaces();
 const latest = races.slice(0, 3);
-const stats = await getStats();
+const stats = getStats();
 
 const pillars = [
   {
@@ -52,7 +52,7 @@ const pillars = [
       <p class="mt-7 max-w-xl leading-[1.9] text-ink-2">
         人気馬を減点方式でふるいにかけ、ワイドを起点に馬券を組み立てる。
         その手順をすべて公開したうえで、投資額と払戻を1円単位で記録しています。
-        回収率は記事データからの自動集計なので、良かった週だけを見せることができません。
+        回収率は実際に購入した全レースの記録からの自動集計なので、良かった週だけを見せることができません。
       </p>
 
       <div class="mt-9 flex flex-wrap gap-3">
@@ -73,7 +73,7 @@ const pillars = [
       <div class="mt-12 max-w-2xl">
         <StatsSummary stats={stats} label="通算" />
         <p class="mt-3 font-[family-name:var(--font-mono)] text-[11px] text-muted">
-          ※ 結果を入力済みの記事から自動集計しています
+          ※ 実際に購入した全レースの記録から自動集計しています
         </p>
       </div>
     </div>
