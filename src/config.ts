@@ -28,7 +28,7 @@ export const SITE = {
 } as const;
 
 /** LINE公式アカウントのURL。未開設なら空文字にすると導線が非表示になる */
-export const LINE_URL = 'https://line.me/R/ti/p/strait0317jabiru';
+export const LINE_URL = '';
 
 /** グローバルナビゲーション */
 export const NAV = [
