@@ -61,12 +61,35 @@ src/pages/logic/checklist.astro, buying.astro, danger.astro に実装されて�
 
 ## 作業手順
 
+gh CLI が利用可能。PR作成・マージともコマンドで実行する。
+
+### 記事の追加のみの場合（コード変更を含まない）
+
+以下を最後まで通しで実行してよい。途中で確認を求めなくてよい。
+
 1. npm run build でビルドが通ることを確認
-2. git add -A（docs/private/ が含まれていないことを git status で確認）
-3. コミット
-4. git push
-5. GitHub上でPRを作成しmainにマージ（gh未インストール）
-6. デプロイ後、本番URLをWebFetchで確認
+2. git status で docs/private/ が含まれていないことを確認
+3. コミット → push
+4. gh pr create でPRを作成
+5. gh pr merge --merge でmainにマージ
+6. GitHub Actions のデプロイ完了を確認
+7. 本番URLをWebFetchで開き、記事が表示されることを確認
+8. 結果を報告
+
+### コード・設定の変更を含む場合
+
+src/ 配下の .astro / .ts / config、.gitignore、package.json、
+astro.config.mjs などに変更がある場合は、**PR作成で必ず止まる。**
+
+1〜4 まで実行し、PRのURLを報告して停止する。
+マージ指示があるまで gh pr merge を実行しないこと。
+
+### 共通
+
+- .github/workflows/ を変更する場合は、種類を問わず必ず事前に確認を取る
+- マージ後は git switch main && git pull でローカルを同期する
+- 不具合が出た場合は gh pr create で修正PRを立てるか、
+  GitHub上のRevertで戻す。強制pushはしない
 
 ## やってはいけないこと
 
