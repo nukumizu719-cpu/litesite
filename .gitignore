@@ -28,3 +28,6 @@ pnpm-debug.log*
 
 # Xserver SSH key
 xserver_key*
+
+# local-only private data (never commit)
+docs/private/

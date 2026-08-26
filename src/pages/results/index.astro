@@ -2,33 +2,60 @@
 import Layout from '../../layouts/Layout.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import StatsSummary from '../../components/StatsSummary.astro';
-import { getStats, getYears, getFinishedRaces, getHitsByType, raceRoi } from '../../lib/stats';
-import { shortDate, isoDate, signedYen } from '../../lib/format';
+import { getStats, getYears, getLedgerRows, getHitsByType } from '../../lib/stats';
+import { shortDate, isoDate, signedYen, yen, roi } from '../../lib/format';
 
-const overall = await getStats();
-const years = await getYears();
-const finished = await getFinishedRaces();
+const overall = getStats();
+const years = getYears();
+const ledgerRows = getLedgerRows();
 const hitsByType = await getHitsByType();
+const articledCount = ledgerRows.filter((r) => r.articleId).length;
 
-const perYear = await Promise.all(
-  years.map(async (y) => ({ year: y, stats: await getStats(y) }))
-);
+const perYear = years.map((y) => ({ year: y, stats: getStats(y) }));
+
+// CBC賞（現時点で唯一の記事）1本の払戻が通算回収率に与えている影響を可視化する
+const CBC_ARTICLE_ID = '2026/0809-cbc-sho';
+const cbc = ledgerRows.find((r) => r.articleId === CBC_ARTICLE_ID);
+const withoutCbc = ledgerRows.filter((r) => r.articleId !== CBC_ARTICLE_ID);
+const exCbc = cbc && {
+  races: withoutCbc.length,
+  invested: withoutCbc.reduce((s, r) => s + r.budget, 0),
+  returned: withoutCbc.reduce((s, r) => s + r.payout, 0),
+};
+const exCbcRoi = exCbc ? roi(exCbc.invested, exCbc.returned) : null;
 ---
 
 <Layout
   title="成績・回収率"
-  description="公開した予想の全記録。投資額と払戻をレースごとに残し、回収率と的中率は記事データから自動集計しています。手で書き換えた数字は一つもありません。"
+  description="公開した予想の全記録。ロジックを適用して実際に購入した全レースの投資額と払戻を残し、回収率と的中率はその購入記録から自動集計しています。手で書き換えた数字は一つもありません。"
 >
   <PageHeader
     eyebrow="Results"
     title="成績・回収率"
-    lead="このページの数字は、各予想記事に入力した投資額と払戻からその場で計算しています。集計対象は結果を入力済みの記事のみ。都合の良い数字だけを残すことができない作りにしています。"
+    lead="このページの数字は、ロジックを適用して実際に購入した全レースの投資額と払戻からその場で計算しています。記事を書いたレースかどうかに関わらず全件が集計対象なので、記事が少ない段階でも数字だけ良く見せることができません。判断過程を記事にしているレースは、レース名にリンクを付けています。"
   />
 
   <div class="mx-auto max-w-4xl px-5 py-12">
     <section class="fade-in">
       <StatsSummary stats={overall} label="通算" />
     </section>
+
+    {
+      exCbc && exCbcRoi !== null && (
+        <section class="fade-in mt-6 rounded-lg border border-line-soft bg-surface-2 px-5 py-4 text-sm leading-relaxed text-ink-2">
+          <p class="font-[family-name:var(--font-mono)] text-xs tabular-nums">
+            22レース全体: 投資{yen(overall.invested)} / 払戻{yen(overall.returned)} / 回収率{overall.roi}%
+          </p>
+          <p class="mt-1 font-[family-name:var(--font-mono)] text-xs tabular-nums">
+            8/9 CBC賞（払戻{yen(cbc.payout)}）を除く{exCbc.races}レース: 投資{yen(exCbc.invested)} / 払戻{yen(exCbc.returned)} / 回収率{exCbcRoi}%
+          </p>
+          <p class="mt-3">
+            {overall.roi}%という数字は、CBC賞1本の払戻に支えられている。これを除くと{exCbcRoi}%。
+            この状態から100%を目指す過程を記録していく。
+          </p>
+        </section>
+      )
+    }
 
     {
       perYear.length > 1 && (
@@ -47,7 +74,9 @@ const perYear = await Promise.all(
       hitsByType.length > 0 && (
         <section class="fade-in mt-12">
           <h2 class="mb-2 font-[family-name:var(--font-display)] text-xl font-bold">券種別の的中回数</h2>
-          <p class="mb-5 text-sm text-muted">どの券種が効いているかの確認用です。</p>
+          <p class="mb-5 text-sm text-muted">
+            どの券種が効いているかの確認用です。買い目の詳細は記事にしか持たないため、記事化済みの{articledCount}レースのみが対象です（通算成績は{overall.races}レース全体の集計で、母数が異なります）。
+          </p>
           <ul class="flex flex-wrap gap-2.5">
             {hitsByType.map((h) => (
               <li class="flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-sm">
@@ -64,16 +93,17 @@ const perYear = await Promise.all(
       <h2 class="mb-5 font-[family-name:var(--font-display)] text-xl font-bold">レース別の記録</h2>
 
       {
-        finished.length === 0 ? (
+        ledgerRows.length === 0 ? (
           <p class="rounded-lg border border-line bg-surface px-5 py-10 text-center text-sm text-muted">
-            結果を入力した記事がまだありません。
+            購入記録がまだありません。
           </p>
         ) : (
           <div class="scroll-x rounded-lg border border-line bg-surface">
-            <table class="w-full min-w-[620px] border-collapse text-sm">
+            <table class="w-full min-w-[680px] border-collapse text-sm">
               <thead>
                 <tr class="bg-surface-2 text-left font-[family-name:var(--font-mono)] text-[10px] tracking-[0.12em] text-muted uppercase">
                   <th class="px-4 py-2.5 font-semibold">日付</th>
+                  <th class="px-4 py-2.5 font-semibold">開催</th>
                   <th class="px-4 py-2.5 font-semibold">レース</th>
                   <th class="px-4 py-2.5 text-right font-semibold">投資</th>
                   <th class="px-4 py-2.5 text-right font-semibold">払戻</th>
@@ -82,43 +112,46 @@ const perYear = await Promise.all(
                 </tr>
               </thead>
               <tbody>
-                {finished.map((r) => {
-                  const rate = raceRoi(r) ?? 0;
-                  const profit = (r.data.result?.payout ?? 0) - r.data.budget;
+                {ledgerRows.map((row) => {
+                  const d = new Date(row.date);
                   return (
                     <tr class="border-t border-line-soft">
                       <td class="px-4 py-2.5 font-[family-name:var(--font-mono)] text-xs whitespace-nowrap text-muted">
-                        <time datetime={isoDate(r.data.raceDate)}>{shortDate(r.data.raceDate)}</time>
+                        <time datetime={isoDate(d)}>{shortDate(d)}</time>
+                      </td>
+                      <td class="px-4 py-2.5 font-[family-name:var(--font-mono)] text-xs whitespace-nowrap text-muted">
+                        {row.venue}{row.raceNo}R
                       </td>
                       <td class="px-4 py-2.5">
-                        <a href={`/races/${r.id}/`} class="font-medium hover:text-turf">
-                          {r.data.raceName}
-                        </a>
-                        <span class="ml-1.5 font-[family-name:var(--font-mono)] text-[10px] text-muted">
-                          {r.data.grade}
-                        </span>
+                        {row.articleId ? (
+                          <a href={`/races/${row.articleId}/`} class="font-medium hover:text-turf">
+                            {row.raceName}
+                          </a>
+                        ) : (
+                          <span class="font-medium text-ink-2">{row.raceName}</span>
+                        )}
                       </td>
                       <td class="px-4 py-2.5 text-right font-[family-name:var(--font-mono)] tabular-nums text-ink-2">
-                        {r.data.budget.toLocaleString('ja-JP')}
+                        {row.budget.toLocaleString('ja-JP')}
                       </td>
                       <td class="px-4 py-2.5 text-right font-[family-name:var(--font-mono)] tabular-nums text-ink-2">
-                        {(r.data.result?.payout ?? 0).toLocaleString('ja-JP')}
+                        {row.payout.toLocaleString('ja-JP')}
                       </td>
                       <td
                         class:list={[
                           'px-4 py-2.5 text-right font-[family-name:var(--font-mono)] font-semibold tabular-nums',
-                          profit >= 0 ? 'text-hit' : 'text-miss',
+                          row.profit >= 0 ? 'text-hit' : 'text-miss',
                         ]}
                       >
-                        {signedYen(profit)}
+                        {signedYen(row.profit)}
                       </td>
                       <td
                         class:list={[
                           'px-4 py-2.5 text-right font-[family-name:var(--font-mono)] font-semibold tabular-nums',
-                          rate >= 100 ? 'text-hit' : 'text-miss',
+                          row.roi >= 100 ? 'text-hit' : 'text-miss',
                         ]}
                       >
-                        {rate}%
+                        {row.roi}%
                       </td>
                     </tr>
                   );
