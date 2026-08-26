@@ -1,0 +1,116 @@
+---
+import { betAmount, betTotal, betsToText, yen, type Bet } from '../lib/format';
+
+interface Props {
+  bets: Bet[];
+  budget: number;
+  raceName?: string;
+}
+
+const { bets, budget, raceName } = Astro.props;
+
+const total = betTotal(bets);
+const copyText = betsToText(bets, raceName);
+const overBudget = total > budget;
+---
+
+<div class="rounded-lg border border-line bg-surface">
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-line-soft px-4 py-3">
+    <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.16em] text-muted uppercase">
+      買い目
+    </p>
+    <button
+      type="button"
+      class="copy-bets inline-flex items-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-xs font-semibold text-ink-2 transition-colors hover:border-turf hover:text-turf"
+      data-copy={copyText}
+    >
+      <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="9" y="9" width="12" height="12" rx="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+      </svg>
+      <span class="copy-label">買い目をコピー</span>
+    </button>
+  </div>
+
+  <div class="scroll-x">
+    <table class="w-full min-w-[440px] border-collapse text-sm">
+      <thead>
+        <tr class="bg-surface-2 text-left font-[family-name:var(--font-mono)] text-[10px] tracking-[0.12em] text-muted uppercase">
+          <th class="px-4 py-2.5 font-semibold">券種</th>
+          <th class="px-4 py-2.5 font-semibold">組み合わせ</th>
+          <th class="px-4 py-2.5 text-right font-semibold">点数</th>
+          <th class="px-4 py-2.5 text-right font-semibold">1点</th>
+          <th class="px-4 py-2.5 text-right font-semibold">小計</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          bets.map((b) => (
+            <tr class="border-t border-line-soft">
+              <td class="px-4 py-2.5 font-semibold whitespace-nowrap">{b.type}</td>
+              <td class="px-4 py-2.5 font-[family-name:var(--font-mono)] tabular-nums whitespace-nowrap text-ink-2">
+                {b.combo}
+              </td>
+              <td class="px-4 py-2.5 text-right font-[family-name:var(--font-mono)] tabular-nums text-ink-2">
+                {b.points}
+              </td>
+              <td class="px-4 py-2.5 text-right font-[family-name:var(--font-mono)] tabular-nums text-ink-2">
+                {b.unit.toLocaleString('ja-JP')}
+              </td>
+              <td class="px-4 py-2.5 text-right font-[family-name:var(--font-mono)] font-semibold tabular-nums">
+                {betAmount(b).toLocaleString('ja-JP')}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+      <tfoot>
+        <tr class="border-t-2 border-line bg-surface-2">
+          <td class="px-4 py-3 font-bold" colspan={4}>合計</td>
+          <td class="px-4 py-3 text-right font-[family-name:var(--font-mono)] text-base font-bold tabular-nums">
+            {total.toLocaleString('ja-JP')}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <p class="border-t border-line-soft px-4 py-3 text-xs text-muted">
+    投資予定額 {yen(budget)}
+    {overBudget && <span class="ml-2 font-semibold text-miss">合計が投資額を超えています</span>}
+  </p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.copy-bets').forEach((btn) => {
+    const label = btn.querySelector('.copy-label');
+    btn.addEventListener('click', async () => {
+      const text = btn.dataset.copy ?? '';
+      const done = (msg: string) => {
+        if (!label) return;
+        const prev = label.textContent;
+        label.textContent = msg;
+        setTimeout(() => (label.textContent = prev), 1800);
+      };
+      try {
+        await navigator.clipboard.writeText(text);
+        done('コピーしました');
+      } catch {
+        // クリップボードAPIが使えない環境（古いブラウザ・非HTTPS）向けの退避
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          done('コピーしました');
+        } catch {
+          done('コピーできません');
+        }
+        ta.remove();
+      }
+    });
+  });
+</script>

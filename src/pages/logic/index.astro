@@ -1,0 +1,105 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { getCollection } from 'astro:content';
+
+const updates = await getCollection('updates');
+const latestUpdate = updates.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())[0];
+
+const pages = [
+  {
+    n: '01',
+    href: '/logic/checklist/',
+    title: '人気馬チェックリスト',
+    body: '人気馬の不安要素を−5点から−1点で減点し、最も減点の少ない馬を採用する。14項目すべてを、それぞれの理由つきで公開しています。',
+    meta: '軸馬を決めるための表',
+  },
+  {
+    n: '02',
+    href: '/logic/buying/',
+    title: '馬券購入ロジック',
+    body: 'ワイドを起点に、4〜6番人気×6〜10倍と1〜2番人気を組む。券種ごとの使い分けと、あえて買わない基準まで。',
+    meta: '買い目を作るための手順',
+  },
+  {
+    n: '03',
+    href: '/logic/danger/',
+    title: '危険な人気馬の見抜き方',
+    body: '前走逃げ、長期休み明け、特殊条件勝ち、枠替わり、牝馬限定戦からの混合戦。5つの判定基準と、その裏返しにある狙い目。',
+    meta: '切る判断のための基準',
+  },
+  {
+    n: '04',
+    href: '/logic/updates/',
+    title: 'ロジック更新履歴',
+    body: '外したレースから何を学び、どのルールをどう変えたのか。ルールが固定されていないことこそ、この記録の中身です。',
+    meta: 'ルールが変わった記録',
+  },
+];
+---
+
+<Layout
+  title="予想ロジック"
+  description="人気馬チェックリスト、馬券購入ロジック、危険な人気馬の判定基準。当サイトが全ての予想で使っているルールを、隠さずすべて公開しています。"
+>
+  <PageHeader
+    eyebrow="Logic"
+    title="予想ロジック"
+    lead="このサイトの予想は、毎回この3つのルールに沿って書かれています。手順を公開しているので、同じレースについて別の結論になったなら、どこで判断が分かれたのかを突き合わせられます。"
+  />
+
+  <div class="mx-auto max-w-3xl px-5 py-12">
+    <section class="prose">
+      <h2>なぜ全部公開するのか</h2>
+      <p>
+        「AIが予想しました」と書かれたサイトはいくらでもありますが、
+        その中身が読者に見えることはまずありません。何を根拠にその印が付いたのかが分からなければ、
+        当たったときも外れたときも、次に活かせるものが何も残りません。
+      </p>
+      <p>
+        ここで公開しているのは、<strong>誰でも同じ手順を踏める形にまで言語化されたルール</strong>です。
+        隠すべき秘密の指数ではなく、手作業で辿れる引き算の表と、買い方の約束事。
+        だからこそ、外れたときに「どのルールが機能しなかったのか」まで検証できます。
+      </p>
+    </section>
+
+    <section class="mt-12 grid gap-4">
+      {
+        pages.map((p) => (
+          <a
+            href={p.href}
+            class="fade-in group flex flex-col gap-2 rounded-lg border border-line bg-surface p-6 transition-colors hover:border-turf"
+          >
+            <div class="flex items-center gap-3">
+              <span class="font-[family-name:var(--font-mono)] text-xs font-semibold tracking-[0.14em] text-dirt">
+                {p.n}
+              </span>
+              <span class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.12em] text-muted uppercase">
+                {p.meta}
+              </span>
+            </div>
+            <h2 class="font-[family-name:var(--font-display)] text-xl font-bold group-hover:text-turf">
+              {p.title}
+            </h2>
+            <p class="text-sm leading-relaxed text-ink-2">{p.body}</p>
+          </a>
+        ))
+      }
+    </section>
+
+    {
+      latestUpdate && (
+        <aside class="mt-12 rounded-lg border border-line-soft bg-surface-2 px-5 py-4">
+          <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.14em] text-muted uppercase">
+            最新の更新
+          </p>
+          <p class="mt-2 text-sm">
+            <a href="/logic/updates/" class="font-semibold hover:text-turf">
+              {latestUpdate.data.title}
+            </a>
+          </p>
+        </aside>
+      )
+    }
+  </div>
+</Layout>

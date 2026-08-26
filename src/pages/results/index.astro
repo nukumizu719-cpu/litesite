@@ -1,0 +1,138 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import StatsSummary from '../../components/StatsSummary.astro';
+import { getStats, getYears, getFinishedRaces, getHitsByType, raceRoi } from '../../lib/stats';
+import { shortDate, isoDate, signedYen } from '../../lib/format';
+
+const overall = await getStats();
+const years = await getYears();
+const finished = await getFinishedRaces();
+const hitsByType = await getHitsByType();
+
+const perYear = await Promise.all(
+  years.map(async (y) => ({ year: y, stats: await getStats(y) }))
+);
+---
+
+<Layout
+  title="成績・回収率"
+  description="公開した予想の全記録。投資額と払戻をレースごとに残し、回収率と的中率は記事データから自動集計しています。手で書き換えた数字は一つもありません。"
+>
+  <PageHeader
+    eyebrow="Results"
+    title="成績・回収率"
+    lead="このページの数字は、各予想記事に入力した投資額と払戻からその場で計算しています。集計対象は結果を入力済みの記事のみ。都合の良い数字だけを残すことができない作りにしています。"
+  />
+
+  <div class="mx-auto max-w-4xl px-5 py-12">
+    <section class="fade-in">
+      <StatsSummary stats={overall} label="通算" />
+    </section>
+
+    {
+      perYear.length > 1 && (
+        <section class="fade-in mt-12">
+          <h2 class="mb-5 font-[family-name:var(--font-display)] text-xl font-bold">年別</h2>
+          <div class="grid gap-4 sm:grid-cols-2">
+            {perYear.map((p) => (
+              <StatsSummary stats={p.stats} label={`${p.year}年`} compact />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      hitsByType.length > 0 && (
+        <section class="fade-in mt-12">
+          <h2 class="mb-2 font-[family-name:var(--font-display)] text-xl font-bold">券種別の的中回数</h2>
+          <p class="mb-5 text-sm text-muted">どの券種が効いているかの確認用です。</p>
+          <ul class="flex flex-wrap gap-2.5">
+            {hitsByType.map((h) => (
+              <li class="flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-sm">
+                <span class="font-semibold">{h.type}</span>
+                <span class="font-[family-name:var(--font-mono)] tabular-nums text-turf">{h.count}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <section class="fade-in mt-12">
+      <h2 class="mb-5 font-[family-name:var(--font-display)] text-xl font-bold">レース別の記録</h2>
+
+      {
+        finished.length === 0 ? (
+          <p class="rounded-lg border border-line bg-surface px-5 py-10 text-center text-sm text-muted">
+            結果を入力した記事がまだありません。
+          </p>
+        ) : (
+          <div class="scroll-x rounded-lg border border-line bg-surface">
+            <table class="w-full min-w-[620px] border-collapse text-sm">
+              <thead>
+                <tr class="bg-surface-2 text-left font-[family-name:var(--font-mono)] text-[10px] tracking-[0.12em] text-muted uppercase">
+                  <th class="px-4 py-2.5 font-semibold">日付</th>
+                  <th class="px-4 py-2.5 font-semibold">レース</th>
+                  <th class="px-4 py-2.5 text-right font-semibold">投資</th>
+                  <th class="px-4 py-2.5 text-right font-semibold">払戻</th>
+                  <th class="px-4 py-2.5 text-right font-semibold">収支</th>
+                  <th class="px-4 py-2.5 text-right font-semibold">回収率</th>
+                </tr>
+              </thead>
+              <tbody>
+                {finished.map((r) => {
+                  const rate = raceRoi(r) ?? 0;
+                  const profit = (r.data.result?.payout ?? 0) - r.data.budget;
+                  return (
+                    <tr class="border-t border-line-soft">
+                      <td class="px-4 py-2.5 font-[family-name:var(--font-mono)] text-xs whitespace-nowrap text-muted">
+                        <time datetime={isoDate(r.data.raceDate)}>{shortDate(r.data.raceDate)}</time>
+                      </td>
+                      <td class="px-4 py-2.5">
+                        <a href={`/races/${r.id}/`} class="font-medium hover:text-turf">
+                          {r.data.raceName}
+                        </a>
+                        <span class="ml-1.5 font-[family-name:var(--font-mono)] text-[10px] text-muted">
+                          {r.data.grade}
+                        </span>
+                      </td>
+                      <td class="px-4 py-2.5 text-right font-[family-name:var(--font-mono)] tabular-nums text-ink-2">
+                        {r.data.budget.toLocaleString('ja-JP')}
+                      </td>
+                      <td class="px-4 py-2.5 text-right font-[family-name:var(--font-mono)] tabular-nums text-ink-2">
+                        {(r.data.result?.payout ?? 0).toLocaleString('ja-JP')}
+                      </td>
+                      <td
+                        class:list={[
+                          'px-4 py-2.5 text-right font-[family-name:var(--font-mono)] font-semibold tabular-nums',
+                          profit >= 0 ? 'text-hit' : 'text-miss',
+                        ]}
+                      >
+                        {signedYen(profit)}
+                      </td>
+                      <td
+                        class:list={[
+                          'px-4 py-2.5 text-right font-[family-name:var(--font-mono)] font-semibold tabular-nums',
+                          rate >= 100 ? 'text-hit' : 'text-miss',
+                        ]}
+                      >
+                        {rate}%
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )
+      }
+    </section>
+
+    <p class="mt-8 text-xs leading-relaxed text-muted">
+      過去の成績は将来の結果を保証するものではありません。掲載しているのは実際に購入した買い目の記録であり、
+      的中率・回収率の向上を約束するものではありません。
+    </p>
+  </div>
+</Layout>

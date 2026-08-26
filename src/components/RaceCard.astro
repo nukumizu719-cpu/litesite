@@ -1,0 +1,69 @@
+---
+import type { Race } from '../lib/stats';
+import { shortDate, isoDate, roi as calcRoi } from '../lib/format';
+
+interface Props {
+  race: Race;
+}
+
+const { race } = Astro.props;
+const d = race.data;
+const finished = !!d.result;
+const hit = (d.result?.payout ?? 0) > 0;
+const rate = finished ? calcRoi(d.budget, d.result!.payout) : null;
+
+const gradeStyle =
+  d.grade === 'G1'
+    ? 'bg-turf text-white'
+    : d.grade === 'G2' || d.grade === 'G3'
+      ? 'bg-turf-soft text-turf'
+      : 'bg-surface-2 text-ink-2';
+---
+
+<a
+  href={`/races/${race.id}/`}
+  class="group flex flex-col gap-3 rounded-lg border border-line bg-surface p-5 transition-colors hover:border-turf"
+>
+  <div class="flex flex-wrap items-center gap-2">
+    <span
+      class:list={['rounded-[3px] px-2 py-0.5 font-[family-name:var(--font-mono)] text-[10px] font-semibold tracking-wider', gradeStyle]}
+    >
+      {d.grade}
+    </span>
+    <time datetime={isoDate(d.raceDate)} class="font-[family-name:var(--font-mono)] text-[11px] text-muted">
+      {shortDate(d.raceDate)}
+    </time>
+    {d.handicap && <span class="font-[family-name:var(--font-mono)] text-[10px] text-dirt">ハンデ</span>}
+    {
+      finished && (
+        <span
+          class:list={[
+            'ml-auto rounded-[3px] px-2 py-0.5 font-[family-name:var(--font-mono)] text-[10px] font-semibold',
+            hit ? 'bg-hit-soft text-hit' : 'bg-miss-soft text-miss',
+          ]}
+        >
+          {hit ? '的中' : '不的中'} {rate}%
+        </span>
+      )
+    }
+    {
+      !finished && (
+        <span class="ml-auto font-[family-name:var(--font-mono)] text-[10px] text-muted">結果待ち</span>
+      )
+    }
+  </div>
+
+  <h3 class="font-[family-name:var(--font-display)] text-lg leading-snug font-bold text-balance group-hover:text-turf">
+    {d.raceName}
+  </h3>
+
+  <p class="font-[family-name:var(--font-mono)] text-[11px] text-muted">
+    {d.course}・{d.headCount}頭
+  </p>
+
+  {d.summary && <p class="line-clamp-2 text-sm leading-relaxed text-ink-2">{d.summary}</p>}
+
+  <p class="mt-auto pt-1 text-xs text-muted">
+    軸 <span class="font-semibold text-ink-2">{d.axis}</span>
+  </p>
+</a>

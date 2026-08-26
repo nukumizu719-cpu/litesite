@@ -1,0 +1,31 @@
+---
+import { WAKU_COLORS } from '../config';
+import { wakuOf } from '../lib/format';
+
+interface Props {
+  /** 馬番 */
+  no: number;
+  /** 出走頭数。枠番の算出に使う */
+  headCount: number;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { no, headCount, size = 'md' } = Astro.props;
+
+const waku = wakuOf(no, headCount);
+const c = WAKU_COLORS[waku - 1];
+
+const box = {
+  sm: 'h-5 w-5 text-[11px]',
+  md: 'h-7 w-7 text-[13px]',
+  lg: 'h-9 w-9 text-base',
+}[size];
+---
+
+<span
+  class:list={['inline-grid shrink-0 place-items-center rounded-[3px] font-[family-name:var(--font-mono)] font-semibold tabular-nums ring-1 ring-black/15', box]}
+  style={`background:${c.bg};color:${c.fg}`}
+  title={`${waku}枠（${c.name}）${no}番`}
+>
+  {no}
+</span>

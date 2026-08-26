@@ -1,80 +1,83 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { SITE } from '../config';
 
-const title = "特定商取引法に基づく表記 | LiteSite（ライトサイト）";
-const description = "LiteSite（ライトサイト）の特定商取引法に基づく表記をご案内します。";
+/**
+ * 特定商取引法に基づく表記。
+ *
+ * 有料コンテンツの販売を始めたら SELLING を true にして、
+ * 下の items の「（準備中）」をすべて実際の情報に置き換えること。
+ * 氏名・住所・電話番号の記載は、通信販売を行う事業者の法律上の義務。
+ * note などの外部プラットフォームで販売する場合は、
+ * そのプラットフォーム側の表記に従うため、ここは false のままでよい。
+ */
+const SELLING = false;
+
+const items = [
+  { label: '販売事業者', value: '（準備中）' },
+  { label: '運営責任者', value: '（準備中）' },
+  { label: '所在地', value: '（準備中）' },
+  { label: '電話番号', value: '（準備中）' },
+  { label: 'メールアドレス', value: SITE.email || '（準備中）' },
+  { label: '販売価格', value: '各商品ページに表示する金額' },
+  { label: '商品代金以外の必要料金', value: '通信料等はお客様のご負担となります' },
+  { label: '支払方法', value: '（準備中）' },
+  { label: '支払時期', value: '（準備中）' },
+  { label: '商品の引渡し時期', value: '決済完了後、直ちに閲覧可能となります' },
+  {
+    label: '返品・キャンセル',
+    value:
+      'デジタルコンテンツの性質上、決済完了後の返品・返金には応じられません。ただし、当方の責によりコンテンツが閲覧できない場合はこの限りではありません。',
+  },
+  {
+    label: '動作環境',
+    value: 'インターネットに接続された端末および一般的なウェブブラウザ',
+  },
+];
 ---
 
-<Layout title={title} description={description}>
-  <main class="bg-slate-50 py-20">
-    <div class="container mx-auto px-6 max-w-4xl">
-      <div class="bg-white p-8 md:p-16 rounded-3xl shadow-sm border border-slate-200">
-        <h1 class="text-3xl font-bold text-slate-900 mb-8 pb-4 border-b-2 border-blue-600 inline-block">
-          特定商取引法に基づく表記
-        </h1>
+<Layout
+  title="特定商取引法に基づく表記"
+  description={`${SITE.name}における特定商取引法に基づく表記です。`}
+  noindex={!SELLING}
+>
+  <PageHeader eyebrow="Legal" title="特定商取引法に基づく表記" />
 
-        <div class="space-y-0 text-sm md:text-base">
-          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
-            <div class="font-bold text-slate-900 mb-2 md:mb-0">販売業者</div>
-            <div class="md:col-span-2 text-slate-600">LiteSite（ライトサイト）</div>
-          </div>
-
-          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
-            <div class="font-bold text-slate-900 mb-2 md:mb-0">代表責任者</div>
-            <div class="md:col-span-2 text-slate-600">（※お名前をご記入ください）</div>
-          </div>
-
-          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
-            <div class="font-bold text-slate-900 mb-2 md:mb-0">所在地</div>
-            <div class="md:col-span-2 text-slate-600">愛知県安城市（※詳細な住所をご記入ください）</div>
-          </div>
-
-          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
-            <div class="font-bold text-slate-900 mb-2 md:mb-0">メールアドレス</div>
-            <div class="md:col-span-2 text-slate-600">info@litesite.jp</div>
-          </div>
-
-          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
-            <div class="font-bold text-slate-900 mb-2 md:mb-0">販売価格</div>
-            <div class="md:col-span-2 text-slate-600">
-              各プラン・サービスごとに表示された価格に基づきます。<br />
-              詳細は「料金プラン」のページをご確認ください。
-            </div>
-          </div>
-
-          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
-            <div class="font-bold text-slate-900 mb-2 md:mb-0">商品代金以外の必要料金</div>
-            <div class="md:col-span-2 text-slate-600">
-              ・銀行振込手数料（振込支払いの場合）<br />
-              ・ドメイン、サーバー取得に関わる実費（セルフ運用プランの場合）
-            </div>
-          </div>
-
-          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
-            <div class="font-bold text-slate-900 mb-2 md:mb-0">引き渡し時期</div>
-            <div class="md:col-span-2 text-slate-600">
-              制作着手から通常1ヶ月程度（契約内容および資料提供のタイミングにより前後します）。
-            </div>
-          </div>
-
-          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
-            <div class="font-bold text-slate-900 mb-2 md:mb-0">お支払方法</div>
-            <div class="md:col-span-2 text-slate-600">銀行振込、クレジットカード（Stripe等）</div>
-          </div>
-
-          <div class="grid md:grid-cols-3 border-b border-slate-100 py-6">
-            <div class="font-bold text-slate-900 mb-2 md:mb-0">返品・キャンセル</div>
-            <div class="md:col-span-2 text-slate-600 leading-relaxed">
-              サービスの性質上、制作着手後のキャンセル・返品は受け付けておりません。<br />
-              保守サブスクリプションの解約は、解約希望月の前月末日までにお申し出いただくことで、翌月より停止いたします。
-            </div>
-          </div>
+  <div class="mx-auto max-w-3xl px-5 py-12">
+    {
+      !SELLING ? (
+        <div class="rounded-lg border border-line bg-surface px-6 py-8">
+          <p class="leading-relaxed text-ink-2">
+            現在、当サイトでは有料コンテンツの販売を行っていません。
+            そのため、特定商取引法に基づく表記の対象となる取引はありません。
+          </p>
+          <p class="mt-4 leading-relaxed text-ink-2">
+            有料コンテンツの提供を開始する際には、法令に基づく表記をこのページに掲載します。
+            当サイトに関するお問い合わせは
+            <a href="/contact/" class="text-turf underline underline-offset-4">お問い合わせ</a>
+            からお願いします。
+          </p>
         </div>
-      </div>
+      ) : (
+        <div class="overflow-hidden rounded-lg border border-line bg-surface">
+          <dl class="grid gap-px bg-line">
+            {items.map((it) => (
+              <div class="grid gap-1 bg-surface px-5 py-4 sm:grid-cols-[10rem_1fr] sm:gap-5">
+                <dt class="font-[family-name:var(--font-mono)] text-[11px] tracking-wider text-muted">
+                  {it.label}
+                </dt>
+                <dd class="text-sm leading-relaxed">{it.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )
+    }
 
-      <div class="mt-8 text-center">
-        <a href="/" class="text-blue-600 hover:underline text-sm font-bold">← ホームへ戻る</a>
-      </div>
-    </div>
-  </main>
+    <p class="mt-8 text-sm leading-relaxed text-muted">
+      あわせて<a href="/terms/" class="text-turf underline underline-offset-4">利用規約</a>および
+      <a href="/disclaimer/" class="text-turf underline underline-offset-4">免責事項</a>をご確認ください。
+    </p>
+  </div>
 </Layout>

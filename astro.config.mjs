@@ -5,18 +5,28 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // 1. サイトのURLを設定（SEOとサイトマップ生成に必須）
+  // サイトのURL（SEOとサイトマップ生成に必須）
   site: 'https://litesite.jp',
 
-  // 2. 末尾のスラッシュ設定（SEO評価を統一するために推奨）
+  // 末尾のスラッシュ設定（SEO評価を統一するため）
   trailingSlash: 'always',
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
   },
 
   integrations: [
-    // 3. サイトマップの設定（Googleにページを正しく伝える）
-    sitemap()
-  ]
+    sitemap({
+      // noindex にしているページはサイトマップからも外す
+      filter: (page) => {
+        const path = new URL(page).pathname;
+        if (path === '/thanks/') return false;
+        // 有料販売を始めて law.astro の SELLING を true にしたら、この行を消す
+        if (path === '/law/') return false;
+        // 下書き記事（記入例のサンプルなど）
+        if (path.includes('-sample/')) return false;
+        return true;
+      },
+    }),
+  ],
 });

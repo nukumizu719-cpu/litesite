@@ -1,0 +1,177 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+
+const tickets = [
+  {
+    type: 'ワイド',
+    stance: '起点',
+    tone: 'core',
+    rule: '4〜6番人気かつ6〜10倍の馬を起点に、1〜2番人気と組む',
+    detail:
+      'すべての組み立てはここから始まります。中位人気の馬を1頭決め、それを上位人気と結ぶ。人気馬同士のボックスは買いません。当たっても配当が資金効率に見合わないうえ、当てにいく馬券が「外れない馬券」にすり替わってしまうからです。',
+    avoid: '人気馬同士のボックス',
+  },
+  {
+    type: '馬連',
+    stance: '併用',
+    tone: 'core',
+    rule: 'ワイドで選んだ組み合わせと同じ相手を、2〜3点に絞って重ねる',
+    detail:
+      'ワイドで押さえた組み合わせのうち、特に自信のあるものだけ馬連でも取ります。同じ相手を重ねることで、当たった時のリターンが跳ね上がる。点数を広げると意味がなくなるので、2〜3点が上限です。',
+    avoid: '単勝1倍台の馬が本命のレース',
+  },
+  {
+    type: '単勝',
+    stance: '限定',
+    tone: 'sub',
+    rule: '4.0〜9.9倍のゾーンから、前走4〜6着・条件好転・逃げ先行の馬を狙う',
+    detail:
+      '前走で掲示板を外さない程度に走りながら人気を落としている馬が、条件が好転して先行できる場合。この3つが揃った時だけ買います。1倍台や2倍台は、当たっても資金が増えません。',
+    avoid: '3倍未満のオッズ',
+  },
+  {
+    type: '3連複',
+    stance: '限定',
+    tone: 'sub',
+    rule: '荒れる材料が揃ったレースだけ。20点以内、軸は人気馬から選ぶ',
+    detail:
+      '人気馬に不安要素がある、ハンデ戦、牝馬限定の重賞、2歳戦、穴馬候補が多い。こうした条件が重なったレースでのみ使います。買うと決めたら2列目・3列目は薄くせず厚めに取る。点数を抑えたいなら、そもそも3連複を買わないほうが正しい判断です。',
+    avoid: '紐を絞りすぎること',
+  },
+  {
+    type: '複勝',
+    stance: '買わない',
+    tone: 'no',
+    rule: '原則として購入しない',
+    detail:
+      '的中率は上がりますが、回収率がほとんど動きません。「当たった」という感触だけが残り、収支が改善しない典型的な馬券です。同じ資金はワイドに回します。',
+    avoid: '—',
+  },
+  {
+    type: '3連単・枠連',
+    stance: '例外',
+    tone: 'no',
+    rule: '明確な理由があるときだけ',
+    detail:
+      '着順まで当てにいく必要がある、あるいは枠でまとめたほうが効率が良いと判断できる場合に限ります。基本の組み立てには入れません。',
+    avoid: '「なんとなく」の購入',
+  },
+];
+
+const toneStyle: Record<string, string> = {
+  core: 'border-turf',
+  sub: 'border-line',
+  no: 'border-line-soft opacity-90',
+};
+const stanceStyle: Record<string, string> = {
+  core: 'bg-turf text-ground',
+  sub: 'bg-surface-2 text-ink-2',
+  no: 'bg-surface-2 text-muted',
+};
+---
+
+<Layout
+  title="馬券購入ロジック"
+  description="ワイドを起点に馬券を組み立てる、当サイトの購入ルール。券種ごとの使い分けと、あえて買わない基準まで公開しています。"
+>
+  <PageHeader
+    eyebrow="Logic 02"
+    title="馬券購入ロジック"
+    lead="どの馬を買うかを決めたあと、それをどう馬券にするか。ワイドを起点に組み立てるという一点だけは、どのレースでも動かしていません。"
+  />
+
+  <div class="mx-auto max-w-3xl px-5 py-12">
+    <section class="prose">
+      <h2>なぜワイドが起点なのか</h2>
+      <p>
+        馬券の組み立てで最初に決めるべきは、券種ではなく<strong>「どの2頭の関係に賭けるか」</strong>だと考えています。
+        ワイドは3着までの2頭を当てる馬券なので、着順のブレを吸収しながら、その2頭への評価をそのまま形にできます。
+      </p>
+      <p>
+        起点が決まれば、そこから先は展開できます。同じ組み合わせで馬連を重ねれば期待値が上がる。
+        荒れそうなら、その2頭を軸に3連複へ広げる。<strong>起点を先に決めるから、券種を増やしても筋が通ります。</strong>
+        逆に券種から入ると、買い目が散って理由を説明できなくなります。
+      </p>
+
+      <h2>起点の作り方</h2>
+      <ol>
+        <li><a href="/logic/checklist/">チェックリスト</a>で減点の最も少ない人気馬を見つける</li>
+        <li>4〜6番人気で単勝6〜10倍のゾーンから、相手を1頭選ぶ</li>
+        <li>この2頭のワイドを本線に置く</li>
+        <li>同じ組み合わせで馬連を重ねる（自信があるときのみ）</li>
+        <li>荒れる材料があれば、この2頭を軸に3連複へ広げる</li>
+      </ol>
+      <p>
+        6〜10倍というゾーンにこだわるのは、この価格帯が
+        <strong>「市場に見えてはいるが、まだ過剰には買われていない」</strong>境界だからです。
+        これより人気だと妙味がなく、これより人気薄だと的中率が落ちすぎます。
+      </p>
+    </section>
+
+    <section class="mt-14">
+      <h2 class="mb-2 font-[family-name:var(--font-display)] text-2xl font-bold">券種ごとのルール</h2>
+      <p class="mb-7 text-sm text-muted">買う基準と同じくらい、買わない基準を明確にしています。</p>
+
+      <div class="grid gap-4">
+        {
+          tickets.map((t) => (
+            <div class:list={['fade-in rounded-lg border-l-[3px] border border-line bg-surface p-5', toneStyle[t.tone]]}>
+              <div class="flex flex-wrap items-center gap-3">
+                <h3 class="font-[family-name:var(--font-display)] text-lg font-bold">{t.type}</h3>
+                <span
+                  class:list={[
+                    'rounded-[3px] px-2 py-0.5 font-[family-name:var(--font-mono)] text-[10px] font-semibold tracking-wider',
+                    stanceStyle[t.tone],
+                  ]}
+                >
+                  {t.stance}
+                </span>
+              </div>
+              <p class="mt-3 font-semibold text-ink">{t.rule}</p>
+              <p class="mt-2.5 text-sm leading-relaxed text-ink-2">{t.detail}</p>
+              {t.avoid !== '—' && (
+                <p class="mt-3 font-[family-name:var(--font-mono)] text-[11px] text-miss">
+                  避ける：{t.avoid}
+                </p>
+              )}
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="prose mt-14">
+      <h2>組み立ての約束事</h2>
+      <p>外したレースから積み上げてきた、購入前の確認事項です。</p>
+      <ul>
+        <li><strong>フォーメーションの1列目は最低2頭。</strong>1頭に絞ると、その馬が飛んだ瞬間に全通りが消えます</li>
+        <li><strong>軸馬はすべての列に入れる。</strong>着順が1つずれただけで外れる形を作らない</li>
+        <li><strong>点数は購入前に必ず数え直す。</strong>組み合わせを足したつもりで読み違えることが実際にありました</li>
+        <li><strong>大穴への厚張りはしない。</strong>資金は本線に寄せ、穴は薄く広く</li>
+        <li><strong>3連複の紐は薄くしない。</strong>絞りすぎるなら買わないほうがいい</li>
+      </ul>
+      <p>
+        これらがどのレースをきっかけに追加されたかは、<a href="/logic/updates/">更新履歴</a>に残しています。
+      </p>
+
+      <h2>投資額について</h2>
+      <p>
+        1レースあたりの上限を決めてから買い目を作ります。買い目を先に作って金額を後付けすると、
+        必ず膨らみます。各記事には投資予定額と実際の合計を並べて表示しているので、
+        ルールを守れているかどうかも記事上で確認できます。
+      </p>
+    </section>
+
+    <nav class="mt-14 grid gap-3 border-t border-line pt-8 sm:grid-cols-2">
+      <a href="/logic/checklist/" class="rounded-lg border border-line bg-surface px-5 py-4 transition-colors hover:border-turf">
+        <span class="font-[family-name:var(--font-mono)] text-[10px] tracking-widest text-muted uppercase">Logic 01</span>
+        <span class="mt-1 block font-semibold">人気馬チェックリスト</span>
+      </a>
+      <a href="/logic/danger/" class="rounded-lg border border-line bg-surface px-5 py-4 transition-colors hover:border-turf">
+        <span class="font-[family-name:var(--font-mono)] text-[10px] tracking-widest text-muted uppercase">Logic 03</span>
+        <span class="mt-1 block font-semibold">危険な人気馬</span>
+      </a>
+    </nav>
+  </div>
+</Layout>

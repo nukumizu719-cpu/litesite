@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { NAV } from '../config';
+---
+
+<Layout title="ページが見つかりません" noindex={true}>
+  <div class="mx-auto max-w-xl px-5 py-24 text-center">
+    <p class="font-[family-name:var(--font-mono)] text-5xl font-bold tabular-nums text-muted">404</p>
+    <h1 class="mt-5 font-[family-name:var(--font-display)] text-2xl font-bold text-balance">
+      お探しのページが見つかりません
+    </h1>
+    <p class="mt-4 leading-relaxed text-ink-2">
+      URLが変更されたか、削除された可能性があります。
+    </p>
+
+    <ul class="mt-9 flex flex-wrap justify-center gap-2.5">
+      <li>
+        <a href="/" class="inline-block rounded-full border border-line px-5 py-2.5 text-sm font-semibold text-ink-2 transition-colors hover:border-turf hover:text-turf">
+          トップ
+        </a>
+      </li>
+      {
+        NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class="inline-block rounded-full border border-line px-5 py-2.5 text-sm font-semibold text-ink-2 transition-colors hover:border-turf hover:text-turf"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Layout>

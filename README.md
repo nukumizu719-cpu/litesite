@@ -1,43 +1,45 @@
-# Astro Starter Kit: Minimal
+# 減点法ケイバ（litesite.jp）
 
-```sh
-npm create astro@latest -- --template minimal
+独自の減点式チェックリストと馬券購入ロジックをAIに適用した競馬予想サイト。
+予想の根拠と、投資額・払戻の全記録を公開している。
+
+## 技術構成
+
+- Astro 5 / Tailwind CSS 4
+- 記事は Markdown（Content Collections）
+- `main` への push で GitHub Actions が Xserver へ rsync 配信
+
+## コマンド
+
+```bash
+npm install     # 依存パッケージのインストール
+npm run dev     # 開発サーバー（http://localhost:4321）
+npm run build   # 本番ビルド（dist/ に出力）
+npm run preview # ビルド結果をローカルで確認
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## ディレクトリ
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```
+src/
+  config.ts             サイト名・URL・LINE・GA の設定（変更はここ1箇所）
+  content.config.ts     記事のデータ構造の定義
+  content/
+    races/{年}/*.md     予想記事
+    updates/*.md        ロジックの更新履歴
+  lib/
+    format.ts           日付・金額・枠番の計算
+    stats.ts            回収率・的中率の集計
+  components/           UIコンポーネント
+  layouts/Layout.astro  共通レイアウト（meta・OGP・構造化データ）
+  pages/                各ページ
+docs/
+  記事の書き方.md         週次運用の手順と Claude 用プロンプト
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 記事の追加
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+`docs/記事の書き方.md` を参照。
+`src/content/races/{年}/{MMDD}-{レース名}.md` に置くと、そのままURLになる。
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+`npm run build` が通ればデータ構造は正しい。落ちる場合は frontmatter を確認する。

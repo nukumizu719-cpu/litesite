@@ -1,25 +1,181 @@
 ---
-// src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro'; // ここに統合済みの新Hero
-import Features from '../components/Features.astro';
-import Works from '../components/Works.astro';
-import Pricing from '../components/Pricing.astro';
-import FAQ from '../components/FAQ.astro';
-import LineButton from '../components/LineButton.astro';
+import RaceCard from '../components/RaceCard.astro';
+import StatsSummary from '../components/StatsSummary.astro';
 import LineSection from '../components/LineSection.astro';
+import { getRaces, getStats } from '../lib/stats';
+import { SITE } from '../config';
+
+const races = await getRaces();
+const latest = races.slice(0, 3);
+const stats = await getStats();
+
+const pillars = [
+  {
+    n: '01',
+    title: 'ロジックを隠さない',
+    body: '人気馬を減点方式でふるいにかけるチェックリストと、ワイドを起点にした買い目の組み立て方をすべて公開しています。同じ手順を踏めば、誰でも同じ結論にたどり着けます。',
+    href: '/logic/',
+    cta: 'ロジックを見る',
+  },
+  {
+    n: '02',
+    title: '負けた記録も残す',
+    body: '投資額と払戻をレースごとに記録し、回収率と的中率はサイトが自動で計算しています。都合の良い結果だけを残すことができない作りです。',
+    href: '/results/',
+    cta: '全成績を見る',
+  },
+  {
+    n: '03',
+    title: 'ルールを更新していく',
+    body: '外したレースから何を学び、どのルールをどう変えたのかを日付つきで残しています。ロジックが固定されていないことこそ、この記録の価値だと考えています。',
+    href: '/logic/updates/',
+    cta: '更新履歴を見る',
+  },
+];
 ---
 
-<Layout 
-  title="名古屋・愛知の創業型補助金活用ホームページ制作 | LiteSite" 
->
-  <main>
-    <Hero />
-    <Features />
-    <Works />
-    <LineSection />
-    <Pricing />
-    <FAQ />
-    <LineButton />
-  </main>
+<Layout>
+  {/* ── ヒーロー ── */}
+  <section class="border-b border-line">
+    <div class="mx-auto max-w-5xl px-5 pt-14 pb-12 md:pt-20 md:pb-16">
+      <p class="flex items-center gap-3 font-[family-name:var(--font-mono)] text-[10px] font-semibold tracking-[0.22em] text-dirt uppercase">
+        {SITE.nameEn}
+        <span class="h-px flex-1 bg-line"></span>
+      </p>
+
+      <h1 class="mt-5 max-w-3xl font-[family-name:var(--font-display)] text-[2.1rem] leading-[1.28] font-extrabold text-balance md:text-[3.2rem]">
+        当たったかどうかより、<br class="hidden sm:block" />
+        <span class="text-turf">なぜそう買ったか</span>を残す。
+      </h1>
+
+      <p class="mt-7 max-w-xl leading-[1.9] text-ink-2">
+        人気馬を減点方式でふるいにかけ、ワイドを起点に馬券を組み立てる。
+        その手順をすべて公開したうえで、投資額と払戻を1円単位で記録しています。
+        回収率は記事データからの自動集計なので、良かった週だけを見せることができません。
+      </p>
+
+      <div class="mt-9 flex flex-wrap gap-3">
+        <a
+          href="/races/"
+          class="rounded-full bg-turf px-6 py-3 text-sm font-bold text-ground transition-opacity hover:opacity-85"
+        >
+          最新の予想を読む
+        </a>
+        <a
+          href="/logic/"
+          class="rounded-full border border-line px-6 py-3 text-sm font-bold text-ink-2 transition-colors hover:border-turf hover:text-turf"
+        >
+          予想ロジックを見る
+        </a>
+      </div>
+
+      <div class="mt-12 max-w-2xl">
+        <StatsSummary stats={stats} label="通算" />
+        <p class="mt-3 font-[family-name:var(--font-mono)] text-[11px] text-muted">
+          ※ 結果を入力済みの記事から自動集計しています
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* ── 最新の予想 ── */}
+  <section class="mx-auto max-w-5xl px-5 py-14">
+    <div class="mb-7 flex items-end justify-between gap-4">
+      <div>
+        <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.18em] text-dirt uppercase">
+          Latest
+        </p>
+        <h2 class="mt-2 font-[family-name:var(--font-display)] text-2xl font-bold">最新の予想</h2>
+      </div>
+      <a href="/races/" class="shrink-0 text-sm font-semibold text-ink-2 hover:text-turf">
+        すべて見る →
+      </a>
+    </div>
+
+    {
+      latest.length === 0 ? (
+        <p class="rounded-lg border border-line bg-surface px-5 py-12 text-center text-sm text-muted">
+          まだ記事がありません。
+        </p>
+      ) : (
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {latest.map((race) => (
+            <RaceCard race={race} />
+          ))}
+        </div>
+      )
+    }
+  </section>
+
+  {/* ── 3本柱 ── */}
+  <section class="border-y border-line bg-surface">
+    <div class="mx-auto max-w-5xl px-5 py-14">
+      <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.18em] text-dirt uppercase">
+        Approach
+      </p>
+      <h2 class="mt-2 font-[family-name:var(--font-display)] text-2xl font-bold text-balance">
+        このサイトが他と違うところ
+      </h2>
+
+      <div class="mt-9 grid gap-px bg-line md:grid-cols-3">
+        {
+          pillars.map((p) => (
+            <div class="fade-in flex flex-col bg-surface p-6">
+              <p class="font-[family-name:var(--font-mono)] text-xs font-semibold tracking-[0.14em] text-dirt">
+                {p.n}
+              </p>
+              <h3 class="mt-3 font-[family-name:var(--font-display)] text-lg font-bold text-balance">
+                {p.title}
+              </h3>
+              <p class="mt-3 text-sm leading-relaxed text-ink-2">{p.body}</p>
+              <a
+                href={p.href}
+                class="mt-5 inline-block font-[family-name:var(--font-mono)] text-[11px] text-turf underline underline-offset-4 hover:no-underline"
+              >
+                {p.cta} →
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ── ロジック導線 ── */}
+  <section class="mx-auto max-w-5xl px-5 py-14">
+    <div class="grid gap-4 md:grid-cols-3">
+      {
+        [
+          {
+            href: '/logic/checklist/',
+            title: '人気馬チェックリスト',
+            body: '人気馬の不安要素を−5点から−1点で減点し、最も減点の少ない馬を採用する。全項目を公開しています。',
+          },
+          {
+            href: '/logic/buying/',
+            title: '馬券購入ロジック',
+            body: 'ワイドを起点に、4〜6番人気×6〜10倍と1〜2番人気を組む。券種ごとの使い分けと、買わない基準まで。',
+          },
+          {
+            href: '/logic/danger/',
+            title: '危険な人気馬',
+            body: '前走逃げ、長期休み明け、特殊条件勝ち、枠替わり。切るべき人気馬を見抜く5つの判定基準。',
+          },
+        ].map((c) => (
+          <a
+            href={c.href}
+            class="fade-in group rounded-lg border border-line bg-surface p-6 transition-colors hover:border-turf"
+          >
+            <h3 class="font-[family-name:var(--font-display)] text-lg font-bold group-hover:text-turf">
+              {c.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-ink-2">{c.body}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <LineSection />
 </Layout>

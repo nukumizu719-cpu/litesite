@@ -1,21 +1,13 @@
 {
-    "name": "LiteSite（ライトサイト）",
-    "short_name": "LiteSite",
-    "description": "創業型補助金を活用したホームページ制作",
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#f8fafc",
-    "theme_color": "#0f172a",
-    "icons": [
-      {
-        "src": "/favicon-32x32.png",
-        "sizes": "32x32",
-        "type": "image/png"
-      },
-      {
-        "src": "/apple-touch-icon.png",
-        "sizes": "180x180",
-        "type": "image/png"
-      }
-    ]
-  }
+  "name": "減点法ケイバ",
+  "short_name": "減点法ケイバ",
+  "description": "ロジックを公開するAI競馬予想",
+  "icons": [
+    { "src": "/favicon-32x32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ],
+  "theme_color": "#12603A",
+  "background_color": "#F2F5F1",
+  "display": "standalone",
+  "start_url": "/"
+}

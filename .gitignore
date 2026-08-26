@@ -23,5 +23,8 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
+# VSCode personal settings
+.vscode/
+
 # Xserver SSH key
 xserver_key*

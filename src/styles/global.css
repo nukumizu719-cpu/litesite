@@ -1,1 +1,220 @@
 @import "tailwindcss";
+
+/* ============================================================
+   デザイントークン
+   芝（緑）とダート（茶）の二色を軸にした配色。
+   ライト / OSダーク / 手動切替 の3状態すべてに対応する。
+   ============================================================ */
+
+:root {
+  --c-ground:     #F2F5F1;  /* 地色（緑寄りの白） */
+  --c-surface:    #FFFFFF;  /* カード面 */
+  --c-surface-2:  #E9EEE8;  /* 沈めた面 */
+  --c-ink:        #121A15;  /* 本文（緑寄りの黒） */
+  --c-ink-2:      #3D4B42;  /* 副次テキスト */
+  --c-muted:      #64756A;  /* ラベル・注記 */
+  --c-line:       #D6DED4;  /* 罫線 */
+  --c-line-soft:  #E4EAE2;  /* 薄い罫線 */
+  --c-turf:       #12603A;  /* アクセント（芝） */
+  --c-turf-soft:  #E1EFE6;
+  --c-dirt:       #A65A2E;  /* 補助（ダート） */
+  --c-dirt-soft:  #F5E7DC;
+  --c-hit:        #1B7F46;  /* 的中 */
+  --c-hit-soft:   #DFF0E5;
+  --c-miss:       #B8322A;  /* 不的中 */
+  --c-miss-soft:  #F8E3E1;
+  --c-warn:       #96610C;
+  --c-warn-soft:  #FBF0DC;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --c-ground:    #0B110D;
+    --c-surface:   #131B15;
+    --c-surface-2: #1B241D;
+    --c-ink:       #E7EDE8;
+    --c-ink-2:     #C2CFC6;
+    --c-muted:     #8FA095;
+    --c-line:      #27332A;
+    --c-line-soft: #1F2A22;
+    --c-turf:      #45C47E;
+    --c-turf-soft: #17301F;
+    --c-dirt:      #DC9163;
+    --c-dirt-soft: #2E211A;
+    --c-hit:       #45C47E;
+    --c-hit-soft:  #16301F;
+    --c-miss:      #E4746B;
+    --c-miss-soft: #331917;
+    --c-warn:      #E0A64B;
+    --c-warn-soft: #2C2213;
+  }
+}
+
+:root[data-theme="dark"] {
+  --c-ground:    #0B110D;
+  --c-surface:   #131B15;
+  --c-surface-2: #1B241D;
+  --c-ink:       #E7EDE8;
+  --c-ink-2:     #C2CFC6;
+  --c-muted:     #8FA095;
+  --c-line:      #27332A;
+  --c-line-soft: #1F2A22;
+  --c-turf:      #45C47E;
+  --c-turf-soft: #17301F;
+  --c-dirt:      #DC9163;
+  --c-dirt-soft: #2E211A;
+  --c-hit:       #45C47E;
+  --c-hit-soft:  #16301F;
+  --c-miss:      #E4746B;
+  --c-miss-soft: #331917;
+  --c-warn:      #E0A64B;
+  --c-warn-soft: #2C2213;
+}
+
+/* Tailwind のユーティリティにトークンを流し込む。
+   @theme inline を使うと bg-surface などが var() を直接参照するので、
+   テーマ切替がクラスの付け替えなしで効く。 */
+@theme inline {
+  --color-ground:    var(--c-ground);
+  --color-surface:   var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-ink:       var(--c-ink);
+  --color-ink-2:     var(--c-ink-2);
+  --color-muted:     var(--c-muted);
+  --color-line:      var(--c-line);
+  --color-line-soft: var(--c-line-soft);
+  --color-turf:      var(--c-turf);
+  --color-turf-soft: var(--c-turf-soft);
+  --color-dirt:      var(--c-dirt);
+  --color-dirt-soft: var(--c-dirt-soft);
+  --color-hit:       var(--c-hit);
+  --color-hit-soft:  var(--c-hit-soft);
+  --color-miss:      var(--c-miss);
+  --color-miss-soft: var(--c-miss-soft);
+  --color-warn:      var(--c-warn);
+  --color-warn-soft: var(--c-warn-soft);
+
+  --font-display: 'Shippori Mincho B1', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  --font-sans:    'Zen Kaku Gothic New', 'Hiragino Sans', 'Yu Gothic', system-ui, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+/* ============================================================
+   ベース
+   ============================================================ */
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--c-ground);
+  color: var(--c-ink);
+  font-family: var(--font-sans);
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-turf);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--c-turf-soft);
+  color: var(--c-ink);
+}
+
+/* 数字が縦に揃うべき場所で使う */
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* 横に長い表・コードは自分のコンテナ内でスクロールさせる */
+.scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================================
+   記事本文（Markdown）のスタイル
+   ============================================================ */
+
+.prose > * + * { margin-top: 1.1em; }
+.prose h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 1.45;
+  margin-top: 2.4em;
+  margin-bottom: .6em;
+  padding-bottom: .35em;
+  border-bottom: 1px solid var(--c-line);
+  text-wrap: balance;
+}
+.prose h3 {
+  font-weight: 700;
+  font-size: 1.08rem;
+  margin-top: 2em;
+  margin-bottom: .4em;
+}
+.prose p { color: var(--c-ink-2); }
+.prose strong { color: var(--c-ink); font-weight: 700; }
+.prose a { color: var(--c-turf); text-underline-offset: 3px; text-decoration: underline; }
+.prose ul, .prose ol { padding-left: 1.35em; }
+.prose ul { list-style: disc; }
+.prose ol { list-style: decimal; }
+.prose li { margin-top: .35em; color: var(--c-ink-2); }
+.prose li::marker { color: var(--c-muted); }
+.prose blockquote {
+  border-left: 3px solid var(--c-turf);
+  padding: .2em 0 .2em 1em;
+  color: var(--c-ink-2);
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: .86em;
+  background: var(--c-surface-2);
+  padding: .1em .4em;
+  border-radius: 3px;
+  overflow-wrap: anywhere;
+}
+.prose pre {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 4px;
+  padding: 1em 1.2em;
+  overflow-x: auto;
+  font-size: .82rem;
+}
+.prose pre code { background: none; padding: 0; }
+.prose hr { border: 0; border-top: 1px solid var(--c-line); margin: 2.5em 0; }
+.prose table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.prose th, .prose td {
+  text-align: left;
+  padding: .55em .8em;
+  border-bottom: 1px solid var(--c-line-soft);
+}
+.prose thead th { background: var(--c-surface-2); font-size: .8rem; }
+
+/* ============================================================
+   スクロール連動フェードイン
+   ============================================================ */
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .6s ease-out, transform .6s ease-out;
+}
+.fade-in.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

@@ -1,77 +1,89 @@
 ---
-/**
- * SEO & 信頼性強化型 Footer
- * 1. サイト全体のサイトマップ構造を網羅し、内部リンクを強化
- * 2. 補助金・創業支援の専門性をテキストで補強
- * 3. 地域キーワード（名古屋・安城等）を論理的に配置
- * 4. リーガル関連（プライバシーポリシー・特商法）の導線確保
- */
-const currentYear = new Date().getFullYear();
+import { SITE, NAV, LEGAL_NAV } from '../config';
 
-const footerLinks = [
-  { name: 'ホーム', href: '/' },
-  { name: '補助金ガイド', href: '/subsidy/' },
-  { name: '制作プラン', href: '/#pricing' },
-  { name: '制作実績', href: '/#works' },
-  { name: 'よくある質問', href: '/#faq' },
-  { name: 'お問い合わせ', href: '/contact/' },
+const year = new Date().getFullYear();
+
+const logicLinks = [
+  { label: '人気馬チェックリスト', href: '/logic/checklist/' },
+  { label: '馬券購入ロジック', href: '/logic/buying/' },
+  { label: '危険な人気馬', href: '/logic/danger/' },
+  { label: 'ロジック更新履歴', href: '/logic/updates/' },
 ];
 ---
-<footer class="bg-slate-900 text-slate-400 py-16 border-t border-slate-800">
-  <div class="container mx-auto px-6">
-    <div class="grid md:grid-cols-12 gap-12 mb-16">
-      
-      <div class="md:col-span-5 text-left">
-        <div class="mb-6">
-          <h2 class="text-2xl font-bold text-white mb-2 tracking-tight">LiteSite<span class="text-blue-500">.jp</span></h2>
-          <p class="text-sm text-slate-300 font-bold italic">名古屋・愛知の「勝てる」創業支援Web制作</p>
-        </div>
-        <p class="text-sm leading-relaxed mb-6 max-w-sm text-slate-400">
-          小規模事業者持続化補助金（第6版）に対応した戦略的サイト構築。
-          最新のAstroフレームワークを採用し、表示速度とSEOで名古屋の起業家・個人事業主様のビジネスを加速させます。
+
+<footer class="mt-24 border-t border-line bg-surface">
+  <div class="mx-auto max-w-6xl px-5 py-14">
+    <div class="grid gap-10 md:grid-cols-12">
+      <div class="md:col-span-5">
+        <p class="font-[family-name:var(--font-display)] text-xl font-extrabold">{SITE.name}</p>
+        <p class="mt-1 font-[family-name:var(--font-mono)] text-[10px] tracking-[0.18em] text-muted uppercase">
+          {SITE.nameEn}
+        </p>
+        <p class="mt-5 max-w-sm text-sm leading-relaxed text-ink-2">
+          人気馬を減点方式でふるいにかけ、ワイドを起点に馬券を組み立てる。
+          そのルールと、投資額・払戻の全記録を公開しています。
+          掲載している回収率・的中率は記事データからの自動集計値です。
         </p>
       </div>
 
       <div class="md:col-span-3">
-        <h3 class="text-white font-bold mb-6 text-sm uppercase tracking-widest border-l-2 border-blue-500 pl-3">Menu</h3>
-        <ul class="grid grid-cols-2 md:grid-cols-1 gap-4 text-sm font-medium">
-          {footerLinks.map(link => (
-            <li>
-              <a href={link.href} class="hover:text-blue-400 transition-colors flex items-center gap-2 group">
-                <span class="text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                {link.name}
-              </a>
-            </li>
-          ))}
+        <h2 class="border-l-2 border-turf pl-2.5 font-[family-name:var(--font-mono)] text-[10px] tracking-[0.16em] text-muted uppercase">
+          Contents
+        </h2>
+        <ul class="mt-5 grid grid-cols-2 gap-3 text-sm md:grid-cols-1">
+          {
+            NAV.map((item) => (
+              <li>
+                <a href={item.href} class="text-ink-2 transition-colors hover:text-turf">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
 
-      <div class="md:col-span-4 text-left">
-        <h3 class="text-white font-bold mb-6 text-sm uppercase tracking-widest border-l-2 border-blue-500 pl-3">Service Area</h3>
-        <div class="text-sm space-y-4 leading-relaxed">
-          <p class="text-slate-300">
-            <strong class="text-white">名古屋・三河エリア密着対応</strong><br />
-            安城市・名古屋市内全域（中区、中村区、名東区等）、岡崎市、刈谷市、豊田市、その他愛知県全域。
-          </p>
-          <div class="pt-2">
-            <p class="text-xs text-slate-500 mb-1 font-bold">営業時間：平日 10:00 - 18:00</p>
-            <p class="text-xs text-slate-500">※メール・LINE相談は24時間365日受付中</p>
-          </div>
-        </div>
+      <div class="md:col-span-4">
+        <h2 class="border-l-2 border-dirt pl-2.5 font-[family-name:var(--font-mono)] text-[10px] tracking-[0.16em] text-muted uppercase">
+          Logic
+        </h2>
+        <ul class="mt-5 grid gap-3 text-sm">
+          {
+            logicLinks.map((item) => (
+              <li>
+                <a href={item.href} class="text-ink-2 transition-colors hover:text-turf">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </div>
 
-    <div class="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-6">
-      <div class="text-xs text-slate-500">
-        &copy; {currentYear} LiteSite（ライトサイト） All Rights Reserved.
-      </div>
-      <div class="flex flex-wrap justify-center gap-4 md:gap-6 text-xs text-slate-500">
-        <a href="/privacy-policy/" class="hover:text-white transition-colors">プライバシーポリシー</a>
-        <span class="text-slate-700 hidden md:inline">|</span>
-        <a href="/law/" class="hover:text-white transition-colors">特定商取引法に基づく表記</a>
-        <span class="text-slate-700 hidden md:inline">|</span>
-        <span class="text-slate-600">名古屋の個人事業主・起業家を技術で支える。</span>
-      </div>
+    <div class="mt-12 rounded border border-line-soft bg-surface-2 px-5 py-4 text-xs leading-relaxed text-ink-2">
+      <p class="font-bold text-ink">馬券の購入は20歳になってから。</p>
+      <p class="mt-1.5">
+        当サイトの予想は的中および利益を保証するものではありません。馬券の購入は必ずご自身の判断と責任において、
+        余裕資金の範囲で行ってください。詳しくは<a href="/disclaimer/" class="underline underline-offset-2 hover:text-turf">免責事項</a>をご確認ください。
+      </p>
+    </div>
+
+    <div class="mt-8 flex flex-col gap-4 border-t border-line-soft pt-6 md:flex-row md:items-center md:justify-between">
+      <p class="font-[family-name:var(--font-mono)] text-[11px] text-muted">
+        &copy; {year} {SITE.name}
+      </p>
+      <ul class="flex flex-wrap gap-x-4 gap-y-2 text-[11px] text-muted">
+        {
+          LEGAL_NAV.map((item) => (
+            <li>
+              <a href={item.href} class="transition-colors hover:text-turf">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </div>
 </footer>

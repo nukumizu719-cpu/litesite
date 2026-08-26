@@ -1,0 +1,198 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+
+const groups = [
+  {
+    points: -5,
+    label: '致命的になりやすい',
+    items: [
+      {
+        title: '前走で逃げて好走した',
+        body: '前走の好走が逃げによるものだと、今回も同じ形を作れるかどうかに結果が丸ごと依存します。同型が1頭でも増えれば前提が崩れる。人気を背負っている場合、リスクに対して配当が全く見合いません。',
+      },
+      {
+        title: '初ダート、または初芝',
+        body: '馬場適性は走ってみるまで分かりません。血統から推測はできますが、それは「試していない」という事実を変えません。人気馬にこれが付いている時点で、市場が期待だけで買っている状態です。',
+      },
+      {
+        title: '距離延長のローテーション',
+        body: '距離短縮は前走のスピードがそのまま武器になりますが、延長は未知の領域に踏み込む形になります。特にスタミナが問われる条件では、延長ローテの人気馬は最も飛びやすい部類です。',
+      },
+      {
+        title: 'ダート戦で、前走が牝馬限定戦だった',
+        body: 'ダートは芝以上に力とパワーの差がそのまま出ます。牝馬限定戦で作った実績を混合戦に持ち込むと、走破時計以上の壁にぶつかります。',
+      },
+    ],
+  },
+  {
+    points: -4,
+    label: '実績の裏付けが弱い',
+    items: [
+      {
+        title: '昇級初戦',
+        body: '前走の勝ち方が鮮やかなほど人気になりますが、相手のレベルが一段上がった時に同じ形で通用する保証はありません。特に連勝中の馬は過剰に評価されがちです。',
+      },
+      {
+        title: '前走が特殊条件だった',
+        body: '極端な馬場、特殊な距離、少頭数など、再現性の低い条件で作った実績は割り引きます。「あのレースだから勝てた」の可能性を消せません。',
+      },
+      {
+        title: '前走がローカル開催だった',
+        body: 'ローカルの実績をそのまま中央場のレースに持ち込むと、相手関係とコース形態の両方で目減りします。時計の比較だけでは見えない差です。',
+      },
+    ],
+  },
+  {
+    points: -3,
+    label: '条件面の不安',
+    items: [
+      {
+        title: '半年以上の休み明け',
+        body: '仕上がりが読めません。追い切りの評価は参考になりますが、実戦の負荷はまた別です。上位人気に推されているほど、危険度が上がります。',
+      },
+      {
+        title: '芝の外枠、またはダートの内枠',
+        body: '芝は外枠で距離ロスが生じやすく、ダートは内枠で砂を被って走る気を削がれやすい。枠順が発表された時点で判断できる、数少ない確実な減点材料です。',
+      },
+      {
+        title: 'トップハンデを背負っている',
+        body: 'ハンデ戦で最も重い斤量を課されるのは、実績を評価された結果です。しかし斤量差は着差に直結します。実力があることと、その斤量で勝てることは別の話です。',
+      },
+    ],
+  },
+  {
+    points: -2,
+    label: '適性の不一致',
+    items: [
+      {
+        title: '急坂のあるコースで好走実績がない',
+        body: '中山・阪神の坂は、平坦コースで見せた末脚をそのまま削ります。フラットなコースだけで走ってきた馬は、ここで止まります。',
+      },
+      {
+        title: '馬体重が前走から±15kg以上動いている',
+        body: '成長分の増加なら問題ありませんが、大幅な変動は調整過程に何かがあったサインでもあります。パドックで確認できない以上、減点として織り込みます。',
+      },
+    ],
+  },
+  {
+    points: -1,
+    label: '小さな引っかかり',
+    items: [
+      {
+        title: '右回り／左回りで好走実績がない',
+        body: '回りの得手不得手は確かに存在します。単独では決め手になりませんが、他の減点と重なった時に効いてきます。',
+      },
+      {
+        title: '冬場の牝馬、または夏場の牡馬',
+        body: '季節による体調の傾向です。これ単独で切ることはありませんが、迷った時の最後の判断材料になります。',
+      },
+    ],
+  },
+];
+
+const pointStyle: Record<number, string> = {
+  [-5]: 'bg-miss text-white',
+  [-4]: 'bg-miss-soft text-miss',
+  [-3]: 'bg-warn-soft text-warn',
+  [-2]: 'bg-surface-2 text-ink-2',
+  [-1]: 'bg-surface-2 text-muted',
+};
+---
+
+<Layout
+  title="人気馬チェックリスト"
+  description="人気馬の不安要素を−5点から−1点までの減点方式で評価し、最も減点の少ない馬を採用する。当サイトが全ての予想で使っているチェックリストの全項目を公開しています。"
+>
+  <PageHeader
+    eyebrow="Logic 01"
+    title="人気馬チェックリスト"
+    lead="人気馬の中から「最も減点の少ない馬」を選ぶための減点表です。良いところを探すのではなく、不安要素を引き算していく。全ての予想記事で、この表に沿って評価しています。"
+  />
+
+  <div class="mx-auto max-w-3xl px-5 py-12">
+    <section class="prose">
+      <h2>なぜ加点ではなく減点なのか</h2>
+      <p>
+        人気馬には必ず買われる理由があります。前走の勝ちっぷり、鞍上、血統、調教の動き。
+        その理由を並べていけば、どの人気馬も買えるように見えてきます。加点方式は、
+        すでに市場が織り込んだ情報をもう一度なぞるだけの作業になりがちです。
+      </p>
+      <p>
+        一方で、<strong>不安要素はオッズに十分反映されないことがあります。</strong>
+        「前走は逃げ切りだった」「初ダートだ」といった事実は、目立つ実績の裏に隠れやすい。
+        そこを機械的に拾い上げるのが、この減点表の役割です。
+      </p>
+
+      <h2>使い方</h2>
+      <ol>
+        <li>上位人気（おおむね1〜5番人気）の馬を候補として並べる</li>
+        <li>各馬について、下の項目に該当するものをすべて足し合わせる</li>
+        <li>合計点が最も0に近い馬を、その日の軸候補とする</li>
+        <li>減点が最も重い人気馬は、<a href="/logic/danger/">危険な人気馬</a>の判定にかける</li>
+      </ol>
+      <p>
+        点数の絶対値には意味がありません。<strong>同じレースの人気馬同士を比べるための相対的な物差し</strong>です。
+        別のレースの馬と点数を比較しても意味がないので注意してください。
+      </p>
+    </section>
+
+    <section class="mt-14">
+      <h2 class="mb-7 font-[family-name:var(--font-display)] text-2xl font-bold">減点項目</h2>
+
+      <div class="grid gap-8">
+        {
+          groups.map((g) => (
+            <div class="fade-in">
+              <div class="mb-4 flex items-center gap-3">
+                <span
+                  class:list={[
+                    'rounded px-2.5 py-1 font-[family-name:var(--font-mono)] text-sm font-bold tabular-nums',
+                    pointStyle[g.points],
+                  ]}
+                >
+                  {g.points}点
+                </span>
+                <span class="text-sm font-semibold text-ink-2">{g.label}</span>
+                <span class="h-px flex-1 bg-line" />
+              </div>
+
+              <ul class="grid gap-px overflow-hidden rounded-lg border border-line bg-line">
+                {g.items.map((it) => (
+                  <li class="bg-surface px-5 py-4">
+                    <p class="font-bold">{it.title}</p>
+                    <p class="mt-2 text-sm leading-relaxed text-ink-2">{it.body}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="prose mt-14">
+      <h2>この表の限界</h2>
+      <p>
+        当然ですが、減点が最も少ない馬が必ず勝つわけではありません。この表が答えを出すのは
+        「<strong>どの人気馬から入るか</strong>」までで、そこから先の買い方は
+        <a href="/logic/buying/">馬券購入ロジック</a>の担当です。
+      </p>
+      <p>
+        また、項目は固定ではありません。外したレースから見えた欠陥は
+        <a href="/logic/updates/">更新履歴</a>に残したうえで、表そのものを書き換えていきます。
+      </p>
+    </section>
+
+    <nav class="mt-14 grid gap-3 border-t border-line pt-8 sm:grid-cols-2">
+      <a href="/logic/buying/" class="rounded-lg border border-line bg-surface px-5 py-4 transition-colors hover:border-turf">
+        <span class="font-[family-name:var(--font-mono)] text-[10px] tracking-widest text-muted uppercase">Logic 02</span>
+        <span class="mt-1 block font-semibold">馬券購入ロジック</span>
+      </a>
+      <a href="/logic/danger/" class="rounded-lg border border-line bg-surface px-5 py-4 transition-colors hover:border-turf">
+        <span class="font-[family-name:var(--font-mono)] text-[10px] tracking-widest text-muted uppercase">Logic 03</span>
+        <span class="mt-1 block font-semibold">危険な人気馬</span>
+      </a>
+    </nav>
+  </div>
+</Layout>

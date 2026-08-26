@@ -1,0 +1,118 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+
+const signals = [
+  {
+    n: '01',
+    title: '前走で逃げた馬',
+    why: '前走の内容が「単騎で行けたから」成立していた場合、今回も同じ形を作れる保証はどこにもありません。同型が1頭増えるだけで前提が壊れます。',
+    flip: '逆に、前走は他馬に絡まれて潰れたが、今回はメンバー的に単騎で行けそうな馬。ここは狙い目になります。',
+  },
+  {
+    n: '02',
+    title: '半年以上の休み明けで上位人気',
+    why: '休養前の実績で人気になっているだけで、いまの状態は誰にも分かりません。人気を背負っているぶん、リスクとリターンが釣り合いません。',
+    flip: '逆に、叩き2走目で人気を落としている実績馬。一度使った上積みが見込めるうえ、オッズは前走の着順に引きずられています。',
+  },
+  {
+    n: '03',
+    title: '特殊条件で勝った馬',
+    why: '極端な馬場、少頭数、特殊な距離。再現性の低い条件で作った実績は、標準的な条件に戻った瞬間に通用しなくなります。',
+    flip: '逆に、特殊条件で凡走して人気を落とし、今回は得意条件に戻る馬。着順だけを見ている層との評価差が生まれます。',
+  },
+  {
+    n: '04',
+    title: '芝で外枠、またはダートで内枠に替わった馬',
+    why: '芝の外枠は距離ロスが避けられず、ダートの内枠は砂を被って走る気を削がれます。枠順が出た時点で確定する、数少ない客観的な減点材料です。',
+    flip: '逆に、芝で内枠を引いた先行馬、ダートで外枠を引いたスピード馬。枠替わりが有利に働く側は、オッズがまだ反応していないことがあります。',
+  },
+  {
+    n: '05',
+    title: '牝馬限定戦の人気馬が、混合戦（ダート）に出てきた',
+    why: 'ダートは芝以上にパワーの差が結果に出ます。牝馬同士で作った実績をそのまま混合戦に持ち込むと、時計以上の壁にぶつかります。',
+    flip: '逆に、混合戦で揉まれてきた馬が牝馬限定戦に戻るケース。相手が弱化する側は、実力どおりの結果になりやすい。',
+  },
+];
+---
+
+<Layout
+  title="危険な人気馬の見抜き方"
+  description="切るべき人気馬を判定する5つの基準。そしてその裏返しが、そのまま狙い目になります。当サイトが全ての予想で使っている判定基準を公開しています。"
+>
+  <PageHeader
+    eyebrow="Logic 03"
+    title="危険な人気馬の見抜き方"
+    lead="人気馬を1頭消せると、買い目が一気に軽くなります。そして重要なのは、ここに挙げた5つの条件はすべて裏返せるということ。危険信号の逆側に、狙い目が並んでいます。"
+  />
+
+  <div class="mx-auto max-w-3xl px-5 py-12">
+    <section class="prose">
+      <h2>「消す」ことの価値</h2>
+      <p>
+        上位人気を1頭消せると、相手候補の点数が減り、同じ資金で1点あたりの投資を厚くできます。
+        当てにいく馬を1頭増やすより、<strong>切れる馬を1頭見つけるほうが、収支への効き方は大きい。</strong>
+      </p>
+      <p>
+        ただし、消すという判断は外れたときに最も痛い形で返ってきます。だから
+        「なんとなく人気しすぎ」ではなく、事前に決めた条件に照らして機械的に判定します。
+      </p>
+    </section>
+
+    <section class="mt-14 grid gap-5">
+      {
+        signals.map((s) => (
+          <article class="fade-in overflow-hidden rounded-lg border border-line bg-surface">
+            <div class="border-b border-line-soft bg-warn-soft px-5 py-4">
+              <p class="font-[family-name:var(--font-mono)] text-[11px] font-semibold tracking-[0.14em] text-warn">
+                {s.n}
+              </p>
+              <h2 class="mt-1.5 font-[family-name:var(--font-display)] text-lg font-bold text-balance">
+                {s.title}
+              </h2>
+            </div>
+            <div class="grid gap-5 px-5 py-5 sm:grid-cols-2">
+              <div>
+                <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.14em] text-miss uppercase">
+                  危険な理由
+                </p>
+                <p class="mt-2 text-sm leading-relaxed text-ink-2">{s.why}</p>
+              </div>
+              <div class="border-t border-line-soft pt-4 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-5">
+                <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.14em] text-hit uppercase">
+                  裏返すと狙い目
+                </p>
+                <p class="mt-2 text-sm leading-relaxed text-ink-2">{s.flip}</p>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </section>
+
+    <section class="prose mt-14">
+      <h2>使い方の注意</h2>
+      <p>
+        該当項目が1つあるだけで即消し、とはしていません。
+        <a href="/logic/checklist/">チェックリスト</a>の減点と合わせて見て、
+        <strong>減点が重く、かつここに該当する馬</strong>を消す判断材料にしています。
+      </p>
+      <p>
+        また、人気していない馬にこれらが該当していても意味がありません。
+        オッズに織り込まれていない情報だからこそ価値があるのであって、
+        人気薄なら市場はすでにその不安を評価しています。
+      </p>
+    </section>
+
+    <nav class="mt-14 grid gap-3 border-t border-line pt-8 sm:grid-cols-2">
+      <a href="/logic/checklist/" class="rounded-lg border border-line bg-surface px-5 py-4 transition-colors hover:border-turf">
+        <span class="font-[family-name:var(--font-mono)] text-[10px] tracking-widest text-muted uppercase">Logic 01</span>
+        <span class="mt-1 block font-semibold">人気馬チェックリスト</span>
+      </a>
+      <a href="/logic/buying/" class="rounded-lg border border-line bg-surface px-5 py-4 transition-colors hover:border-turf">
+        <span class="font-[family-name:var(--font-mono)] text-[10px] tracking-widest text-muted uppercase">Logic 02</span>
+        <span class="mt-1 block font-semibold">馬券購入ロジック</span>
+      </a>
+    </nav>
+  </div>
+</Layout>

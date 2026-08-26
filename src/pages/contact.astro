@@ -1,11 +1,79 @@
 ---
-// src/pages/contact.astro
 import Layout from '../layouts/Layout.astro';
-import Contact from '../components/Contact.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { SITE, LINE_URL } from '../config';
 ---
 
-<Layout title="お問い合わせ | ライトサイト">
-  <main class="py-12">
-    <Contact />
-  </main>
+<Layout
+  title="お問い合わせ"
+  description={`${SITE.name}へのご連絡はこちらから。掲載内容の誤り、取材・掲載のご相談などを受け付けています。`}
+>
+  <PageHeader
+    eyebrow="Contact"
+    title="お問い合わせ"
+    lead="掲載内容の誤りのご指摘、ご質問、その他のご連絡はこちらからお願いします。個別のレースについての予想代行や、馬券購入の相談にはお応えできません。"
+  />
+
+  <div class="mx-auto max-w-3xl px-5 py-12">
+    <div class="grid gap-4 sm:grid-cols-2">
+      {
+        LINE_URL && (
+          <a
+            href={LINE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex flex-col rounded-lg border border-line bg-surface p-6 transition-colors hover:border-turf"
+          >
+            <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.16em] text-muted uppercase">
+              LINE
+            </p>
+            <h2 class="mt-2.5 font-[family-name:var(--font-display)] text-lg font-bold">
+              LINEで連絡する
+            </h2>
+            <p class="mt-2.5 text-sm leading-relaxed text-ink-2">
+              いちばん返信が早い窓口です。友だち追加のうえメッセージをお送りください。
+            </p>
+            <span class="mt-4 font-[family-name:var(--font-mono)] text-[11px] text-turf">
+              LINEを開く →
+            </span>
+          </a>
+        )
+      }
+
+      <div class="flex flex-col rounded-lg border border-line bg-surface p-6">
+        <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.16em] text-muted uppercase">
+          Mail
+        </p>
+        <h2 class="mt-2.5 font-[family-name:var(--font-display)] text-lg font-bold">メールで連絡する</h2>
+        {
+          SITE.email ? (
+            <p class="mt-2.5 text-sm leading-relaxed text-ink-2">
+              <a href={`mailto:${SITE.email}`} class="font-[family-name:var(--font-mono)] text-turf underline underline-offset-4">
+                {SITE.email}
+              </a>
+              <br />
+              数日以内にご返信します。
+            </p>
+          ) : (
+            <p class="mt-2.5 text-sm leading-relaxed text-ink-2">
+              メールでのお問い合わせ窓口は準備中です。お急ぎの場合はLINEからご連絡ください。
+            </p>
+          )
+        }
+      </div>
+    </div>
+
+    <section class="prose mt-12">
+      <h2>お応えできないこと</h2>
+      <ul>
+        <li>個別のレースについての予想代行、買い目の作成</li>
+        <li>馬券の購入代行、資金の預託に関するご相談</li>
+        <li>掲載している予想の的中・払戻に関する補償</li>
+      </ul>
+      <p>
+        当サイトの立場については<a href="/disclaimer/">免責事項</a>および
+        <a href="/terms/">利用規約</a>をご確認ください。
+      </p>
+    </section>
+  </div>
 </Layout>
