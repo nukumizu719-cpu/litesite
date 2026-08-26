@@ -30,7 +30,15 @@ export const LEDGER: LedgerEntry[] = [
   { date: '2026-07-05', venue: '小倉', raceNo: 11, raceName: '北九州記念', budget: 3000, payout: 0 },
   { date: '2026-07-12', venue: '福島', raceNo: 11, raceName: '七夕賞', budget: 2200, payout: 2500 },
   { date: '2026-07-19', venue: '函館', raceNo: 11, raceName: '函館2歳ステークス(G3)', budget: 4000, payout: 0 },
-  { date: '2026-07-19', venue: '小倉', raceNo: 11, raceName: '小倉記念', budget: 5600, payout: 0 },
+  {
+    date: '2026-07-19',
+    venue: '小倉',
+    raceNo: 11,
+    raceName: '小倉記念',
+    budget: 5600,
+    payout: 0,
+    articleId: '2026/0719-kokura-kinen',
+  },
   { date: '2026-08-02', venue: '札幌', raceNo: 11, raceName: 'クイーンS', budget: 2000, payout: 970 },
   {
     date: '2026-08-09',
