@@ -68,4 +68,13 @@ export const LEDGER: LedgerEntry[] = [
   { date: '2026-08-16', venue: '札幌', raceNo: 11, raceName: '札幌記念(G2)', budget: 3000, payout: 0 },
   { date: '2026-08-22', venue: '新潟', raceNo: 8, raceName: '岩室温泉特別(2勝クラス)', budget: 1000, payout: 0 },
   { date: '2026-08-23', venue: '中京', raceNo: 10, raceName: '3歳未勝利', budget: 1600, payout: 2640 },
+  {
+    date: '2026-09-05',
+    venue: '阪神',
+    raceNo: 4,
+    raceName: '3歳未勝利',
+    budget: 1700,
+    payout: 0,
+    articleId: '2026/0905-hanshin-4r',
+  },
 ];
