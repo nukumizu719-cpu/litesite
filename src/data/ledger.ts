@@ -77,4 +77,22 @@ export const LEDGER: LedgerEntry[] = [
     payout: 0,
     articleId: '2026/0905-hanshin-4r',
   },
+  {
+    date: '2026-09-06',
+    venue: '中山',
+    raceNo: 11,
+    raceName: '紫苑ステークス(G2)',
+    budget: 3400,
+    payout: 1000,
+    articleId: '2026/0906-shion-s',
+  },
+  {
+    date: '2026-09-06',
+    venue: '阪神',
+    raceNo: 11,
+    raceName: '産経賞セントウルステークス(G2)',
+    budget: 2900,
+    payout: 0,
+    articleId: '2026/0906-centaur-s',
+  },
 ];
