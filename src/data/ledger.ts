@@ -95,4 +95,13 @@ export const LEDGER: LedgerEntry[] = [
     payout: 0,
     articleId: '2026/0906-centaur-s',
   },
+  {
+    date: '2026-09-19',
+    venue: '中山',
+    raceNo: 10,
+    raceName: '九十九里特別',
+    budget: 2000,
+    payout: 17050,
+    articleId: '2026/0919-tsukumogi-tokubetsu',
+  },
 ];
