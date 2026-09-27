@@ -20,12 +20,7 @@ export default defineConfig({
       // noindex にしているページはサイトマップからも外す
       filter: (page) => {
         const path = new URL(page).pathname;
-        if (path === '/thanks/') return false;
-        // 有料販売を始めて law.astro の SELLING を true にしたら、この行を消す
-        if (path === '/law/') return false;
-        // 下書き記事（記入例のサンプルなど）
-        if (path.includes('-sample/')) return false;
-        return true;
+        return path !== '/thanks/' && path !== '/404/';
       },
     }),
   ],

@@ -1,0 +1,57 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import FaqList from '../components/FaqList.astro';
+import CtaSection from '../components/CtaSection.astro';
+import { FAQS, FAQ_CATEGORIES } from '../data/faq';
+
+const breadcrumbs = [{ label: 'よくある質問', href: '/faq/' }];
+const groups = FAQ_CATEGORIES.map((c) => ({ category: c, items: FAQS.filter((f) => f.category === c) })).filter((g) => g.items.length > 0);
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQS.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Layout
+  title="ホームページ制作のよくある質問"
+  description="ホームページ制作の料金、制作期間、SEO対策、補助金の利用、公開後の更新など、LiteSite（ライトサイト）によく寄せられる質問にお答えします。"
+  breadcrumbs={breadcrumbs}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <PageHeader eyebrow="FAQ" title="よくある質問" lead="ここにない疑問は、お問い合わせフォームやLINEからお気軽にどうぞ。" breadcrumbs={breadcrumbs} />
+
+  <section class="py-14 md:py-20">
+    <div class="container-x">
+      <div class="mx-auto max-w-3xl">
+        <nav aria-label="質問のカテゴリ" class="mb-12 flex flex-wrap gap-2">
+          {
+            groups.map((g, i) => (
+              <a href={`#faq-${i + 1}`} class="rounded-full border border-line bg-white px-4 py-2 text-sm font-bold hover:border-brand hover:text-brand">
+                {g.category}
+              </a>
+            ))
+          }
+        </nav>
+        <div class="space-y-14">
+          {
+            groups.map((g, i) => (
+              <section id={`faq-${i + 1}`}>
+                <h2 class="mb-5 text-xl font-black">{g.category}</h2>
+                <FaqList items={g.items} />
+              </section>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaSection location="faq_bottom" />
+</Layout>

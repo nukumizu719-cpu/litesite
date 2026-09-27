@@ -1,79 +1,267 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
-import { SITE, LINE_URL } from '../config';
+import { LINE_URL, BUSINESS, TURNSTILE_SITE_KEY } from '../config';
+import { PLANS } from '../data/plans';
+
+const breadcrumbs = [{ label: 'お問い合わせ', href: '/contact/' }];
+
+const kinds = ['新しくホームページを作りたい', '今のホームページを作り替えたい', '補助金を使って作りたい', 'まずは費用感を知りたい', 'その他'];
+const budgets = ['未定・相談したい', '25万円未満', '25〜45万円', '45〜70万円', '70万円以上'];
+const timings = ['未定', '1ヶ月以内', '2〜3ヶ月以内', '半年以内', '補助金の交付決定後'];
+
+const field = 'w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-brand focus:ring-4 focus:ring-brand/10';
 ---
 
 <Layout
-  title="お問い合わせ"
-  description={`${SITE.name}へのご連絡はこちらから。掲載内容の誤り、取材・掲載のご相談などを受け付けています。`}
+  title="お問い合わせ・無料相談"
+  description="LiteSite（ライトサイト）へのホームページ制作のご相談・お見積りのご依頼はこちら。フォームまたはLINEで受け付けています。相談・お見積りは無料です。"
+  breadcrumbs={breadcrumbs}
+  hideCtaBar
 >
+  <script is:inline slot="head" src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
   <PageHeader
     eyebrow="Contact"
-    title="お問い合わせ"
-    lead="掲載内容の誤りのご指摘、ご質問、その他のご連絡はこちらからお願いします。個別のレースについての予想代行や、馬券購入の相談にはお応えできません。"
+    title="お問い合わせ・無料相談"
+    lead={`ホームページ制作のご相談、お見積りのご依頼はこちらから。相談・お見積りは無料で、${BUSINESS.replyWithin}にご返信します。`}
+    breadcrumbs={breadcrumbs}
   />
 
-  <div class="mx-auto max-w-3xl px-5 py-12">
-    <div class="grid gap-4 sm:grid-cols-2">
-      {
-        LINE_URL && (
-          <a
-            href={LINE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex flex-col rounded-lg border border-line bg-surface p-6 transition-colors hover:border-turf"
-          >
-            <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.16em] text-muted uppercase">
-              LINE
-            </p>
-            <h2 class="mt-2.5 font-[family-name:var(--font-display)] text-lg font-bold">
-              LINEで連絡する
-            </h2>
-            <p class="mt-2.5 text-sm leading-relaxed text-ink-2">
-              いちばん返信が早い窓口です。友だち追加のうえメッセージをお送りください。
-            </p>
-            <span class="mt-4 font-[family-name:var(--font-mono)] text-[11px] text-turf">
-              LINEを開く →
-            </span>
-          </a>
-        )
-      }
-
-      <div class="flex flex-col rounded-lg border border-line bg-surface p-6">
-        <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.16em] text-muted uppercase">
-          Mail
-        </p>
-        <h2 class="mt-2.5 font-[family-name:var(--font-display)] text-lg font-bold">メールで連絡する</h2>
+  <section class="py-12 md:py-16">
+    <div class="container-x">
+      <div class="mx-auto max-w-2xl">
         {
-          SITE.email ? (
-            <p class="mt-2.5 text-sm leading-relaxed text-ink-2">
-              <a href={`mailto:${SITE.email}`} class="font-[family-name:var(--font-mono)] text-turf underline underline-offset-4">
-                {SITE.email}
+          LINE_URL && (
+            <div class="rounded-3xl border border-green-200 bg-green-50 p-6 text-center md:p-8">
+              <p class="text-sm font-bold">スマートフォンからなら、LINEがかんたんです</p>
+              <a
+                href={LINE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cta="contact_page"
+                class="btn btn-line mt-4 w-full px-8 py-4 sm:w-auto"
+              >
+                <img src="/line.svg" alt="" width="24" height="24" class="h-6 w-6" />
+                LINEで相談・見積もり
               </a>
-              <br />
-              数日以内にご返信します。
-            </p>
-          ) : (
-            <p class="mt-2.5 text-sm leading-relaxed text-ink-2">
-              メールでのお問い合わせ窓口は準備中です。お急ぎの場合はLINEからご連絡ください。
-            </p>
+            </div>
           )
         }
+
+        <form id="contact-form" class="mt-10 space-y-7" novalidate>
+          <h2 class="text-xl font-black">フォームで相談する</h2>
+          <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+          <fieldset>
+            <legend class="mb-3 text-sm font-bold">ご相談の内容<span class="ml-2 rounded bg-brand px-1.5 py-0.5 text-[10px] text-white">必須</span></legend>
+            <div class="grid gap-2 sm:grid-cols-2">
+              {
+                kinds.map((k, i) => (
+                  <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-line bg-white px-4 py-3 text-sm has-[:checked]:border-brand has-[:checked]:bg-brand-soft">
+                    <input type="radio" name="kind" value={k} required checked={i === 0} class="accent-brand" />
+                    {k}
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <div class="grid gap-7 sm:grid-cols-2">
+            <div>
+              <label for="name" class="mb-2 block text-sm font-bold">お名前<span class="ml-2 rounded bg-brand px-1.5 py-0.5 text-[10px] text-white">必須</span></label>
+              <input id="name" type="text" name="name" required autocomplete="name" class={field} placeholder="山田 太郎" />
+            </div>
+            <div>
+              <label for="company" class="mb-2 block text-sm font-bold">会社名・屋号<span class="ml-2 text-xs font-normal text-muted">任意</span></label>
+              <input id="company" type="text" name="company" autocomplete="organization" class={field} placeholder="やまだ整体院" />
+            </div>
+          </div>
+
+          <div>
+            <label for="email" class="mb-2 block text-sm font-bold">メールアドレス<span class="ml-2 rounded bg-brand px-1.5 py-0.5 text-[10px] text-white">必須</span></label>
+            <input id="email" type="email" name="email" required autocomplete="email" inputmode="email" class={field} placeholder="example@mail.com" />
+          </div>
+          <div>
+            <label for="email-confirm" class="mb-2 block text-sm font-bold">メールアドレス（確認用）<span class="ml-2 rounded bg-brand px-1.5 py-0.5 text-[10px] text-white">必須</span></label>
+            <input id="email-confirm" type="email" name="email-confirm" required autocomplete="email" inputmode="email" class={field} placeholder="もう一度入力してください" />
+            <p id="email-error" class="mt-2 hidden text-sm font-bold text-red-600" role="alert">メールアドレスが一致しません</p>
+          </div>
+
+          <div>
+            <label for="tel" class="mb-2 block text-sm font-bold">電話番号<span class="ml-2 text-xs font-normal text-muted">任意</span></label>
+            <input id="tel" type="tel" name="tel" autocomplete="tel" inputmode="tel" class={field} placeholder="090-1234-5678" />
+          </div>
+
+          <div class="grid gap-7 sm:grid-cols-3">
+            <div>
+              <label for="plan" class="mb-2 block text-sm font-bold">気になるプラン</label>
+              <select id="plan" name="plan" class={field}>
+                <option value="未定">未定</option>
+                {PLANS.map((p) => <option value={p.name} data-id={p.id}>{p.name}</option>)}
+              </select>
+            </div>
+            <div>
+              <label for="budget" class="mb-2 block text-sm font-bold">ご予算</label>
+              <select id="budget" name="budget" class={field}>
+                {budgets.map((b) => <option value={b}>{b}</option>)}
+              </select>
+            </div>
+            <div>
+              <label for="timing" class="mb-2 block text-sm font-bold">公開したい時期</label>
+              <select id="timing" name="timing" class={field}>
+                {timings.map((t) => <option value={t}>{t}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="current-url" class="mb-2 block text-sm font-bold">今のホームページのURL<span class="ml-2 text-xs font-normal text-muted">任意</span></label>
+            <input id="current-url" type="url" name="currentUrl" inputmode="url" class={field} placeholder="https://" />
+          </div>
+
+          <div>
+            <label for="message" class="mb-2 block text-sm font-bold">ご相談内容<span class="ml-2 rounded bg-brand px-1.5 py-0.5 text-[10px] text-white">必須</span></label>
+            <textarea
+              id="message"
+              name="message"
+              required
+              rows="6"
+              class={field}
+              placeholder="業種や、ホームページで実現したいことなど、分かる範囲でご記入ください。"></textarea>
+          </div>
+
+          <label class="flex items-start gap-3 text-sm">
+            <input type="checkbox" name="agree" required class="mt-1 accent-brand" />
+            <span><a href="/privacy-policy/" target="_blank" class="font-bold text-brand underline">プライバシーポリシー</a>に同意して送信します</span>
+          </label>
+
+          <div class="flex justify-center">
+            <div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="light"></div>
+          </div>
+
+          <button type="submit" id="submit-btn" class="btn btn-primary w-full py-4 text-base disabled:cursor-not-allowed disabled:opacity-50">
+            この内容で送信する
+          </button>
+          <p id="form-status" class="hidden rounded-xl bg-red-50 px-4 py-3 text-center text-sm font-bold text-red-600" role="alert"></p>
+          <p class="text-center text-xs text-muted">送信後、{BUSINESS.replyWithin}に {BUSINESS.email} からご返信します。</p>
+        </form>
       </div>
     </div>
-
-    <section class="prose mt-12">
-      <h2>お応えできないこと</h2>
-      <ul>
-        <li>個別のレースについての予想代行、買い目の作成</li>
-        <li>馬券の購入代行、資金の預託に関するご相談</li>
-        <li>掲載している予想の的中・払戻に関する補償</li>
-      </ul>
-      <p>
-        当サイトの立場については<a href="/disclaimer/">免責事項</a>および
-        <a href="/terms/">利用規約</a>をご確認ください。
-      </p>
-    </section>
-  </div>
+  </section>
 </Layout>
+
+<script>
+  import { FORM_ENDPOINT as ENDPOINT } from '../config';
+
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const email = document.getElementById('email') as HTMLInputElement;
+  const emailConfirm = document.getElementById('email-confirm') as HTMLInputElement;
+  const emailError = document.getElementById('email-error')!;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const status = document.getElementById('form-status')!;
+  const startedAt = Date.now();
+  let apiToken = '';
+
+  // 料金ページの「このプランで相談する」から来たときはプランを選択済みにする
+  const planId = new URLSearchParams(location.search).get('plan');
+  if (planId) {
+    const opt = form.querySelector<HTMLOptionElement>(`#plan option[data-id="${CSS.escape(planId)}"]`);
+    if (opt) opt.selected = true;
+  }
+
+  fetch(`${ENDPOINT}?action=token`)
+    .then((r) => r.json())
+    .then((d) => {
+      if (d.ok) apiToken = d.token;
+    })
+    .catch(() => {});
+
+  const emailsMatch = () => !emailConfirm.value || email.value === emailConfirm.value;
+  const checkEmail = () => {
+    const ok = emailsMatch();
+    emailError.classList.toggle('hidden', ok);
+    emailConfirm.classList.toggle('border-red-500', !ok);
+  };
+  email.addEventListener('input', checkEmail);
+  emailConfirm.addEventListener('input', checkEmail);
+
+  const showError = (msg: string) => {
+    status.textContent = msg;
+    status.classList.remove('hidden');
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    status.classList.add('hidden');
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    if (!emailsMatch()) {
+      checkEmail();
+      emailConfirm.focus();
+      return;
+    }
+
+    const fd = new FormData(form);
+    const turnstileToken = fd.get('cf-turnstile-response');
+    if (!turnstileToken) {
+      showError('ロボットでないことの確認が終わるまで、少しお待ちください。');
+      return;
+    }
+
+    // フォームの送信先（GAS）は name / email / message を受け取る。追加項目は message の先頭にまとめる
+    const details = [
+      ['ご相談の内容', fd.get('kind')],
+      ['会社名・屋号', fd.get('company')],
+      ['電話番号', fd.get('tel')],
+      ['気になるプラン', fd.get('plan')],
+      ['ご予算', fd.get('budget')],
+      ['公開したい時期', fd.get('timing')],
+      ['今のホームページ', fd.get('currentUrl')],
+    ]
+      .filter(([, v]) => v)
+      .map(([k, v]) => `【${k}】${v}`)
+      .join('\n');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '送信中...';
+
+    try {
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        body: JSON.stringify({
+          name: fd.get('name'),
+          email: fd.get('email'),
+          message: `${details}\n\n${fd.get('message')}`,
+          website: fd.get('website'),
+          token: apiToken,
+          startedAt,
+          turnstileToken,
+        }),
+      });
+      const result = await res.json();
+      if (!result.ok) throw new Error(result.error || 'failed');
+
+      window.gtag?.('event', 'generate_lead', {
+        form_name: 'contact',
+        inquiry_type: String(fd.get('kind')),
+        plan: String(fd.get('plan')),
+      });
+      // 計測の送信を待ってから遷移
+      setTimeout(() => (location.href = '/thanks/'), 300);
+    } catch (err) {
+      const rateLimited = err instanceof Error && err.message === 'rate_limited';
+      showError(
+        rateLimited
+          ? '短時間に続けて送信することはできません。しばらくしてからお試しください。'
+          : '送信できませんでした。時間をおいて再度お試しいただくか、LINEからご連絡ください。'
+      );
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'この内容で送信する';
+      (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
+    }
+  });
+</script>

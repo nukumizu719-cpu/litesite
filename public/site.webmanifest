@@ -1,14 +1,14 @@
 {
-  "name": "減点法ケイバ",
-  "short_name": "減点法ケイバ",
-  "description": "ロジックを公開するAI競馬予想",
+  "name": "LiteSite（ライトサイト）",
+  "short_name": "LiteSite",
+  "description": "名古屋・安城のホームページ制作",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#004aad",
   "icons": [
     { "src": "/favicon-32x32.png", "sizes": "32x32", "type": "image/png" },
     { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
     { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
-  ],
-  "theme_color": "#12603A",
-  "background_color": "#F2F5F1",
-  "display": "standalone",
-  "start_url": "/"
+  ]
 }

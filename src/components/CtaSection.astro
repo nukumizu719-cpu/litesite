@@ -1,0 +1,44 @@
+---
+/**
+ * ページ末尾に置く問い合わせ導線。フォームとLINEの2択にする。
+ */
+import { LINE_URL, BUSINESS } from '../config';
+
+interface Props {
+  /** GA4 に送る設置場所の名前 */
+  location: string;
+  title?: string;
+  lead?: string;
+}
+
+const {
+  location,
+  title = 'まずは無料で、<br class="sm:hidden" />ご相談ください',
+  lead = '「何から決めればいいか分からない」段階でも大丈夫です。事業の内容をうかがい、必要なページ構成とお見積りをご提案します。無理な営業はしません。',
+} = Astro.props;
+---
+
+<section class="bg-brand py-16 text-white md:py-20">
+  <div class="container-x">
+    <div class="fade-in mx-auto max-w-3xl text-center">
+      <p class="eyebrow !text-brand-line">Contact</p>
+      <h2 class="mt-2 text-2xl leading-snug font-black md:text-4xl" set:html={title} />
+      <p class="mt-5 leading-relaxed text-blue-100">{lead}</p>
+      <div class="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+        <a href="/contact/" data-cta={location} class="btn bg-white px-8 py-4 text-brand shadow-lg hover:bg-brand-soft">
+          フォームで相談する
+          <span aria-hidden="true">→</span>
+        </a>
+        {
+          LINE_URL && (
+            <a href={LINE_URL} target="_blank" rel="noopener noreferrer" data-cta={location} class="btn btn-line px-8 py-4">
+              <img src="/line.svg" alt="" width="22" height="22" class="h-[22px] w-[22px]" />
+              LINEで相談する
+            </a>
+          )
+        }
+      </div>
+      <p class="mt-5 text-xs text-blue-200">ご相談・お見積りは無料です。{BUSINESS.replyWithin}にご返信します。</p>
+    </div>
+  </div>
+</section>

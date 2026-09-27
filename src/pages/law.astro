@@ -1,83 +1,59 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
-import { SITE } from '../config';
+import { SITE, BUSINESS } from '../config';
+import { PLANS, CARE_PLANS, formatYen } from '../data/plans';
 
-/**
- * 特定商取引法に基づく表記。
- *
- * 有料コンテンツの販売を始めたら SELLING を true にして、
- * 下の items の「（準備中）」をすべて実際の情報に置き換えること。
- * 氏名・住所・電話番号の記載は、通信販売を行う事業者の法律上の義務。
- * note などの外部プラットフォームで販売する場合は、
- * そのプラットフォーム側の表記に従うため、ここは false のままでよい。
- */
-const SELLING = false;
+const breadcrumbs = [{ label: '特定商取引法に基づく表記', href: '/law/' }];
 
-const items = [
-  { label: '販売事業者', value: '（準備中）' },
-  { label: '運営責任者', value: '（準備中）' },
-  { label: '所在地', value: '（準備中）' },
-  { label: '電話番号', value: '（準備中）' },
-  { label: 'メールアドレス', value: SITE.email || '（準備中）' },
-  { label: '販売価格', value: '各商品ページに表示する金額' },
-  { label: '商品代金以外の必要料金', value: '通信料等はお客様のご負担となります' },
-  { label: '支払方法', value: '（準備中）' },
-  { label: '支払時期', value: '（準備中）' },
-  { label: '商品の引渡し時期', value: '決済完了後、直ちに閲覧可能となります' },
+// 未設定の項目は、特定商取引法の省略の規定に沿って「請求により開示」と表示する
+const onRequest = '請求があった場合には、遅滞なく開示いたします。';
+const address = BUSINESS.street
+  ? `${BUSINESS.postalCode ? `〒${BUSINESS.postalCode} ` : ''}${BUSINESS.region}${BUSINESS.locality}${BUSINESS.street}`
+  : onRequest;
+
+const rows = [
+  { label: '販売事業者', value: SITE.titleSuffix },
+  { label: '代表者', value: BUSINESS.owner || onRequest },
+  { label: '所在地', value: address },
+  { label: '電話番号', value: BUSINESS.tel || onRequest },
+  { label: 'メールアドレス', value: BUSINESS.email },
   {
-    label: '返品・キャンセル',
-    value:
-      'デジタルコンテンツの性質上、決済完了後の返品・返金には応じられません。ただし、当方の責によりコンテンツが閲覧できない場合はこの限りではありません。',
+    label: '販売価格',
+    value: [
+      ...PLANS.map((p) => `${p.name}：制作費${formatYen(p.price)}〜（税込）`),
+      ...CARE_PLANS.map((c) => `運用プラン「${c.name}」：月額${formatYen(c.monthly)}（税込）`),
+      '最終的な金額は、ヒアリング後にお出しするお見積りによります。',
+    ].join('\n'),
   },
+  { label: '商品代金以外の必要料金', value: '銀行振込の場合の振込手数料\nセルフ運用プランの場合のドメイン・サーバーの実費' },
+  { label: 'お支払い方法', value: '銀行振込、クレジットカード' },
+  { label: 'お支払い時期', value: 'お見積り・ご契約時にご案内します。' },
+  { label: '役務の提供時期', value: 'スタンダードプランは制作着手から通常1ヶ月程度。集客プランはご提案時にお伝えするスケジュールによります（いずれも素材のご提供時期により前後します）' },
   {
-    label: '動作環境',
-    value: 'インターネットに接続された端末および一般的なウェブブラウザ',
+    label: 'キャンセル・解約',
+    value: 'サービスの性質上、制作着手後のキャンセルはお受けしておりません。\n安心サブスクプランの解約は、解約希望月の前月末日までにお申し出いただくことで、翌月から停止します。',
   },
 ];
 ---
 
 <Layout
   title="特定商取引法に基づく表記"
-  description={`${SITE.name}における特定商取引法に基づく表記です。`}
-  noindex={!SELLING}
+  description="LiteSite（ライトサイト）の特定商取引法に基づく表記です。"
+  breadcrumbs={breadcrumbs}
 >
-  <PageHeader eyebrow="Legal" title="特定商取引法に基づく表記" />
+  <PageHeader eyebrow="Legal" title="特定商取引法に基づく表記" breadcrumbs={breadcrumbs} />
 
-  <div class="mx-auto max-w-3xl px-5 py-12">
-    {
-      !SELLING ? (
-        <div class="rounded-lg border border-line bg-surface px-6 py-8">
-          <p class="leading-relaxed text-ink-2">
-            現在、当サイトでは有料コンテンツの販売を行っていません。
-            そのため、特定商取引法に基づく表記の対象となる取引はありません。
-          </p>
-          <p class="mt-4 leading-relaxed text-ink-2">
-            有料コンテンツの提供を開始する際には、法令に基づく表記をこのページに掲載します。
-            当サイトに関するお問い合わせは
-            <a href="/contact/" class="text-turf underline underline-offset-4">お問い合わせ</a>
-            からお願いします。
-          </p>
-        </div>
-      ) : (
-        <div class="overflow-hidden rounded-lg border border-line bg-surface">
-          <dl class="grid gap-px bg-line">
-            {items.map((it) => (
-              <div class="grid gap-1 bg-surface px-5 py-4 sm:grid-cols-[10rem_1fr] sm:gap-5">
-                <dt class="font-[family-name:var(--font-mono)] text-[11px] tracking-wider text-muted">
-                  {it.label}
-                </dt>
-                <dd class="text-sm leading-relaxed">{it.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      )
-    }
-
-    <p class="mt-8 text-sm leading-relaxed text-muted">
-      あわせて<a href="/terms/" class="text-turf underline underline-offset-4">利用規約</a>および
-      <a href="/disclaimer/" class="text-turf underline underline-offset-4">免責事項</a>をご確認ください。
-    </p>
+  <div class="container-x py-12 md:py-16">
+    <dl class="mx-auto max-w-3xl divide-y divide-line rounded-3xl border border-line bg-white">
+      {
+        rows.map((r) => (
+          <div class="grid gap-1 px-6 py-5 md:grid-cols-3 md:gap-6 md:px-8">
+            <dt class="font-bold">{r.label}</dt>
+            <dd class="whitespace-pre-line text-ink-2 md:col-span-2">{r.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
   </div>
 </Layout>

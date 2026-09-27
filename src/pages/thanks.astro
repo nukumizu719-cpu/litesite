@@ -1,26 +1,29 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { BUSINESS, LINE_URL } from '../config';
 ---
 
-<Layout title="送信が完了しました" noindex={true}>
-  <div class="mx-auto flex max-w-xl flex-col items-center px-5 py-24 text-center">
-    <div class="grid h-14 w-14 place-items-center rounded-full bg-turf-soft">
-      <svg class="h-7 w-7 text-turf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M20 6L9 17l-5-5"></path>
-      </svg>
+<Layout title="送信が完了しました" noindex hideCtaBar>
+  <section class="py-20 md:py-28">
+    <div class="container-x">
+      <div class="mx-auto max-w-xl rounded-3xl border border-line bg-white p-8 text-center md:p-12">
+        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-brand-soft text-brand" aria-hidden="true">
+          <svg class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4L8 12.58l7.3-7.3a1 1 0 0 1 1.4 0Z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <h1 class="mt-6 text-2xl font-black">お問い合わせを受け付けました</h1>
+        <p class="mt-5 leading-relaxed text-ink-2">
+          ご相談いただき、ありがとうございます。内容を確認し、{BUSINESS.replyWithin}に {BUSINESS.email} からご返信します。
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-muted">
+          返信が届かない場合は、迷惑メールフォルダをご確認いただくか{LINE_URL ? 'LINEから' : 'お手数ですが再度'}ご連絡ください。
+        </p>
+        <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+          <a href="/works/" class="btn btn-ghost px-6 py-3">制作実績を見る</a>
+          <a href="/" class="btn btn-primary px-6 py-3">トップへ戻る</a>
+        </div>
+      </div>
     </div>
-    <h1 class="mt-6 font-[family-name:var(--font-display)] text-2xl font-bold">
-      送信が完了しました
-    </h1>
-    <p class="mt-4 leading-relaxed text-ink-2">
-      お問い合わせありがとうございます。<br />
-      内容を確認のうえ、数日以内にご返信します。
-    </p>
-    <a
-      href="/"
-      class="mt-8 rounded-full border border-line px-6 py-3 text-sm font-bold text-ink-2 transition-colors hover:border-turf hover:text-turf"
-    >
-      トップへ戻る
-    </a>
-  </div>
+  </section>
 </Layout>

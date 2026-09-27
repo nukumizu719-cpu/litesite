@@ -1,0 +1,50 @@
+---
+/**
+ * 公開後の運用プラン。どの制作プランとも組み合わせられる。
+ */
+import { CARE_PLANS } from '../data/plans';
+
+interface Props {
+  /** 注記（notes）まで出す。料金ページ用 */
+  detailed?: boolean;
+  /** 見出しレベル。ページ内の階層に合わせる */
+  headingLevel?: 'h3' | 'h4';
+}
+
+const { detailed = false, headingLevel: H = 'h3' } = Astro.props;
+---
+
+<div class="mx-auto grid max-w-5xl gap-5 md:grid-cols-2">
+  {
+    CARE_PLANS.map((c) => (
+      <article class="fade-in flex flex-col rounded-3xl border border-line bg-white p-6 md:p-8">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <H class="text-lg font-black">{c.name}</H>
+            <p class="mt-1 text-sm text-muted">{c.lead}</p>
+          </div>
+          <p class="shrink-0 text-right">
+            <span class="block text-[11px] font-bold text-muted">月額</span>
+            <span class:list={['font-[family-name:var(--font-en)] text-2xl font-bold', c.monthly === 0 ? 'text-brand' : 'text-ink']}>
+              {c.monthly.toLocaleString('ja-JP')}
+            </span>
+            <span class="text-sm font-bold">円</span>
+          </p>
+        </div>
+        <ul class="mt-5 space-y-2 border-t border-line pt-5 text-sm">
+          {c.features.map((f) => (
+            <li class="flex gap-2.5">
+              <span class="text-brand" aria-hidden="true">●</span>
+              <span>{f}</span>
+            </li>
+          ))}
+        </ul>
+        {detailed && (
+          <ul class="mt-5 space-y-1 text-xs leading-relaxed text-muted">
+            {c.notes.map((n) => <li>※{n}</li>)}
+          </ul>
+        )}
+      </article>
+    ))
+  }
+</div>

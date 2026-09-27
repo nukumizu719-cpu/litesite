@@ -1,0 +1,162 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import FaqList from '../components/FaqList.astro';
+import CtaSection from '../components/CtaSection.astro';
+import { FAQS } from '../data/faq';
+
+const breadcrumbs = [{ label: '補助金活用', href: '/subsidy/' }];
+const subsidyFaqs = FAQS.filter((f) => f.category === '補助金');
+
+/** このページの情報の基準日。公募回が変わったら内容とあわせて更新する */
+const AS_OF = '2026年9月';
+
+const rules = [
+  {
+    title: 'ホームページだけでは申請できない',
+    body: 'ホームページの制作費は「ウェブサイト関連費」という経費区分に入ります。ウェブサイト関連費だけの申請はできず、チラシの作成、展示会への出展、設備の導入など、ほかの経費と組み合わせた販路開拓の計画が必要です。',
+  },
+  {
+    title: 'ウェブサイト関連費の補助には上限がある',
+    body: '第20回公募では、ウェブサイト関連費として受けられる補助は30万円（税込）までとされています。第19回までの「補助金の総額の4分の1まで」という割合の制限からルールが変わっています。',
+  },
+  {
+    title: '補助されるのは費用の3分の2（原則）',
+    body: '一般型・通常枠の補助率は原則3分の2です。補助上限額は50万円で、インボイス特例や賃金引上げ特例に当てはまる場合は上乗せがあります。',
+  },
+  {
+    title: '交付決定の前に発注した費用は対象外',
+    body: '補助の対象になるのは、交付決定を受けたあとに発注・契約・支払いをした費用です。採択を待たずに制作を始めると、その費用は補助を受けられません。',
+  },
+  {
+    title: '補助金は後払い',
+    body: '補助金は、事業が終わって実績報告をしたあとに支払われる精算払いです。制作費はいったん全額をお支払いいただき、あとから補助金を受け取る流れになります。',
+  },
+];
+
+const steps = [
+  { title: 'ご相談・お見積り', body: 'どんなホームページを作るか、ほかにどんな販路開拓の取り組みをするかをうかがい、見積書を発行します。' },
+  { title: '計画書の作成・申請', body: '経営計画書と補助事業計画書をお客様が作成し、地域の商工会議所・商工会で「事業支援計画書」の発行を受けて申請します。' },
+  { title: '採択・交付決定', body: '審査を経て採択されると、交付決定の通知が届きます。ここから発注できます。' },
+  { title: '発注・制作・公開', body: '交付決定日以降にご契約いただき、制作を始めます。補助事業の期間内に公開します。' },
+  { title: 'お支払い・実績報告', body: '制作費をお支払いいただき、納品物・請求書・領収書などをそろえて実績報告を行います。' },
+  { title: '補助金の受け取り', body: '実績報告の確認が終わると、補助金が入金されます。' },
+];
+---
+
+<Layout
+  title="補助金を使ったホームページ制作"
+  description="ホームページの制作費は、小規模事業者持続化補助金の「ウェブサイト関連費」として補助対象になる場合があります。単独では申請できない、補助は30万円まで、交付決定前の発注は対象外など、使う前に知っておきたい条件と進め方を解説します。"
+  breadcrumbs={breadcrumbs}
+>
+  <PageHeader
+    eyebrow="Subsidy"
+    title="補助金を使ったホームページ制作"
+    lead="ホームページの制作費は、小規模事業者持続化補助金で補助を受けられる場合があります。ただし条件があり、進める順番を間違えると対象外になります。使う前に知っておきたいポイントをまとめました。"
+    breadcrumbs={breadcrumbs}
+  />
+
+  <div class="container-x pt-10">
+    <p class="mx-auto max-w-3xl rounded-2xl border border-accent/40 bg-amber-50 px-5 py-4 text-sm leading-relaxed">
+      <strong>このページは{AS_OF}時点の情報です。</strong>
+      第20回公募（一般型・通常枠／公募要領 第8版）の内容をもとにしています。補助率・上限額・対象経費・スケジュールは公募回ごとに変わるため、申請の前に必ず<a
+        href="https://r6.jizokukahojokin.info/"
+        target="_blank"
+        rel="noopener"
+        class="font-bold text-brand underline">公式サイトの最新の公募要領</a
+      >をご確認ください。
+    </p>
+  </div>
+
+  <section class="py-14 md:py-20">
+    <div class="container-x">
+      <div class="fade-in prose mx-auto max-w-3xl">
+        <h2>小規模事業者持続化補助金とは</h2>
+        <p>
+          小規模事業者が、自分で作った経営計画にもとづいて販路開拓などに取り組むとき、その費用の一部を国が補助する制度です。地域の商工会議所・商工会の支援を受けながら計画書を作り、申請します。
+        </p>
+        <p>
+          ホームページの制作は「新しいお客様に知ってもらう」ための取り組みとして、ほかの販路開拓の経費と組み合わせて申請できます。創業して間もない方向けの〈創業型〉など、類型によって要件が異なります。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-ground py-16 md:py-24">
+    <div class="container-x">
+      <SectionHeading eyebrow="Rules" title="ホームページ制作費を<br class='sm:hidden' />補助対象にするときの条件" lead="一般型・通常枠の第20回公募で示されている主なルールです。" />
+      <ol class="mx-auto max-w-3xl space-y-4">
+        {
+          rules.map((r, i) => (
+            <li class="fade-in flex gap-5 rounded-3xl border border-line bg-white p-6 md:p-8">
+              <span class="font-[family-name:var(--font-en)] text-2xl font-bold text-brand-line">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3 class="text-lg font-black">{r.title}</h3>
+                <p class="mt-2 leading-relaxed text-ink-2">{r.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24">
+    <div class="container-x">
+      <SectionHeading eyebrow="Steps" title="補助金を使うときの進め方" lead="いちばん大事なのは、交付決定が出るまで発注しないこと。申請のスケジュールから逆算して準備を始めます。" />
+      <ol class="mx-auto grid max-w-5xl gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {
+          steps.map((s, i) => (
+            <li class:list={['fade-in rounded-2xl border bg-white p-6', i === 3 ? 'border-brand ring-1 ring-brand' : 'border-line']}>
+              <p class="font-[family-name:var(--font-en)] text-xs font-bold tracking-widest text-brand">STEP {String(i + 1).padStart(2, '0')}</p>
+              <h3 class="mt-2 font-black">{s.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-2">{s.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="bg-ground py-16 md:py-24">
+    <div class="container-x">
+      <div class="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
+        <div class="fade-in rounded-3xl border border-line bg-white p-7 md:p-9">
+          <h2 class="text-lg font-black">LiteSiteがお手伝いできること</h2>
+          <ul class="mt-5 space-y-3 text-[0.95rem]">
+            <li class="flex gap-3"><span class="text-brand" aria-hidden="true">●</span>補助対象の条件に沿った見積書の発行</li>
+            <li class="flex gap-3"><span class="text-brand" aria-hidden="true">●</span>計画書のうち、ホームページで何をするかの整理</li>
+            <li class="flex gap-3"><span class="text-brand" aria-hidden="true">●</span>交付決定後のスケジュールに合わせた制作・公開</li>
+            <li class="flex gap-3"><span class="text-brand" aria-hidden="true">●</span>実績報告に必要な請求書・領収書などの発行</li>
+          </ul>
+        </div>
+        <div class="fade-in rounded-3xl border border-line bg-white p-7 md:p-9">
+          <h2 class="text-lg font-black">お手伝いできないこと</h2>
+          <ul class="mt-5 space-y-3 text-[0.95rem] text-ink-2">
+            <li class="flex gap-3"><span class="text-muted" aria-hidden="true">●</span>申請書類の作成代行</li>
+            <li class="flex gap-3"><span class="text-muted" aria-hidden="true">●</span>採択のお約束</li>
+          </ul>
+          <p class="mt-5 text-sm leading-relaxed text-muted">
+            計画書の書き方は、地域の商工会議所・商工会で相談できます。LiteSiteはホームページの部分に責任をもって関わります。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24">
+    <div class="container-x">
+      <SectionHeading eyebrow="FAQ" title="補助金についてのよくある質問" />
+      <div class="mx-auto max-w-3xl">
+        <FaqList items={subsidyFaqs} />
+      </div>
+    </div>
+  </section>
+
+  <CtaSection
+    location="subsidy_bottom"
+    title="補助金を使うか迷っている<br class='sm:hidden' />段階でも、ご相談ください"
+    lead="補助金を使う場合と使わない場合、それぞれのスケジュールと費用の見通しをお伝えします。"
+  />
+</Layout>

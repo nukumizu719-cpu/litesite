@@ -1,0 +1,49 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaSection from '../components/CtaSection.astro';
+import { FLOW } from '../data/flow';
+
+const breadcrumbs = [{ label: '制作の流れ', href: '/flow/' }];
+---
+
+<Layout
+  title="ホームページ制作の流れ"
+  description="LiteSite（ライトサイト）でホームページを制作する流れ。無料相談・ヒアリングから、構成とお見積りのご提案、デザイン・制作、公開とアクセス解析の設定まで。スタンダードプランなら通常1ヶ月程度で公開します。"
+  breadcrumbs={breadcrumbs}
+>
+  <PageHeader
+    eyebrow="Flow"
+    title="ホームページ制作の流れ"
+    lead="スタンダードプランなら、ご相談から公開まで通常1ヶ月程度です。各ステップでお願いすることも先にお伝えしておきます。"
+    breadcrumbs={breadcrumbs}
+  />
+
+  <section class="py-14 md:py-20">
+    <div class="container-x">
+      <ol class="relative mx-auto max-w-3xl space-y-6 before:absolute before:top-2 before:bottom-2 before:left-[1.4rem] before:w-px before:bg-brand-line md:before:left-[1.9rem]">
+        {
+          FLOW.map((s, i) => (
+            <li class="fade-in relative flex gap-5 md:gap-7">
+              <span class="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand font-[family-name:var(--font-en)] font-bold text-white md:h-[3.8rem] md:w-[3.8rem] md:text-lg">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div class="flex-1 rounded-3xl border border-line bg-white p-6 md:p-8">
+                <h2 class="text-lg font-black md:text-xl">{s.title}</h2>
+                <p class="mt-3 leading-relaxed text-ink-2">{s.detail}</p>
+                {s.yours && (
+                  <p class="mt-4 rounded-xl bg-ground px-4 py-3 text-sm">
+                    <span class="font-bold text-brand">お願いすること：</span>
+                    {s.yours}
+                  </p>
+                )}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <CtaSection location="flow_bottom" />
+</Layout>

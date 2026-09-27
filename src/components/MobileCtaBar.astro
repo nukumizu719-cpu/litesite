@@ -1,0 +1,33 @@
+---
+/**
+ * スマートフォンの画面下に固定する問い合わせバー。
+ * 少しスクロールしてから表示し、ファーストビューのCTAと重ならないようにする。
+ */
+import { LINE_URL } from '../config';
+---
+
+<div
+  id="mobile-cta"
+  class="fixed inset-x-0 bottom-0 z-40 translate-y-full border-t border-line bg-white/95 px-3 pt-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom))] backdrop-blur transition-transform duration-300 md:hidden"
+>
+  <div class="flex gap-2">
+    <a href="/contact/" data-cta="mobile_bar" class="btn btn-primary flex-1 py-3.5 text-sm">
+      無料相談・お見積り
+    </a>
+    {
+      LINE_URL && (
+        <a href={LINE_URL} target="_blank" rel="noopener noreferrer" data-cta="mobile_bar" class="btn btn-line flex-1 py-3.5 text-sm">
+          <img src="/line.svg" alt="" width="20" height="20" class="h-5 w-5" />
+          LINEで相談
+        </a>
+      )
+    }
+  </div>
+</div>
+
+<script>
+  const bar = document.getElementById('mobile-cta');
+  const toggle = () => bar?.classList.toggle('translate-y-full', window.scrollY < 480);
+  window.addEventListener('scroll', toggle, { passive: true });
+  toggle();
+</script>

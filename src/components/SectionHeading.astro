@@ -1,0 +1,19 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  align?: 'center' | 'left';
+  /** 見出しレベル。ページ内の階層に合わせて変える */
+  as?: 'h2' | 'h3';
+}
+
+const { eyebrow, title, lead, align = 'center', as: Tag = 'h2' } = Astro.props;
+const center = align === 'center';
+---
+
+<div class:list={['fade-in mb-10 md:mb-14', center && 'text-center']}>
+  <p class="eyebrow">{eyebrow}</p>
+  <Tag class="mt-2 text-2xl leading-snug font-black tracking-tight text-balance md:text-4xl" set:html={title} />
+  {lead && <p class:list={['mt-5 leading-relaxed text-ink-2 md:text-lg', center && 'mx-auto max-w-2xl']}>{lead}</p>}
+</div>
