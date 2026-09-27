@@ -1,0 +1,170 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import CtaSection from '../components/CtaSection.astro';
+import { PLAN_COMMON } from '../data/plans';
+import { AREAS } from '../config';
+
+const breadcrumbs = [{ label: 'サービス', href: '/service/' }];
+
+const menus = [
+  {
+    id: 'new',
+    title: '新規のホームページ制作',
+    target: '開業・創業する方、はじめてホームページを持つ方',
+    body: '事業の強みと来てほしいお客様をヒアリングし、「どんな検索で見つけてもらうか」から逆算してページ構成を決めます。名刺代わりではなく、問い合わせの入口として働くホームページを作ります。',
+    points: ['狙う検索キーワードの整理', '業種に合ったページ構成の設計', 'スマートフォン中心のデザイン', 'お問い合わせフォーム・LINE導線の設置'],
+  },
+  {
+    id: 'renewal',
+    title: 'ホームページのリニューアル',
+    target: '今のサイトが古い・遅い・更新できていない方',
+    body: 'WordPressの管理が負担になっている、スマートフォンで見づらい、表示が遅いといったサイトを、管理の手間がいらない静的サイトに作り替えます。今のドメインはそのまま使えます。',
+    points: ['今のサイトの課題の洗い出し', 'ドメインを引き継いだ作り替え', 'URLが変わるページの転送設定', 'WordPressの管理・保守費からの卒業'],
+  },
+  {
+    id: 'subsidy',
+    title: '補助金を使った制作のご相談',
+    target: '小規模事業者持続化補助金などの活用を考えている方',
+    body: '補助金の対象になる経費の条件や、申請のスケジュールに合わせた制作の進め方をご相談いただけます。事業計画のうちホームページに関わる部分の整理と、見積書の発行でお手伝いします。',
+    points: ['補助対象になる条件の確認', '交付決定後に発注する進め方', '計画書のうちWeb活用部分の整理', '見積書・請求書の発行'],
+  },
+];
+
+const seo = [
+  { title: 'キーワード設計', body: '「地域名＋業種」など、お客様が実際に使う検索語をヒアリングで決め、ページごとに割り当てます。' },
+  { title: 'タイトル・説明文', body: '検索結果でクリックされるよう、全ページのタイトルと説明文を個別に作ります。' },
+  { title: '見出し構造', body: '見出しの階層を正しく組み、検索エンジンにページの内容が伝わる形に整えます。' },
+  { title: '構造化データ', body: '事業者情報・パンくず・よくある質問などを、検索エンジンが読み取れる形式で記述します。' },
+  { title: '表示速度', body: '画像の自動圧縮と次世代形式への変換、不要なプログラムの排除で、読み込みを軽くします。' },
+  { title: '計測の準備', body: 'Googleアナリティクスとサーチコンソールを設定し、公開後の効果を数字で確認できるようにします。' },
+];
+---
+
+<Layout
+  title="ホームページ制作のサービス内容"
+  description="LiteSite（ライトサイト）のホームページ制作サービス。新規制作・リニューアル・補助金を使った制作のご相談に対応。SEOの内部対策と表示速度の最適化を標準で行い、問い合わせにつながるホームページを作ります。"
+  breadcrumbs={breadcrumbs}
+>
+  <PageHeader
+    eyebrow="Service"
+    title="サービス内容"
+    lead="作ることがゴールではなく、お客様に見つけてもらい、問い合わせをもらうこと。そのために必要な設計から公開後の管理まで、ひと通りお任せいただけます。"
+    breadcrumbs={breadcrumbs}
+  />
+
+  <section class="py-16 md:py-24">
+    <div class="container-x">
+      <SectionHeading eyebrow="Menu" title="対応しているご依頼" />
+      <div class="space-y-6">
+        {
+          menus.map((m) => (
+            <article id={m.id} class="fade-in grid gap-8 rounded-3xl border border-line bg-white p-7 md:grid-cols-5 md:p-10">
+              <div class="md:col-span-3">
+                <h3 class="text-xl font-black md:text-2xl">{m.title}</h3>
+                <p class="mt-2 text-sm font-bold text-brand">{m.target}</p>
+                <p class="mt-4 leading-relaxed text-ink-2">{m.body}</p>
+              </div>
+              <ul class="space-y-2.5 rounded-2xl bg-ground p-6 text-sm md:col-span-2">
+                {m.points.map((p) => (
+                  <li class="flex gap-2.5">
+                    <span class="text-brand" aria-hidden="true">●</span>
+                    <span class="font-medium">{p}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-ground py-16 md:py-24" id="included">
+    <div class="container-x">
+      <SectionHeading eyebrow="Included" title="すべてのプランに含まれる作業" />
+      <ol class="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        {
+          PLAN_COMMON.map((c, i) => (
+            <li class="fade-in rounded-3xl border border-line bg-white p-7">
+              <p class="font-[family-name:var(--font-en)] text-2xl font-bold text-brand-line">{String(i + 1).padStart(2, '0')}</p>
+              <h3 class="mt-2 font-black">{c.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-2">{c.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24" id="seo">
+    <div class="container-x">
+      <SectionHeading
+        eyebrow="SEO"
+        title="標準で行うSEOの内部対策"
+        lead="検索順位を約束することはできません。そのかわり、ホームページの側でできる対策は、追加料金なしですべて行います。"
+      />
+      <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          seo.map((s) => (
+            <li class="fade-in rounded-3xl border border-line bg-white p-7">
+              <h3 class="font-black">{s.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-2">{s.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="bg-ground py-16 md:py-24" id="tech">
+    <div class="container-x">
+      <div class="mx-auto grid max-w-5xl items-center gap-10 md:grid-cols-2">
+        <div class="fade-in">
+          <p class="eyebrow">Technology</p>
+          <h2 class="mt-2 text-2xl leading-snug font-black md:text-3xl">WordPressを使わない<br />「静的サイト」で作る理由</h2>
+          <p class="mt-5 leading-relaxed text-ink-2">
+            LiteSiteは、Astro（アストロ）という仕組みで、あらかじめ完成させたページをサーバーに置く「静的サイト」を作ります。アクセスのたびにページを組み立てるWordPressと比べて、表示が速く、管理の手間と攻撃を受ける入口が少ないのが特長です。
+          </p>
+          <p class="mt-4 leading-relaxed text-ink-2">
+            いっぽうで、管理画面から自分で記事を書く使い方には向きません。更新の頻度や運用の体制をうかがったうえで、合う作り方をご提案します。
+          </p>
+          <a href="/column/wordpress-vs-static-site/" class="mt-6 inline-block font-bold text-brand hover:underline">静的サイトとWordPressの違いを詳しく →</a>
+        </div>
+        <dl class="fade-in grid grid-cols-2 gap-4">
+          <div class="rounded-3xl border border-line bg-white p-6">
+            <dt class="text-xs font-bold text-muted">月々の保守作業</dt>
+            <dd class="mt-2 text-xl font-black">ほぼ不要</dd>
+          </div>
+          <div class="rounded-3xl border border-line bg-white p-6">
+            <dt class="text-xs font-bold text-muted">ログイン画面</dt>
+            <dd class="mt-2 text-xl font-black">なし</dd>
+          </div>
+          <div class="rounded-3xl border border-line bg-white p-6">
+            <dt class="text-xs font-bold text-muted">データベース</dt>
+            <dd class="mt-2 text-xl font-black">なし</dd>
+          </div>
+          <div class="rounded-3xl border border-line bg-white p-6">
+            <dt class="text-xs font-bold text-muted">画像の最適化</dt>
+            <dd class="mt-2 text-xl font-black">自動</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24" id="area">
+    <div class="container-x">
+      <div class="fade-in mx-auto max-w-3xl rounded-3xl border border-line bg-white p-8 md:p-12">
+        <p class="eyebrow">Area</p>
+        <h2 class="mt-2 text-2xl font-black md:text-3xl">対応エリア</h2>
+        <p class="mt-5 leading-relaxed text-ink-2">
+          <strong class="text-ink">{AREAS.main.join('・')}</strong>を中心に、{AREAS.nearby.join('・')}など愛知県内は対面で打ち合わせにうかがいます。県外のお客様や、移動の時間を取りたくない方はZoom・LINEで対応します。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CtaSection location="service_bottom" />
+</Layout>

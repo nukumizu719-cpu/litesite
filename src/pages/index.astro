@@ -1,181 +1,296 @@
 ---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import RaceCard from '../components/RaceCard.astro';
-import StatsSummary from '../components/StatsSummary.astro';
-import LineSection from '../components/LineSection.astro';
-import { getRaces, getStats } from '../lib/stats';
-import { SITE } from '../config';
+import SectionHeading from '../components/SectionHeading.astro';
+import PlanCards from '../components/PlanCards.astro';
+import WorksGrid from '../components/WorksGrid.astro';
+import FaqList from '../components/FaqList.astro';
+import CtaSection from '../components/CtaSection.astro';
+import ColumnCard from '../components/ColumnCard.astro';
+import { LINE_URL, AREAS } from '../config';
+import { FAQS } from '../data/faq';
+import { FLOW } from '../data/flow';
+import { WORKS } from '../data/works';
 
-const races = await getRaces();
-const latest = races.slice(0, 3);
-const stats = getStats();
+const topFaqs = FAQS.filter((f) => f.top);
+const columns = (await getCollection('column', (e) => !e.data.draft))
+  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
+  .slice(0, 3);
 
-const pillars = [
+const problems = [
+  'ホームページはあるのに、問い合わせがほとんど来ない',
+  'WordPressの操作が難しくて、作ったきり触っていない',
+  '更新や管理がよく分からず、何年も放置している',
+  '制作会社に頼むと、毎月の管理費がかかりそうで不安',
+  '更新しないと壊れたり、乗っ取られたりしないか心配',
+  'シンプルで、きちんとした印象のサイトがほしい',
+];
+
+const reasons = [
   {
-    n: '01',
-    title: 'ロジックを隠さない',
-    body: '人気馬を減点方式でふるいにかけるチェックリストと、ワイドを起点にした買い目の組み立て方をすべて公開しています。同じ手順を踏めば、誰でも同じ結論にたどり着けます。',
-    href: '/logic/',
-    cta: 'ロジックを見る',
+    no: '01',
+    title: '表示が速いから、検索にも来訪者にも強い',
+    body: '完成済みのページをそのまま配信する「静的サイト」で作ります。表示の速さはGoogleが評価に使う指標のひとつ。スマートフォンで待たされないことは、そのまま問い合わせの増加につながります。',
   },
   {
-    n: '02',
-    title: '負けた記録も残す',
-    body: '投資額と払戻をレースごとに記録し、回収率と的中率はサイトが自動で計算しています。都合の良い結果だけを残すことができない作りです。',
-    href: '/results/',
-    cta: '全成績を見る',
+    no: '02',
+    title: '月額の管理費は0円から',
+    body: 'WordPressのような本体やプラグインの更新作業がありません。管理のために毎月費用を払う必要がなく、そのぶんを広告や本業への投資に回せます。',
   },
   {
-    n: '03',
-    title: 'ルールを更新していく',
-    body: '外したレースから何を学び、どのルールをどう変えたのかを日付つきで残しています。ロジックが固定されていないことこそ、この記録の価値だと考えています。',
-    href: '/logic/updates/',
-    cta: '更新履歴を見る',
+    no: '03',
+    title: 'SEOの内部対策を標準で実施',
+    body: '狙う検索キーワードをヒアリングで決め、タイトル・見出し・説明文を設計します。構造化データやサイトマップ、アクセス解析の設定まで、追加料金なしで行います。',
   },
+  {
+    no: '04',
+    title: '改ざんやサーバー攻撃の心配が少ない',
+    body: 'ログイン画面やデータベースを持たないため、WordPressで多い不正ログインや脆弱性を突いた改ざんを、そもそも受けにくい構造です。',
+  },
+];
+
+const compare = [
+  { label: '表示の速さ', wp: 'プラグインやテーマ次第で遅くなりやすい', ls: '完成済みのページを配信するので速い' },
+  { label: '月々の管理', wp: '本体・プラグインの更新が必要', ls: '更新作業は不要' },
+  { label: 'セキュリティ', wp: '不正ログイン・脆弱性への対策が必要', ls: 'ログイン画面がなく、攻撃を受けにくい' },
+  { label: '自分での文章更新', wp: '管理画面から自分で更新できる', ls: '更新は依頼する形（サブスクなら月1回無料）' },
 ];
 ---
 
 <Layout>
-  {/* ── ヒーロー ── */}
-  <section class="border-b border-line">
-    <div class="mx-auto max-w-5xl px-5 pt-14 pb-12 md:pt-20 md:pb-16">
-      <p class="flex items-center gap-3 font-[family-name:var(--font-mono)] text-[10px] font-semibold tracking-[0.22em] text-dirt uppercase">
-        {SITE.nameEn}
-        <span class="h-px flex-1 bg-line"></span>
-      </p>
-
-      <h1 class="mt-5 max-w-3xl font-[family-name:var(--font-display)] text-[2.1rem] leading-[1.28] font-extrabold text-balance md:text-[3.2rem]">
-        当たったかどうかより、<br class="hidden sm:block" />
-        <span class="text-turf">なぜそう買ったか</span>を残す。
-      </h1>
-
-      <p class="mt-7 max-w-xl leading-[1.9] text-ink-2">
-        人気馬を減点方式でふるいにかけ、ワイドを起点に馬券を組み立てる。
-        その手順をすべて公開したうえで、投資額と払戻を1円単位で記録しています。
-        回収率は実際に購入した全レースの記録からの自動集計なので、良かった週だけを見せることができません。
-      </p>
-
-      <div class="mt-9 flex flex-wrap gap-3">
-        <a
-          href="/races/"
-          class="rounded-full bg-turf px-6 py-3 text-sm font-bold text-ground transition-opacity hover:opacity-85"
-        >
-          最新の予想を読む
-        </a>
-        <a
-          href="/logic/"
-          class="rounded-full border border-line px-6 py-3 text-sm font-bold text-ink-2 transition-colors hover:border-turf hover:text-turf"
-        >
-          予想ロジックを見る
-        </a>
-      </div>
-
-      <div class="mt-12 max-w-2xl">
-        <StatsSummary stats={stats} label="通算" />
-        <p class="mt-3 font-[family-name:var(--font-mono)] text-[11px] text-muted">
-          ※ 実際に購入した全レースの記録から自動集計しています
+  {/* ===== ファーストビュー ===== */}
+  <section class="relative overflow-hidden bg-ground">
+    <div class="pointer-events-none absolute -top-40 -right-40 h-[28rem] w-[28rem] rounded-full bg-brand-soft blur-3xl" aria-hidden="true"></div>
+    <div class="container-x relative grid items-center gap-12 py-12 md:py-20 lg:grid-cols-12 lg:py-24">
+      <div class="lg:col-span-7">
+        <p class="inline-flex items-center gap-2 rounded-full border border-brand-line bg-white px-4 py-1.5 text-xs font-bold text-brand md:text-sm">
+          <span class="h-2 w-2 rounded-full bg-accent" aria-hidden="true"></span>
+          {AREAS.main.join('・')}のホームページ制作
         </p>
-      </div>
-    </div>
-  </section>
-
-  {/* ── 最新の予想 ── */}
-  <section class="mx-auto max-w-5xl px-5 py-14">
-    <div class="mb-7 flex items-end justify-between gap-4">
-      <div>
-        <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.18em] text-dirt uppercase">
-          Latest
+        <h1 class="mt-6 text-[2rem] leading-[1.35] font-black tracking-tight md:text-5xl md:leading-[1.3]">
+          問い合わせにつながる<br />ホームページを、<br /><span class="text-brand">月額0円</span>から。
+        </h1>
+        <p class="mt-6 max-w-xl leading-relaxed text-ink-2 md:text-lg">
+          表示が速く、管理の手間がいらない静的サイトで、愛知県の個人事業主・小規模事業者の集客を支えます。SEOの内部対策は標準で。ヒアリングから公開まで、制作者がひとりで責任をもって担当します。
         </p>
-        <h2 class="mt-2 font-[family-name:var(--font-display)] text-2xl font-bold">最新の予想</h2>
-      </div>
-      <a href="/races/" class="shrink-0 text-sm font-semibold text-ink-2 hover:text-turf">
-        すべて見る →
-      </a>
-    </div>
-
-    {
-      latest.length === 0 ? (
-        <p class="rounded-lg border border-line bg-surface px-5 py-12 text-center text-sm text-muted">
-          まだ記事がありません。
-        </p>
-      ) : (
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {latest.map((race) => (
-            <RaceCard race={race} />
-          ))}
-        </div>
-      )
-    }
-  </section>
-
-  {/* ── 3本柱 ── */}
-  <section class="border-y border-line bg-surface">
-    <div class="mx-auto max-w-5xl px-5 py-14">
-      <p class="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.18em] text-dirt uppercase">
-        Approach
-      </p>
-      <h2 class="mt-2 font-[family-name:var(--font-display)] text-2xl font-bold text-balance">
-        このサイトが他と違うところ
-      </h2>
-
-      <div class="mt-9 grid gap-px bg-line md:grid-cols-3">
-        {
-          pillars.map((p) => (
-            <div class="fade-in flex flex-col bg-surface p-6">
-              <p class="font-[family-name:var(--font-mono)] text-xs font-semibold tracking-[0.14em] text-dirt">
-                {p.n}
-              </p>
-              <h3 class="mt-3 font-[family-name:var(--font-display)] text-lg font-bold text-balance">
-                {p.title}
-              </h3>
-              <p class="mt-3 text-sm leading-relaxed text-ink-2">{p.body}</p>
-              <a
-                href={p.href}
-                class="mt-5 inline-block font-[family-name:var(--font-mono)] text-[11px] text-turf underline underline-offset-4 hover:no-underline"
-              >
-                {p.cta} →
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href="/contact/" data-cta="hero" class="btn btn-primary px-8 py-4 text-base">
+            無料で相談する<span aria-hidden="true">→</span>
+          </a>
+          {
+            LINE_URL && (
+              <a href={LINE_URL} target="_blank" rel="noopener noreferrer" data-cta="hero" class="btn btn-line px-8 py-4 text-base">
+                <img src="/line.svg" alt="" width="22" height="22" class="h-[22px] w-[22px]" />
+                LINEで相談する
               </a>
-            </div>
+            )
+          }
+        </div>
+        <dl class="mt-10 grid max-w-xl grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-4">
+          <div class="bg-white p-4">
+            <dt class="text-[11px] font-bold text-muted">制作費</dt>
+            <dd class="mt-1 font-bold"><span class="font-[family-name:var(--font-en)] text-lg">22.9</span>万円〜</dd>
+          </div>
+          <div class="bg-white p-4">
+            <dt class="text-[11px] font-bold text-muted">月額管理費</dt>
+            <dd class="mt-1 font-bold"><span class="font-[family-name:var(--font-en)] text-lg">0</span>円〜</dd>
+          </div>
+          <div class="bg-white p-4">
+            <dt class="text-[11px] font-bold text-muted">公開までの目安</dt>
+            <dd class="mt-1 font-bold">約<span class="font-[family-name:var(--font-en)] text-lg">1</span>ヶ月</dd>
+          </div>
+          <div class="bg-white p-4">
+            <dt class="text-[11px] font-bold text-muted">打ち合わせ</dt>
+            <dd class="mt-1 font-bold">対面・Zoom</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="relative hidden lg:col-span-5 lg:block" aria-hidden="true">
+        <div class="relative ml-auto w-[88%] rotate-2 overflow-hidden rounded-2xl border border-line bg-white shadow-2xl shadow-brand/10">
+          <div class="flex gap-1.5 border-b border-line bg-ground px-3 py-2.5">
+            <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span><span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span><span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
+          </div>
+          <Image src={WORKS[0].image} alt="" widths={[480, 960]} sizes="40vw" loading="eager" fetchpriority="high" class="w-full" />
+        </div>
+        <div class="absolute -bottom-10 -left-2 w-[62%] -rotate-3 overflow-hidden rounded-2xl border border-line bg-white shadow-2xl shadow-brand/10">
+          <div class="flex gap-1.5 border-b border-line bg-ground px-3 py-2">
+            <span class="h-2 w-2 rounded-full bg-slate-300"></span><span class="h-2 w-2 rounded-full bg-slate-300"></span><span class="h-2 w-2 rounded-full bg-slate-300"></span>
+          </div>
+          <Image src={WORKS[2].image} alt="" widths={[360, 720]} sizes="28vw" loading="eager" class="w-full" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== お悩み ===== */}
+  <section class="py-16 md:py-24">
+    <div class="container-x">
+      <SectionHeading eyebrow="Problems" title="こんなお悩み、<br class='sm:hidden' />ありませんか？" />
+      <ul class="mx-auto grid max-w-4xl gap-3 md:grid-cols-2">
+        {
+          problems.map((p) => (
+            <li class="fade-in flex items-start gap-3 rounded-2xl border border-line bg-white p-5">
+              <svg class="mt-0.5 h-5 w-5 shrink-0 text-brand" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4L8 12.58l7.3-7.3a1 1 0 0 1 1.4 0Z" clip-rule="evenodd" />
+              </svg>
+              <span class="font-medium">{p}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="phrase fade-in mt-10 text-center text-lg leading-relaxed font-bold md:text-xl">
+        LiteSiteは、<span class="bg-[linear-gradient(transparent_60%,#fde9b8_60%)]">「作って終わり」にも「管理費の払い続け」にもならない</span><br class="hidden md:block" />ホームページをつくります。
+      </p>
+    </div>
+  </section>
+
+  {/* ===== 選ばれる理由 ===== */}
+  <section class="bg-ground py-16 md:py-24" id="reasons">
+    <div class="container-x">
+      <SectionHeading
+        eyebrow="Reasons"
+        title="LiteSiteが選ばれる<br class='sm:hidden' />4つの理由"
+        lead="WordPressを使わない「静的サイト」という作り方で、速さ・安さ・安全性を同時にかなえます。"
+      />
+      <div class="grid gap-5 md:grid-cols-2">
+        {
+          reasons.map((r) => (
+            <article class="fade-in rounded-3xl border border-line bg-white p-7 md:p-9">
+              <p class="font-[family-name:var(--font-en)] text-3xl font-bold text-brand-line">{r.no}</p>
+              <h3 class="mt-3 text-lg leading-snug font-black md:text-xl">{r.title}</h3>
+              <p class="mt-3 leading-relaxed text-ink-2">{r.body}</p>
+            </article>
           ))
         }
       </div>
+
+      {/* スマホはカード、md以上は表で見せる */}
+      <div class="fade-in mt-14 md:hidden">
+        <p class="mb-4 text-center font-bold">WordPressのサイトとの違い</p>
+        <ul class="space-y-3">
+          {
+            compare.map((c) => (
+              <li class="overflow-hidden rounded-2xl border border-line bg-white">
+                <p class="bg-ground px-4 py-2.5 text-sm font-bold">{c.label}</p>
+                <dl class="divide-y divide-line text-sm">
+                  <div class="flex gap-3 px-4 py-3">
+                    <dt class="w-20 shrink-0 text-xs font-bold text-muted">WordPress</dt>
+                    <dd class="text-ink-2">{c.wp}</dd>
+                  </div>
+                  <div class="flex gap-3 bg-brand-soft/50 px-4 py-3">
+                    <dt class="w-20 shrink-0 text-xs font-bold text-brand">LiteSite</dt>
+                    <dd class="font-medium">{c.ls}</dd>
+                  </div>
+                </dl>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="fade-in mt-14 hidden overflow-hidden rounded-3xl border border-line bg-white md:block">
+        <table class="w-full text-left">
+          <caption class="border-b border-line px-5 py-4 text-left font-bold md:px-7">WordPressのサイトとの違い</caption>
+          <thead class="bg-ground text-sm">
+            <tr>
+              <th scope="col" class="w-[22%] px-4 py-3 md:px-7"><span class="sr-only">項目</span></th>
+              <th scope="col" class="px-4 py-3 font-bold text-muted">一般的なWordPress</th>
+              <th scope="col" class="bg-brand-soft px-4 py-3 font-bold text-brand">LiteSite（静的サイト）</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-line">
+            {
+              compare.map((c) => (
+                <tr>
+                  <th scope="row" class="px-4 py-4 align-top font-bold md:px-7">{c.label}</th>
+                  <td class="px-4 py-4 align-top text-ink-2">{c.wp}</td>
+                  <td class="bg-brand-soft/50 px-4 py-4 align-top font-medium">{c.ls}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4 text-center text-sm">
+        <a href="/column/wordpress-vs-static-site/" class="font-bold text-brand hover:underline">静的サイトとWordPressの違いを詳しく読む →</a>
+      </p>
     </div>
   </section>
 
-  {/* ── ロジック導線 ── */}
-  <section class="mx-auto max-w-5xl px-5 py-14">
-    <div class="grid gap-4 md:grid-cols-3">
-      {
-        [
-          {
-            href: '/logic/checklist/',
-            title: '人気馬チェックリスト',
-            body: '人気馬の不安要素を−5点から−1点で減点し、最も減点の少ない馬を採用する。全項目を公開しています。',
-          },
-          {
-            href: '/logic/buying/',
-            title: '馬券購入ロジック',
-            body: 'ワイドを起点に、4〜6番人気×6〜10倍と1〜2番人気を組む。券種ごとの使い分けと、買わない基準まで。',
-          },
-          {
-            href: '/logic/danger/',
-            title: '危険な人気馬',
-            body: '前走逃げ、長期休み明け、特殊条件勝ち、枠替わり。切るべき人気馬を見抜く5つの判定基準。',
-          },
-        ].map((c) => (
-          <a
-            href={c.href}
-            class="fade-in group rounded-lg border border-line bg-surface p-6 transition-colors hover:border-turf"
-          >
-            <h3 class="font-[family-name:var(--font-display)] text-lg font-bold group-hover:text-turf">
-              {c.title}
-            </h3>
-            <p class="mt-3 text-sm leading-relaxed text-ink-2">{c.body}</p>
-          </a>
-        ))
-      }
+  {/* ===== 制作実績 ===== */}
+  <section class="py-16 md:py-24" id="works">
+    <div class="container-x">
+      <SectionHeading eyebrow="Works" title="制作実績" lead="愛知県をはじめ、個人事業主から法人まで。業種に合わせて、見つけてもらうための構成から一緒に考えています。" />
+      <WorksGrid />
+      <p class="mt-10 text-center">
+        <a href="/works/" class="btn btn-ghost px-8 py-3.5">制作実績をもっと見る</a>
+      </p>
     </div>
   </section>
 
-  <LineSection />
+  {/* ===== 料金 ===== */}
+  <section class="bg-ground py-16 md:py-24" id="price">
+    <div class="container-x">
+      <SectionHeading eyebrow="Price" title="料金プラン" lead="制作費は同じ。公開後の管理を自分でするか、任せるかでお選びください。" />
+      <PlanCards location="top_price" />
+      <p class="mt-8 text-center">
+        <a href="/price/" class="font-bold text-brand hover:underline">料金の詳細・含まれる作業を見る →</a>
+      </p>
+    </div>
+  </section>
+
+  {/* ===== 制作の流れ ===== */}
+  <section class="py-16 md:py-24" id="flow">
+    <div class="container-x">
+      <SectionHeading eyebrow="Flow" title="ご相談から公開までの流れ" lead="金額はヒアリング後のご提案で確定します。着手してから費用が増えることはありません。" />
+      <ol class="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          FLOW.slice(0, 7).map((s, i) => (
+            <li class="fade-in relative rounded-2xl border border-line bg-white p-6">
+              <p class="font-[family-name:var(--font-en)] text-xs font-bold tracking-widest text-brand">STEP {String(i + 1).padStart(2, '0')}</p>
+              <h3 class="mt-2 font-black">{s.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-2">{s.short}</p>
+            </li>
+          ))
+        }
+        <li class="fade-in flex items-center justify-center rounded-2xl border border-dashed border-brand-line bg-brand-soft/40 p-6 text-center">
+          <a href="/flow/" class="font-bold text-brand hover:underline">各ステップの詳細と<br />お願いすること →</a>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  {/* ===== FAQ ===== */}
+  <section class="bg-ground py-16 md:py-24" id="faq">
+    <div class="container-x">
+      <SectionHeading eyebrow="FAQ" title="よくある質問" />
+      <div class="mx-auto max-w-3xl">
+        <FaqList items={topFaqs} />
+        <p class="mt-8 text-center">
+          <a href="/faq/" class="btn btn-ghost px-8 py-3.5">質問をすべて見る</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== コラム ===== */}
+  {
+    columns.length > 0 && (
+      <section class="py-16 md:py-24">
+        <div class="container-x">
+          <SectionHeading eyebrow="Column" title="ホームページづくりのコラム" lead="依頼する前に知っておくと失敗しにくいことを、制作者の視点でまとめています。" />
+          <ul class="grid gap-5 md:grid-cols-3">
+            {columns.map((c) => (
+              <li class="fade-in">
+                <ColumnCard entry={c} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaSection location="top_bottom" />
 </Layout>

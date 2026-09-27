@@ -1,74 +1,72 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
-import LineSection from '../components/LineSection.astro';
-import { SITE } from '../config';
+import CtaSection from '../components/CtaSection.astro';
+import { SITE, BUSINESS, AREAS, LINE_URL } from '../config';
+
+const breadcrumbs = [{ label: '運営者情報', href: '/about/' }];
+
+const rows = [
+  { label: '屋号', value: SITE.titleSuffix },
+  { label: '代表者', value: BUSINESS.owner },
+  { label: '所在地', value: `${BUSINESS.postalCode ? `〒${BUSINESS.postalCode} ` : ''}${BUSINESS.region}${BUSINESS.locality}${BUSINESS.street}` },
+  { label: '事業内容', value: 'ホームページの企画・制作、公開後の運用・保守、Web集客のご相談' },
+  { label: '対応エリア', value: `${AREAS.main.join('・')}を中心に愛知県全域（県外はオンライン対応）` },
+  { label: '営業時間', value: `${BUSINESS.hours}（${BUSINESS.hoursNote}）` },
+  { label: '電話番号', value: BUSINESS.tel },
+  { label: 'メール', value: BUSINESS.email },
+].filter((r) => r.value);
 ---
 
 <Layout
-  title="このサイトについて"
-  description={`${SITE.name}の運営方針。何を公開し、何を保証しないのか。予想の作り方と、数字の集計方法について説明しています。`}
+  title="運営者情報"
+  description="LiteSite（ライトサイト）は愛知県安城市を拠点に、名古屋・西三河エリアの個人事業主・小規模事業者のホームページを制作しています。屋号・所在地・事業内容・対応エリアのご案内。"
+  breadcrumbs={breadcrumbs}
 >
-  <PageHeader
-    eyebrow="About"
-    title="このサイトについて"
-    lead="独自の減点式チェックリストと馬券購入ロジックを、AIに適用して予想を組み立てています。ルールも、勝敗も、投資額も、隠さず残すことを方針にしています。"
-  />
+  <PageHeader eyebrow="About" title="運営者情報" breadcrumbs={breadcrumbs} />
 
-  <div class="mx-auto max-w-3xl px-5 py-12">
-    <section class="prose">
-      <h2>やっていること</h2>
-      <p>
-        毎週、注目したレースについて次の手順で予想を組み立て、記事として公開しています。
-      </p>
-      <ol>
-        <li>出馬表とオッズを確認する</li>
-        <li>上位人気の各馬を<a href="/logic/checklist/">人気馬チェックリスト</a>にかけ、減点を集計する</li>
-        <li><a href="/logic/danger/">危険な人気馬</a>の判定基準に照らし、切る馬を決める</li>
-        <li><a href="/logic/buying/">馬券購入ロジック</a>に沿って、ワイドを起点に買い目を組む</li>
-        <li>レース後、結果と払戻を同じ記事に追記する</li>
-      </ol>
-      <p>
-        この2〜4のステップで、判断の整理と文章化にAIを使っています。
-        ルールを与えて出力させ、こちらで最終判断をしてから公開する形です。
-        <strong>AIが独自に馬を選んでいるのではなく、公開しているルールを適用させています。</strong>
-      </p>
+  <section class="py-14 md:py-20">
+    <div class="container-x">
+      <div class="mx-auto max-w-3xl">
+        <div class="fade-in prose">
+          <h2>小さな事業者のための、ちょうどいいホームページを</h2>
+          <p>
+            LiteSite（ライトサイト）は、愛知県{BUSINESS.locality}を拠点にホームページ制作を請け負っています。お客様の多くは、ひとりや少人数で事業を営む個人事業主・小規模事業者の方です。
+          </p>
+          <p>
+            そうした方にとって、WordPressの更新作業や毎月の管理費は、本業の時間とお金を少しずつ奪う負担になりがちです。LiteSiteでは、表示が速く、管理の手間がほとんどいらない「静的サイト」という作り方を選び、作ったあとも負担にならないホームページを届けることを大切にしています。
+          </p>
+          <p>
+            制作会社のような分業ではなく、ヒアリングから設計・制作・公開まで同じ担当者が行います。伝えたことが途中で抜け落ちず、公開後の相談もそのまま同じ相手にできます。
+          </p>
+        </div>
 
-      <h2>数字について</h2>
-      <p>
-        <a href="/results/">成績ページ</a>に出ている回収率・的中率・収支は、
-        すべてJRAの購入記録に基づく台帳から、ページを生成するたびに計算しています。
-        記事にしていないレースも集計対象に含まれるため、成績の良いレースだけを選んで載せることができません。
-      </p>
-      <p>
-        つまり、<strong>都合の悪いレースを集計から外すには、台帳そのものからレコードを消すしかない</strong>作りになっています。
-        台帳のレコードは消さない方針なので、記事化していないレースも成績にそのまま残ります。
-      </p>
+        <h2 class="mt-16 text-xl font-black">事業者概要</h2>
+        <dl class="mt-6 divide-y divide-line rounded-3xl border border-line bg-white">
+          {
+            rows.map((r) => (
+              <div class="grid gap-1 px-6 py-5 md:grid-cols-4 md:gap-6 md:px-8">
+                <dt class="font-bold">{r.label}</dt>
+                <dd class="text-ink-2 md:col-span-3">{r.value}</dd>
+              </div>
+            ))
+          }
+          {
+            LINE_URL && (
+              <div class="grid gap-1 px-6 py-5 md:grid-cols-4 md:gap-6 md:px-8">
+                <dt class="font-bold">LINE</dt>
+                <dd class="md:col-span-3">
+                  <a href={LINE_URL} target="_blank" rel="noopener noreferrer" data-cta="about" class="font-bold text-brand underline">
+                    LINEで友だち追加する
+                  </a>
+                </dd>
+              </div>
+            )
+          }
+        </dl>
+      </div>
+    </div>
+  </section>
 
-      <h2>やらないこと</h2>
-      <ul>
-        <li>的中や利益を保証すること。予想が外れることは前提です</li>
-        <li>「絶対」「必ず」といった断定的な表現を使うこと</li>
-        <li>実績を後から書き換えること</li>
-        <li>他の予想家の予想を転載すること</li>
-        <li>読者から資金を預かって代理で馬券を購入すること</li>
-      </ul>
-
-      <h2>免責</h2>
-      <p>
-        当サイトの内容は情報提供であり、的中および利益を保証するものではありません。
-        馬券の購入は20歳になってから、必ずご自身の判断と責任において、
-        余裕資金の範囲で行ってください。詳しくは<a href="/disclaimer/">免責事項</a>および
-        <a href="/terms/">利用規約</a>をご確認ください。
-      </p>
-
-      <h2>運営</h2>
-      <p>
-        {SITE.author}<br />
-        ご連絡は<a href="/contact/">お問い合わせ</a>からお願いします。
-      </p>
-    </section>
-  </div>
-
-  <LineSection />
+  <CtaSection location="about_bottom" />
 </Layout>

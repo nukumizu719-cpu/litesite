@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ColumnCard from '../../components/ColumnCard.astro';
+import CtaSection from '../../components/CtaSection.astro';
+
+const entries = (await getCollection('column', (e) => !e.data.draft)).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf()
+);
+const breadcrumbs = [{ label: 'コラム', href: '/column/' }];
+---
+
+<Layout
+  title="ホームページ制作のコラム"
+  description="ホームページ制作の費用、WordPressと静的サイトの違い、依頼前の準備、補助金の使い方など、小規模事業者がホームページで失敗しないための情報を制作者の視点でまとめています。"
+  breadcrumbs={breadcrumbs}
+>
+  <PageHeader
+    eyebrow="Column"
+    title="ホームページ制作のコラム"
+    lead="依頼する前に知っておくと失敗しにくいことを、制作者の視点でまとめています。"
+    breadcrumbs={breadcrumbs}
+  />
+  <section class="py-14 md:py-20">
+    <div class="container-x">
+      <ul class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {
+          entries.map((e) => (
+            <li>
+              <ColumnCard entry={e} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+  <CtaSection location="column_index" />
+</Layout>

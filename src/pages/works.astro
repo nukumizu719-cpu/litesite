@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import WorksGrid from '../components/WorksGrid.astro';
+import CtaSection from '../components/CtaSection.astro';
+
+const breadcrumbs = [{ label: '制作実績', href: '/works/' }];
+---
+
+<Layout
+  title="ホームページ制作実績"
+  description="LiteSite（ライトサイト）のホームページ制作実績。愛知県岡崎市の人工芝施工店をはじめ、個人事業主から法人のコーポレートサイトまで、業種に合わせた構成とデザインで制作しています。"
+  breadcrumbs={breadcrumbs}
+>
+  <PageHeader
+    eyebrow="Works"
+    title="制作実績"
+    lead="業種もお客様像もさまざまですが、どのサイトも「誰に、どんな検索で見つけてもらうか」を最初に決めてから作っています。"
+    breadcrumbs={breadcrumbs}
+  />
+  <section class="py-14 md:py-20">
+    <div class="container-x">
+      <h2 class="sr-only">制作したホームページ</h2>
+      <WorksGrid detailed />
+    </div>
+  </section>
+  <CtaSection location="works_bottom" title="あなたの事業のホームページも、<br class='hidden sm:block' />ご相談ください" />
+</Layout>
