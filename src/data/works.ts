@@ -5,7 +5,6 @@
 import type { ImageMetadata } from 'astro';
 import relagarden from '../assets/works/relagarden.jpg';
 import miwaInfo from '../assets/works/miwa-info.jpg';
-import miwacoin from '../assets/works/miwacoin.jpg';
 import gofish from '../assets/works/gofish.jpg';
 
 export interface Work {
@@ -63,15 +62,5 @@ export const WORKS: Work[] = [
     alt: '家系図作成サービス・合同会社ゴーフィッシュジャパン様のホームページのトップ画面',
     summary: '家族の歴史を扱うサービスにふさわしい、落ち着いた温かみのあるデザイン。サービス内容から料金・流れ・よくある質問までを1ページで伝えます。',
     points: ['写真と明朝体で温かみを出したデザイン', '料金の目安と作成の流れを明示', 'サービスの範囲（法的手続きは対象外）を冒頭で明記'],
-  },
-  {
-    client: '株式会社MIWA様',
-    industry: 'コンサルティング',
-    location: '滋賀県彦根市',
-    url: 'https://miwacoin.com/',
-    image: miwacoin,
-    alt: '株式会社MIWA様のコーポレートサイトのトップ画面',
-    summary: '事業内容・サービス・会社概要を1ページにまとめた、シンプルなコーポレートサイトです。',
-    points: ['1ページ完結のコーポレートサイト', '事業内容とサービスを整理した構成', '会社概要・お問い合わせまでの短い導線'],
   },
 ];

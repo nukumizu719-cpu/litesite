@@ -38,7 +38,7 @@ export const PLANS: Plan[] = [
     id: 'growth',
     name: '集客プラン',
     lead: '検索からの問い合わせを本格的に増やしたい方へ',
-    price: 650000,
+    price: 715000,
     pages: '20〜30ページ規模',
     features: [
       'スタンダードプランの内容すべて',
