@@ -3,44 +3,84 @@ import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import PlanCards from '../components/PlanCards.astro';
+import CarePlans from '../components/CarePlans.astro';
 import FaqList from '../components/FaqList.astro';
 import CtaSection from '../components/CtaSection.astro';
-import { PLAN_COMMON, PLANS, formatYen } from '../data/plans';
+import { PLAN_COMMON, PLANS, CARE_PLANS, formatYen } from '../data/plans';
 import { FAQS } from '../data/faq';
 
 const breadcrumbs = [{ label: '料金', href: '/price/' }];
 const priceFaqs = FAQS.filter((f) => f.category === '料金・契約');
-const [self, sub] = PLANS;
+const [standard, growth] = PLANS;
+const [self, sub] = CARE_PLANS;
 
 const fits = [
   {
-    plan: self,
-    items: ['公開後に内容を変えることがほとんどない', 'ドメインやサーバーの契約を自分で管理できる', '維持費をできるだけ抑えたい'],
-    note: 'ページの修正や追加が必要になったときは、その都度お見積りします。',
+    plan: standard,
+    items: ['開業・創業にあわせて、まずホームページを持ちたい', '会社・お店の紹介と問い合わせ窓口があれば十分', '費用を抑えて始め、あとから育てたい'],
   },
   {
-    plan: sub,
-    items: ['年に何度か、文章や写真を差し替えたい', 'ドメイン・サーバーの更新手続きを任せたい', '集客について気軽に相談できる相手がほしい'],
-    note: 'ドメイン・サーバーの費用は月額に含まれます。',
+    plan: growth,
+    items: ['対応エリアが広く、地域ごとに検索で見つけてほしい', '施工事例や実績を1件ずつ詳しく見せたい', 'ホームページを営業の柱にしたい'],
   },
 ];
 ---
 
 <Layout
   title="ホームページ制作の料金プラン"
-  description={`ホームページ制作の料金。制作費${formatYen(self.initial)}〜（税込）、月額管理費0円のセルフ運用プランと、更新・管理をお任せいただける月額${formatYen(sub.monthly)}の安心サブスクプランからお選びいただけます。名古屋・安城・愛知県対応。`}
+  description={`ホームページ制作の料金。10ページ前後までのスタンダードプラン${formatYen(standard.price)}〜、地域別ページや施工事例ページで集客を強化する集客プラン${formatYen(growth.price)}〜（税込）。公開後の管理は月額0円から選べます。名古屋・安城・愛知県対応。`}
   breadcrumbs={breadcrumbs}
 >
   <PageHeader
     eyebrow="Price"
     title="料金プラン"
-    lead="制作費はどちらのプランも同じです。公開後のドメイン・サーバーの管理や更新を、ご自身でするか、LiteSiteに任せるかでお選びください。"
+    lead="制作費は、サイトの規模に合わせて2つのプランから。公開後の管理は、ご自身で行う（月額0円）か、LiteSiteに任せる（月額4,980円）かを別にお選びいただけます。"
     breadcrumbs={breadcrumbs}
   />
 
   <section class="py-16 md:py-24">
     <div class="container-x">
+      <SectionHeading eyebrow="Production" title="制作プラン" />
       <PlanCards location="price_page" />
+    </div>
+  </section>
+
+  <section class="bg-ground py-16 md:py-24">
+    <div class="container-x">
+      <SectionHeading eyebrow="Which plan" title="どちらの制作プランが向いている？" />
+      <div class="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
+        {
+          fits.map(({ plan, items }) => (
+            <article class="fade-in rounded-3xl border border-line bg-white p-7 md:p-9">
+              <h3 class="text-lg font-black">{plan.name}が向いている方</h3>
+              <ul class="mt-5 space-y-3">
+                {items.map((f) => (
+                  <li class="flex gap-3">
+                    <svg class="mt-1 h-4 w-4 shrink-0 text-brand" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4L8 12.58l7.3-7.3a1 1 0 0 1 1.4 0Z" clip-rule="evenodd" />
+                    </svg>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+      <p class="mx-auto mt-6 max-w-3xl text-center text-sm leading-relaxed text-ink-2">
+        スタンダードプランで始めて、あとから地域別ページや事例ページを追加していくこともできます。
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24" id="care">
+    <div class="container-x">
+      <SectionHeading
+        eyebrow="After launch"
+        title="公開後の運用プラン"
+        lead={`どちらの制作プランとも組み合わせられます。${self.name}なら月額0円、${sub.name}なら月額${formatYen(sub.monthly)}（税込）です。`}
+      />
+      <CarePlans detailed />
     </div>
   </section>
 
@@ -63,32 +103,6 @@ const fits = [
 
   <section class="py-16 md:py-24">
     <div class="container-x">
-      <SectionHeading eyebrow="Which plan" title="どちらのプランが向いている？" />
-      <div class="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
-        {
-          fits.map(({ plan, items, note }) => (
-            <article class="fade-in rounded-3xl border border-line bg-white p-7 md:p-9">
-              <h3 class="text-lg font-black">{plan.name}が向いている方</h3>
-              <ul class="mt-5 space-y-3">
-                {items.map((f) => (
-                  <li class="flex gap-3">
-                    <svg class="mt-1 h-4 w-4 shrink-0 text-brand" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4L8 12.58l7.3-7.3a1 1 0 0 1 1.4 0Z" clip-rule="evenodd" />
-                    </svg>
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-              <p class="mt-6 border-t border-line pt-5 text-sm text-muted">{note}</p>
-            </article>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <section class="bg-ground py-16 md:py-24">
-    <div class="container-x">
       <div class="mx-auto grid max-w-5xl gap-6 md:grid-cols-3">
         <div class="fade-in rounded-3xl border border-line bg-white p-7">
           <h2 class="font-black">お支払い方法</h2>
@@ -96,7 +110,7 @@ const fits = [
         </div>
         <div class="fade-in rounded-3xl border border-line bg-white p-7">
           <h2 class="font-black">納期の目安</h2>
-          <p class="mt-3 text-sm leading-relaxed text-ink-2">制作着手から通常1ヶ月程度です。素材をご用意いただく時期によって前後します。</p>
+          <p class="mt-3 text-sm leading-relaxed text-ink-2">スタンダードプランは制作着手から通常1ヶ月程度です。集客プランはページ数に応じて、ご提案時にスケジュールをお伝えします。</p>
         </div>
         <div class="fade-in rounded-3xl border border-line bg-white p-7">
           <h2 class="font-black">補助金を使う場合</h2>
@@ -108,7 +122,7 @@ const fits = [
     </div>
   </section>
 
-  <section class="py-16 md:py-24">
+  <section class="bg-ground py-16 md:py-24">
     <div class="container-x">
       <SectionHeading eyebrow="FAQ" title="料金についてのよくある質問" />
       <div class="mx-auto max-w-3xl">

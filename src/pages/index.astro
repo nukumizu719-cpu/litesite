@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import PlanCards from '../components/PlanCards.astro';
+import CarePlans from '../components/CarePlans.astro';
 import WorksGrid from '../components/WorksGrid.astro';
 import FaqList from '../components/FaqList.astro';
 import CtaSection from '../components/CtaSection.astro';
@@ -98,7 +99,7 @@ const compare = [
           </div>
           <div class="bg-white p-4">
             <dt class="text-[11px] font-bold text-muted">公開までの目安</dt>
-            <dd class="mt-1 font-bold">約<span class="font-[family-name:var(--font-en)] text-lg">1</span>ヶ月</dd>
+            <dd class="mt-1 font-bold">約<span class="font-[family-name:var(--font-en)] text-lg">1</span>ヶ月〜</dd>
           </div>
           <div class="bg-white p-4">
             <dt class="text-[11px] font-bold text-muted">打ち合わせ</dt>
@@ -232,8 +233,10 @@ const compare = [
   {/* ===== 料金 ===== */}
   <section class="bg-ground py-16 md:py-24" id="price">
     <div class="container-x">
-      <SectionHeading eyebrow="Price" title="料金プラン" lead="制作費は同じ。公開後の管理を自分でするか、任せるかでお選びください。" />
+      <SectionHeading eyebrow="Price" title="料金プラン" lead="制作費はサイトの規模に合わせて2プラン。公開後の管理は月額0円から選べます。" />
       <PlanCards location="top_price" />
+      <h3 class="fade-in mt-16 mb-6 text-center text-lg font-black">公開後の運用プラン<span class="ml-2 text-sm font-bold text-muted">どちらの制作プランとも組み合わせOK</span></h3>
+      <CarePlans headingLevel="h4" />
       <p class="mt-8 text-center">
         <a href="/price/" class="font-bold text-brand hover:underline">料金の詳細・含まれる作業を見る →</a>
       </p>

@@ -7,6 +7,8 @@ interface Props {
 }
 
 const { location } = Astro.props;
+const check =
+  'M16.7 5.3a1 1 0 0 1 0 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4L8 12.58l7.3-7.3a1 1 0 0 1 1.4 0Z';
 ---
 
 <div class="mx-auto grid max-w-5xl items-stretch gap-6 lg:grid-cols-2 lg:gap-8">
@@ -20,47 +22,43 @@ const { location } = Astro.props;
       >
         {plan.recommended && (
           <p class="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-accent px-4 py-1 text-xs font-bold whitespace-nowrap text-ink">
-            おまかせしたい方に人気
+            検索から問い合わせを増やすなら
           </p>
         )}
         <h3 class="text-xl font-black">{plan.name}</h3>
         <p class="mt-1 text-sm text-muted">{plan.lead}</p>
 
         <div class="mt-6 rounded-2xl bg-ground p-5">
-          <p class="text-xs font-bold text-muted">制作費</p>
-          <p class="mt-1 flex items-baseline gap-1">
+          <div class="flex items-baseline justify-between gap-3">
+            <p class="text-xs font-bold text-muted">制作費</p>
+            <p class="rounded-full bg-white px-3 py-1 text-xs font-bold text-brand">{plan.pages}</p>
+          </div>
+          <p class="mt-1 flex flex-wrap items-baseline gap-x-1">
             <span class="font-[family-name:var(--font-en)] text-4xl font-bold tracking-tight text-ink">
-              {plan.initial.toLocaleString('ja-JP')}
+              {plan.price.toLocaleString('ja-JP')}
             </span>
             <span class="text-sm font-bold">円〜</span>
             <span class="text-xs whitespace-nowrap text-muted">（税込）</span>
           </p>
-          <div class="mt-4 flex items-baseline justify-between border-t border-line pt-4">
-            <p class="text-xs font-bold text-muted">月額</p>
-            <p class="flex items-baseline gap-1">
-              <span class:list={['font-[family-name:var(--font-en)] text-2xl font-bold', plan.monthly === 0 ? 'text-brand' : 'text-ink']}>
-                {plan.monthly === 0 ? '0' : plan.monthly.toLocaleString('ja-JP')}
-              </span>
-              <span class="text-sm font-bold">円</span>
-              {plan.monthly > 0 && <span class="text-xs whitespace-nowrap text-muted">（税込）</span>}
-            </p>
-          </div>
         </div>
 
         <ul class="mt-7 flex-1 space-y-3 text-[0.95rem]">
           {plan.features.map((f) => (
             <li class="flex gap-3">
               <svg class="mt-1 h-4 w-4 shrink-0 text-brand" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4L8 12.58l7.3-7.3a1 1 0 0 1 1.4 0Z" clip-rule="evenodd" />
+                <path fill-rule="evenodd" d={check} clip-rule="evenodd" />
               </svg>
               <span>{f}</span>
             </li>
           ))}
         </ul>
 
-        <ul class="mt-6 space-y-1 border-t border-line pt-5 text-xs leading-relaxed text-muted">
-          {plan.notes.map((n) => <li>※{n}</li>)}
-        </ul>
+        {plan.example && (
+          <p class="mt-6 rounded-xl border border-brand-line bg-brand-soft/50 px-4 py-3 text-sm">
+            <span class="font-bold text-brand">制作例：</span>
+            <a href={plan.example.href} class="underline underline-offset-2 hover:text-brand">{plan.example.label}</a>
+          </p>
+        )}
 
         <a
           href={`/contact/?plan=${plan.id}`}

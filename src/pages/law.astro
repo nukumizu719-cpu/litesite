@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import { SITE, BUSINESS } from '../config';
-import { PLANS, formatYen } from '../data/plans';
+import { PLANS, CARE_PLANS, formatYen } from '../data/plans';
 
 const breadcrumbs = [{ label: '特定商取引法に基づく表記', href: '/law/' }];
 
@@ -20,13 +20,16 @@ const rows = [
   { label: 'メールアドレス', value: BUSINESS.email },
   {
     label: '販売価格',
-    value: PLANS.map((p) => `${p.name}：制作費${formatYen(p.initial)}〜${p.monthly ? `、月額${formatYen(p.monthly)}` : ''}（税込）`).join('\n') +
-      '\n最終的な金額は、ヒアリング後にお出しするお見積りによります。',
+    value: [
+      ...PLANS.map((p) => `${p.name}：制作費${formatYen(p.price)}〜（税込）`),
+      ...CARE_PLANS.map((c) => `運用プラン「${c.name}」：月額${formatYen(c.monthly)}（税込）`),
+      '最終的な金額は、ヒアリング後にお出しするお見積りによります。',
+    ].join('\n'),
   },
   { label: '商品代金以外の必要料金', value: '銀行振込の場合の振込手数料\nセルフ運用プランの場合のドメイン・サーバーの実費' },
   { label: 'お支払い方法', value: '銀行振込、クレジットカード' },
   { label: 'お支払い時期', value: 'お見積り・ご契約時にご案内します。' },
-  { label: '役務の提供時期', value: '制作着手から通常1ヶ月程度（契約内容や素材のご提供時期により前後します）' },
+  { label: '役務の提供時期', value: 'スタンダードプランは制作着手から通常1ヶ月程度。集客プランはご提案時にお伝えするスケジュールによります（いずれも素材のご提供時期により前後します）' },
   {
     label: 'キャンセル・解約',
     value: 'サービスの性質上、制作着手後のキャンセルはお受けしておりません。\n安心サブスクプランの解約は、解約希望月の前月末日までにお申し出いただくことで、翌月から停止します。',
