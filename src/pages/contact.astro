@@ -153,6 +153,7 @@ const field = 'w-full rounded-xl border border-line bg-white px-4 py-3 outline-n
 
 <script>
   import { FORM_ENDPOINT as ENDPOINT } from '../config';
+  import { markLead, sendLeadThenGo } from '../lib/lead';
 
   const form = document.getElementById('contact-form') as HTMLFormElement;
   const email = document.getElementById('email') as HTMLInputElement;
@@ -245,13 +246,13 @@ const field = 'w-full rounded-xl border border-line bg-white px-4 py-3 outline-n
       const result = await res.json();
       if (!result.ok) throw new Error(result.error || 'failed');
 
-      window.gtag?.('event', 'generate_lead', {
-        form_name: 'contact',
-        inquiry_type: String(fd.get('kind')),
-        plan: String(fd.get('plan')),
-      });
-      // 計測の送信を待ってから遷移
-      setTimeout(() => (location.href = '/thanks/'), 300);
+      // GA4 の generate_lead は /thanks/ を開いたときに送る（lib/lead.ts）
+      const lead = { form_name: 'contact', inquiry_type: String(fd.get('kind')), plan: String(fd.get('plan')) };
+      if (markLead(lead)) {
+        location.href = '/thanks/';
+      } else {
+        sendLeadThenGo(lead, '/thanks/');
+      }
     } catch (err) {
       const rateLimited = err instanceof Error && err.message === 'rate_limited';
       showError(
